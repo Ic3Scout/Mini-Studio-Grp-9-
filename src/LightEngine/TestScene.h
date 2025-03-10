@@ -12,11 +12,13 @@ class TestScene : public Scene
 
 	Player* pEntitySelected;
 
-private:
-	void TrySetSelectedEntity(Player* pEntity, int x, int y);
+	bool mIsMovingRight;
+	bool mIsMovingLeft;
+
 
 public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
+
 };

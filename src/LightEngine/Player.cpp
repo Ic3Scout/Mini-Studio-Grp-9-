@@ -6,22 +6,14 @@ void Player::MoveRight(float deltaTime)
 {
 	std::cout << "Player::MoveRight" << std::endl;
 
-	mSpeed += mAccelerationR * deltaTime;
-	if (mSpeed > mMaxSpeed)
-		mSpeed = mMaxSpeed;
-
 	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
 }
 
 void Player::MoveLeft(float deltaTime)
 {
-	std::cout << "Player::MoveLeft" << std::endl;
+    std::cout << "Player::MoveLeft" << std::endl;
 
-	mSpeed -= mAccelerationL * deltaTime;
-	if (mSpeed < -mMaxSpeed)
-		mSpeed = -mMaxSpeed;
-
-	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
+    SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y); // Correction ici
 }
 
 void Player::Jump()
