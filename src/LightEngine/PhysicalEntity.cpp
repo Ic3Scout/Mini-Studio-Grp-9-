@@ -2,10 +2,20 @@
 
 void PhysicalEntity::Fall(float dt)
 {
-	sf::Vector2f pos = GetPosition();
+	if (mGravity == false)
+	{
+		mGravitySpeed = 0.f;
+
+		return;
+	}
 
 	mGravitySpeed += mGravityAcceleration * dt;
 
+	/*mDirection.y = 1;
+
+	mSpeed = mGravitySpeed;*/
+
+	sf::Vector2f pos = GetPosition();
 	float newPosY = pos.y + mGravitySpeed * dt;
-	this->SetPosition(pos.x, newPosY);
+	SetPosition(pos.x, newPosY);
 }
