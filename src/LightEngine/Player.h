@@ -4,9 +4,9 @@
 class Player : public Entity
 {
 	float mSpeed = 0.f;
-	float mAccelerationR = 1.f;
-	float mAccelerationL = 1.f;
-	float mMaxSpeed = 75.f;
+	float mAccelerationR = 10.f;
+	float mAccelerationL = 10.f;
+	float mMaxSpeed = 25.f;
 
 public:
 	void MoveRight(float deltaTime);
