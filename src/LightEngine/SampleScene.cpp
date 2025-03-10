@@ -6,7 +6,7 @@
 
 void SampleScene::OnInitialize()
 {
-	pEntity1 = CreateEntity<PhysicalEntity>(100, sf::Color::Red);
+	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
 	pEntity1->SetPosition(100, 100);
 	pEntity1->SetRigidBody(true);
 
@@ -27,8 +27,7 @@ void SampleScene::OnEvent(const sf::Event& event)
 	{
 		if (pEntitySelected != nullptr) 
 		{
-			pEntitySelected->Fall();
-			/*pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);*/
+			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}
 	}
 }
@@ -48,4 +47,6 @@ void SampleScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+
+	pEntity1->Fall(GetDeltaTime());
 }
