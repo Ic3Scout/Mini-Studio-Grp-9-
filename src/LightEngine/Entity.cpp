@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <iostream>
 
 void Entity::Initialize(float radius, const sf::Color& color)
 {
@@ -72,19 +73,42 @@ bool Entity::IsInside(float x, float y) const
 	return (dx * dx + dy * dy) < (radius * radius);
 }
 
-void Entity::SetHitbox()
+void Entity::UpdateHitBox()
 {
 	sf::Vector2f pos = GetPosition();
 
-	float radius = GetRadius();
+	AABBCollider h = mHitbox;
 
-	mHitbox.xMin = pos.x - radius;
-	mHitbox.yMin = pos.y - radius;
+	float width = (h.xMax - h.xMin);
+	float height = (h.yMax - h.yMin);
 
-	mHitbox.xMax = pos.x + radius;
-	mHitbox.yMax = pos.y + radius;
+	if (width <= 0 || height <= 0)
+	{
+		std::cout << "Error : Invalid Width or Height !\n";
+		return;
+	}
 
-	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, mHitbox.xMax - mHitbox.xMin, mHitbox.yMax - mHitbox.yMin, sf::Color::Blue);
+	mHitbox.xMin = pos.x - width * 0.5f;
+	mHitbox.yMin = pos.y - height * 0.5f;
+
+	mHitbox.xMax = pos.x + width * 0.5f;
+	mHitbox.yMax = pos.y + height * 0.5f;
+
+	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
+}
+
+void Entity::SetHitbox(float xMin, float yMin, float xMax, float yMax)
+{
+	if (xMax - xMin < 0 || yMax - yMin < 0)
+	{
+		std::cout << "Impossible to set hitbox !\n";
+		return;
+	}
+
+	mHitbox.xMin = xMin;
+	mHitbox.yMin = yMin;
+	mHitbox.xMax = xMax;
+	mHitbox.yMax = yMax;
 }
 
 void Entity::Destroy()
@@ -190,7 +214,7 @@ void Entity::Update()
 		}
 	}
 
-	SetHitbox();
+	UpdateHitBox();
 
 	OnUpdate();
 }

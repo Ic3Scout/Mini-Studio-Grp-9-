@@ -3,7 +3,8 @@
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	std::cout << "Oof\n";
+	std::cout << "Collision !\n";
+	system("cls");
 }
 
 void PhysicalEntity::Fall(float dt)

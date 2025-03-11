@@ -56,7 +56,8 @@ public:
 
 	//Changes
 	AABBCollider* GetHitbox() { return &mHitbox; }
-	void SetHitbox();
+	void UpdateHitBox();
+	void SetHitbox(float xMin, float yMin, float xMax, float yMax);
 
 
     void Destroy();
