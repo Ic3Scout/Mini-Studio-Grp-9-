@@ -39,9 +39,13 @@ void Player::OnUpdate()
 	{
 		MoveRight(dt);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
 	{
 		MoveLeft(dt);
+	}
+	else
+	{
+		mSpeed = 0.f;
 	}
 }
 
