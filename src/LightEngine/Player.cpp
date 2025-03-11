@@ -37,6 +37,51 @@ void Player::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
+	//float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+
+	//if (sf::Joystick::isConnected(0))
+	//{
+	///*	std::cout << "JoyStick Connecte" << std::endl;*/
+	//}
+	//if (sf::Joystick::isButtonPressed(0, 1))
+	//{
+	//	std::cout << "X Pressed 1" << std::endl;
+
+	//	Jump();
+	//}
+	//if (sf::Joystick::isButtonPressed(0, 2))
+	//{
+	//	std::cout << "O Pressed 2" << std::endl;
+	//}
+	//if (sf::Joystick::isButtonPressed(0, 3))
+	//{
+	//	std::cout << "tri Pressed 3" << std::endl;
+	//}
+	//if (sf::Joystick::isButtonPressed(0, 4))
+	//{
+	//	std::cout << "car Pressed 4" << std::endl;
+	//}
+	//if (x > 25)
+	//{
+	//	mSpeed = 0.f;
+
+	//	MoveRight(dt);
+	//}
+	//else if (x < -25)
+	//{
+	//	mSpeed = 0.f;
+
+	//	MoveLeft(dt);
+	//}
+	//else
+	//{
+	//	mSpeed = 0.f;
+	//}
+	//std::cout << "axe X" << x << std::endl;
+
+
+
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
@@ -67,3 +112,27 @@ void Player::OnCollision(Entity* other)
 {
 	std::cout << "DummyEntity::OnCollision" << std::endl;
 }
+
+//	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+//	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y);
+//	if (pEntitySelected != nullptr)
+//	{
+//		sf::Vector2f position = pEntitySelected->GetPosition();
+//		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
+//	}
+//
+//	/*pEntity1->Fall(GetDeltaTime());*/
+//	if (sf::Joystick::isConnected(0))
+//	{
+//		//std::cout << "JoyStick Connecte" << std::endl;
+//	}
+//	if (sf::Joystick::isButtonPressed(0, 1))
+//	{
+//		std::cout << "X Pressed" << std::endl;
+//	}
+//	if (sf::Joystick::isButtonPressed(0, 2))
+//	{
+//		std::cout << "O Pressed" << std::endl;
+//	}
+//	std::cout << "axe X" << x << std::endl;
+//	std::cout << "axe Y" << y << std::endl;
