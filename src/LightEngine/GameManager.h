@@ -8,6 +8,7 @@
 class Entity;
 class Scene;
 class Debug;
+class Camera;
 
 namespace sf 
 {
@@ -58,6 +59,9 @@ public:
 	float GetDeltaTime() const { return mDeltaTime; }
 	Scene* GetScene() const { return mpScene; }
 	sf::Font& GetFont() { return mFont; };
+
+	//Changes
+	void SetCamera(const Camera& camera);
 
 	friend Debug;
 	friend Scene;
