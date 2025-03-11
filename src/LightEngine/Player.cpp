@@ -11,14 +11,28 @@ void Player::MoveRight(float deltaTime)
 
 void Player::MoveLeft(float deltaTime)
 {
-    std::cout << "Player::MoveLeft" << std::endl;
+	std::cout << "Player::MoveLeft" << std::endl;
 
-    SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y); // Correction ici
+	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
 }
 
 void Player::Jump()
 {
 	//SetImpulsion(500.f);  (apres la physique)
+}
+
+void Player::OnUpdate()
+{
+	float dt = GetDeltaTime();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		MoveRight(dt);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
+	{
+		MoveLeft(dt);
+	}
 }
 
 void Player::OnCollision(Entity* other)

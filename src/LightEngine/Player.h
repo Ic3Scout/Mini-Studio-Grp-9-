@@ -3,11 +3,12 @@
 
 class Player : public Entity
 {
-	float mSpeed = 15.f;
+	float mSpeed = 200.f;
 
 public:
 	void MoveRight(float deltaTime);
 	void MoveLeft(float deltaTime);
 	void Jump();
+	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
 };

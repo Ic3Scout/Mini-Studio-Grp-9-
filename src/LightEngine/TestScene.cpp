@@ -17,49 +17,14 @@ void TestScene::OnInitialize()
     pEntity3->SetRigidBody(true);
 
     pEntitySelected = nullptr;
-
-    // Initialiser les états des touches
-    mIsMovingRight = false;
-    mIsMovingLeft = false;
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-    if (event.type == sf::Event::KeyPressed)
-    {
-        if (event.key.code == sf::Keyboard::Key::D)
-        {
-            mIsMovingRight = true;
-        }
-        if (event.key.code == sf::Keyboard::Key::Q)
-        {
-            mIsMovingLeft = true;
-        }
-    }
-    else if (event.type == sf::Event::KeyReleased)
-    {
-        if (event.key.code == sf::Keyboard::Key::D)
-        {
-            mIsMovingRight = false;
-        }
-        if (event.key.code == sf::Keyboard::Key::Q)
-        {
-            mIsMovingLeft = false;
-        }
-    }
 }
 
 void TestScene::OnUpdate()
 {
-    if (mIsMovingRight)
-    {
-        pEntity3->MoveRight(1.f);
-    }
-    if (mIsMovingLeft)
-    {
-        pEntity3->MoveLeft(1.f);
-    }
-
     if (pEntitySelected != nullptr)
     {
         sf::Vector2f position = pEntitySelected->GetPosition();
