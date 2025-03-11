@@ -14,4 +14,3 @@ public:
 	void SwapGravity() { mGravity = !mGravity; }
 	void Fall(float dt);
 };
-
