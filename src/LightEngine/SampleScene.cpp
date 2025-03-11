@@ -48,5 +48,5 @@ void SampleScene::OnUpdate()
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
 
-	pEntity1->Fall(GetDeltaTime());
+	/*pEntity1->Fall(GetDeltaTime());*/
 }
