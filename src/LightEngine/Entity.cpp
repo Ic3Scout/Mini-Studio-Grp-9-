@@ -46,13 +46,11 @@ void Entity::Repulse(Entity* other)
 
 bool Entity::IsColliding(Entity* other) const
 {
-	AABBCollider* otherHitbox = other->GetHitbox();
+	AABBCollider otherHitbox = *(other->GetHitbox());
 
-	if ( (otherHitbox->xMax >= mHitbox.xMin && mHitbox.xMin >= otherHitbox->xMin) ||
-		( otherHitbox->xMax >= mHitbox.xMax && mHitbox.xMax >= otherHitbox->xMin))
+	if (mHitbox.xMax >= otherHitbox.xMin && mHitbox.xMin <= otherHitbox.xMax)
 	{
-		if ((otherHitbox->yMax >= mHitbox.yMin && mHitbox.yMin >= otherHitbox->yMin) ||
-			(otherHitbox->yMax >= mHitbox.yMax && mHitbox.yMax >= otherHitbox->yMin))
+		if (mHitbox.yMax >= otherHitbox.yMin && mHitbox.yMin <= otherHitbox.yMax)
 		{
 			return true;
 		}
