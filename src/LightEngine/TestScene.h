@@ -8,8 +8,7 @@ class Player;
 class TestScene : public Scene
 {
 	PhysicalEntity* pEntity1;
-	PhysicalEntity* pEntity2;
-
+	Player* pEntity2;
 	Player* pEntity3;
 
 	PhysicalEntity* pEntitySelected;
