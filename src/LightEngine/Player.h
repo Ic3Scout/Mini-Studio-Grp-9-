@@ -1,9 +1,17 @@
 #pragma once
 #include "Entity.h"
 
+struct PlayerParameter
+{
+	float mMinSpeed = 50.f;
+	float mMaxSpeed = 200.f;
+	float mAcceleration = 25.f;
+	float mDeceleration = 75.f;
+};
+
 class Player : public Entity
 {
-	float mSpeed = 200.f;
+	PlayerParameter mParameters;
 
 public:
 	void MoveRight(float deltaTime);
