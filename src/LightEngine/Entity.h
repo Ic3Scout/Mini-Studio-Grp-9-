@@ -37,6 +37,15 @@ protected:
 	bool mRigidBody = false;
 
 public:
+	enum CollideWith
+	{
+		Nothing,
+		Left,
+		Top,
+		Right,
+		Bottom,
+	};
+
 	bool GoToDirection(int x, int y, float speed = -1.f);
     bool GoToPosition(int x, int y, float speed = -1.f);
     void SetPosition(float x, float y, float ratioX = 0.5f, float ratioY = 0.5f);
@@ -51,7 +60,7 @@ public:
 	sf::Shape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
-    bool IsColliding(Entity* other) const;
+    int IsColliding(Entity* other) const;
 	bool IsInside(float x, float y) const;
 
 	//Changes

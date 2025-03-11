@@ -7,13 +7,13 @@
 void SampleScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity1->SetPosition(100, 100);
+	pEntity1->SetPosition(640, 360);
 	pEntity1->SetRigidBody(false);
-	pEntity1->SetHitbox(-50, -25, 50, 25);
+	pEntity1->SetHitbox(-100, -100, 50, 50);
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity2->SetPosition(500, 100);
+	pEntity2->SetPosition(400, 360);
 	pEntity2->SetRigidBody(false);
-	pEntity2->SetHitbox(-25, -50, 25, 50);
+	pEntity2->SetHitbox(-50, -50, 50, 50);
 
 	pEntitySelected = nullptr;
 }

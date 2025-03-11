@@ -44,19 +44,62 @@ void Entity::Repulse(Entity* other)
 	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
-bool Entity::IsColliding(Entity* other) const
+int Entity::IsColliding(Entity* other) const
 {
-	AABBCollider otherHitbox = *(other->GetHitbox());
+	AABBCollider HB = mHitbox;
+	AABBCollider otherHB = *(other->GetHitbox());
 
-	if (mHitbox.xMax >= otherHitbox.xMin && mHitbox.xMin <= otherHitbox.xMax)
+	if (HB.xMax >= otherHB.xMin && HB.xMin <= otherHB.xMax)
 	{
-		if (mHitbox.yMax >= otherHitbox.yMin && mHitbox.yMin <= otherHitbox.yMax)
+		if(HB.yMax >= otherHB.yMin && HB.yMin <= otherHB.yMax)
 		{
-			return true;
+			int mFace = 0;
+			//Face Detection
+
+			float overlapX = 0;
+			float overlapY = 0;
+
+			sf::Vector2f distBetweenCentersXY = { abs( this->GetPosition().x - other->GetPosition().x ) , abs( this->GetPosition().y - other->GetPosition().y ) };
+
+			float halfWidth = (abs(HB.xMax - HB.xMin)) *0.5f;
+			float halfHeight = (abs(HB.yMax - HB.yMin)) * 0.5f;
+
+			float otherHalfWidth = (abs(otherHB.xMax - otherHB.xMin)) * 0.5f;
+			float otherHalfHeight = (abs(otherHB.yMax - otherHB.yMin)) * 0.5f;
+
+			overlapX = halfWidth + otherHalfWidth - distBetweenCentersXY.x;
+			overlapY = halfHeight + otherHalfHeight - distBetweenCentersXY.y;
+
+			//std::cout << "Overlap X = " << overlapX << "\nOverlap Y = " << overlapY << std::endl;
+
+			if (overlapX > overlapY)
+			{
+				if (HB.yMax < otherHB.yMax)
+				{
+					mFace = CollideWith::Bottom;
+				}
+				else
+				{
+					mFace = CollideWith::Top;
+				}
+			}
+			else
+			{
+				if (HB.xMax < otherHB.xMax)
+				{
+					mFace = CollideWith::Right;
+				}
+				else
+					mFace = CollideWith::Left;
+			}
+
+			return mFace;
 		}
 	}
 
-	return false;
+	system("cls");
+
+	return CollideWith::Nothing;
 }
 
 bool Entity::IsInside(float x, float y) const

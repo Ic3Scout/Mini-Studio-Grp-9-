@@ -3,8 +3,35 @@
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	std::cout << "Collision !\n";
+	// A SUPPRIMER C JUSTE DU DEBUGAGE
+
 	system("cls");
+
+	switch (IsColliding(collidedWith))
+	{
+	case CollideWith::Bottom:
+		std::cout << "Collision bas\n";
+		break;
+
+	case CollideWith::Top:
+		std::cout << "Collision haut\n";
+		break;
+
+	case CollideWith::Left:
+		std::cout << "Collision gauche\n";
+		break;
+
+	case CollideWith::Right:
+		std::cout << "Collision droite\n";
+		break;
+
+	default:
+		std::cout << "Collision buguee\n";
+		break;
+	}
+
+	// TOUT CA
+
 }
 
 void PhysicalEntity::Fall(float dt)
