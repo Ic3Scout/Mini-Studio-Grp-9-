@@ -8,7 +8,11 @@ void SampleScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
 	pEntity1->SetPosition(100, 100);
-	pEntity1->SetRigidBody(true);
+	pEntity1->SetRigidBody(false);
+
+	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
+	pEntity2->SetPosition(500, 100);
+	pEntity2->SetRigidBody(false);
 
 	pEntitySelected = nullptr;
 }
@@ -21,6 +25,7 @@ void SampleScene::OnEvent(const sf::Event& event)
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
 		TrySetSelectedEntity(pEntity1, event.mouseButton.x, event.mouseButton.y);
+		TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
 	}
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)

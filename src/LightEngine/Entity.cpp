@@ -45,16 +45,19 @@ void Entity::Repulse(Entity* other)
 
 bool Entity::IsColliding(Entity* other) const
 {
-	sf::Vector2f distance = GetPosition(0.5f, 0.5f) - other->GetPosition(0.5f, 0.5f);
+	AABBCollider* otherHitbox = other->GetHitbox();
 
-	float sqrLength = (distance.x * distance.x) + (distance.y * distance.y);
+	if ( (otherHitbox->xMax >= mHitbox.xMin && mHitbox.xMin >= otherHitbox->xMin) ||
+		( otherHitbox->xMax >= mHitbox.xMax && mHitbox.xMax >= otherHitbox->xMin))
+	{
+		if ((otherHitbox->yMax >= mHitbox.yMin && mHitbox.yMin >= otherHitbox->yMin) ||
+			(otherHitbox->yMax >= mHitbox.yMax && mHitbox.yMax >= otherHitbox->yMin))
+		{
+			return true;
+		}
+	}
 
-	float radius1 = mShape.getRadius();
-	float radius2 = other->mShape.getRadius();
-
-	float sqrRadius = (radius1 + radius2) * (radius1 + radius2);
-
-	return sqrLength < sqrRadius;
+	return false;
 }
 
 bool Entity::IsInside(float x, float y) const
@@ -67,6 +70,21 @@ bool Entity::IsInside(float x, float y) const
 	float radius = mShape.getRadius();
 
 	return (dx * dx + dy * dy) < (radius * radius);
+}
+
+void Entity::SetHitbox()
+{
+	sf::Vector2f pos = GetPosition();
+
+	float radius = GetRadius();
+
+	mHitbox.xMin = pos.x - radius;
+	mHitbox.yMin = pos.y - radius;
+
+	mHitbox.xMax = pos.x + radius;
+	mHitbox.yMax = pos.y + radius;
+
+	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, mHitbox.xMax - mHitbox.xMin, mHitbox.yMax - mHitbox.yMin, sf::Color::Blue);
 }
 
 void Entity::Destroy()
@@ -171,6 +189,8 @@ void Entity::Update()
 			mTarget.isSet = false;
 		}
 	}
+
+	SetHitbox();
 
 	OnUpdate();
 }

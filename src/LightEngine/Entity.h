@@ -13,6 +13,12 @@ class Scene;
 
 class Entity
 {
+	struct AABBCollider
+	{
+		float xMin, yMin;
+		float xMax, yMax;
+	};
+
     struct Target 
     {
 		sf::Vector2i position;
@@ -23,6 +29,7 @@ class Entity
 protected:
     sf::CircleShape mShape;
     sf::Vector2f mDirection;
+	AABBCollider mHitbox;
 	Target mTarget;
     float mSpeed = 0.f;
     bool mToDestroy = false;
@@ -46,6 +53,11 @@ public:
 	bool IsTag(int tag) const { return mTag == tag; }
     bool IsColliding(Entity* other) const;
 	bool IsInside(float x, float y) const;
+
+	//Changes
+	AABBCollider* GetHitbox() { return &mHitbox; }
+	void SetHitbox();
+
 
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }

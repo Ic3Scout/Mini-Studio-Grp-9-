@@ -1,4 +1,10 @@
 #include "PhysicalEntity.h"
+#include <iostream>
+
+void PhysicalEntity::OnCollision(Entity* collidedWith)
+{
+	std::cout << "Oof\n";
+}
 
 void PhysicalEntity::Fall(float dt)
 {
