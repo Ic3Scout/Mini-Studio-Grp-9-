@@ -71,6 +71,11 @@ void SampleScene::OnUpdate()
 	}
 	if (sf::Joystick::isButtonPressed(0,1))
 	{
-		std::cout << "Button 1 Pressed" << std::endl;
+		std::cout << "X Pressed" << std::endl;
 	}
+	if (sf::Joystick::isButtonPressed(0, 2))
+	{
+		std::cout << "O Pressed" << std::endl;
+	}
+
 }
