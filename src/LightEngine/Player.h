@@ -4,9 +4,9 @@
 struct PlayerParameter
 {
 	float mMinSpeed = 50.f;
-	float mMaxSpeed = 200.f;
-	float mAcceleration = 25.f;
-	float mDeceleration = 75.f;
+	float mMaxSpeed = 500.f;
+	float mAcceleration = 300.f;
+	float mDeceleration = 150.f;
 };
 
 class Player : public Entity
