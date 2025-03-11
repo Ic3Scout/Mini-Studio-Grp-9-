@@ -38,7 +38,7 @@ void TestScene::OnEvent(const sf::Event& event)
 	{
 		if (pEntitySelected != nullptr)
 		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
+			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 200.f);
 		}
 	}
 }
@@ -54,6 +54,8 @@ void TestScene::TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y)
 void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
+
+	pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entité 1
 
 	if (pEntitySelected != nullptr)
 	{
