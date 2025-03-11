@@ -59,7 +59,10 @@ void SampleScene::TrySetSelectedEntity(DummyEntity* pEntity, int x, int y)
 
 
 void SampleScene::OnUpdate()
+
 {
+	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Y);
 	if(pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
@@ -67,7 +70,7 @@ void SampleScene::OnUpdate()
 	}
 	if (sf::Joystick::isConnected(0))
 	{
-		std::cout << "JoyStick Connecte" << std::endl;
+		//std::cout << "JoyStick Connecte" << std::endl;
 	}
 	if (sf::Joystick::isButtonPressed(0,1))
 	{
@@ -77,5 +80,6 @@ void SampleScene::OnUpdate()
 	{
 		std::cout << "O Pressed" << std::endl;
 	}
-
+	std::cout << "axe X" << x << std::endl;
+	std::cout << "axe Y" << y << std::endl;
 }
