@@ -1,15 +1,16 @@
 #pragma once
-#include "Entity.h"
+#include "PhysicalEntity.h"
 
 struct PlayerParameter
 {
 	float mMinSpeed = 50.f;
-	float mMaxSpeed = 500.f;
-	float mAcceleration = 300.f;
-	float mDeceleration = 150.f;
+	float mMaxSpeed = 200.f;
+	float mAcceleration = 150.f;
+	float mDeceleration = 125.f;
+	float mJumpSpeed = 200.f;
 };
 
-class Player : public Entity
+class Player : public PhysicalEntity
 {
 	PlayerParameter mParameters;
 

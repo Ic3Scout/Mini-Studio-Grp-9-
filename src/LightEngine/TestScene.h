@@ -2,19 +2,19 @@
 
 #include "Scene.h"
 
+class PhysicalEntity;
 class Player;
 
 class TestScene : public Scene
 {
-	Player* pEntity1;
+	PhysicalEntity* pEntity1;
 	Player* pEntity2;
 	Player* pEntity3;
 
-	Player* pEntitySelected;
+	PhysicalEntity* pEntitySelected;
 
-	bool mIsMovingRight;
-	bool mIsMovingLeft;
-
+private:
+	void TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y);
 
 public:
 	void OnInitialize() override;

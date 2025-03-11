@@ -28,7 +28,9 @@ void Player::MoveLeft(float deltaTime)
 
 void Player::Jump()
 {
-	//SetImpulsion(500.f);  (apres la physique)
+	std::cout << "Player::Jump" << std::endl;
+
+	mGravitySpeed = mParameters.mJumpSpeed;
 }
 
 void Player::OnUpdate()
@@ -37,15 +39,27 @@ void Player::OnUpdate()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
+		{
+			mSpeed = 0.f;
+		}
 		MoveRight(dt);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
 	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+		{
+			mSpeed = 0.f;
+		}
 		MoveLeft(dt);
 	}
 	else
 	{
 		mSpeed = 0.f;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+	{
+		Jump();
 	}
 }
 
