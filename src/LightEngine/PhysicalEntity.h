@@ -6,7 +6,7 @@ class PhysicalEntity : public Entity
 protected:
 	bool mGravity = false;
 	float mGravitySpeed = 0;
-	float mGravityAcceleration = 9.81f * 25;
+	float mGravityAcceleration = 9.81f * 75;
 
 public:
 	void OnCollision(Entity* collidedWith) override;

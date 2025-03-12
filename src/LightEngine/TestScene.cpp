@@ -60,6 +60,8 @@ void TestScene::OnUpdate()
         Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
     }
 
+	Debug::DrawRectangle(400, 600, 500, 50, sf::Color::White);
+
     pEntity1->Fall(GetDeltaTime());
     pEntity2->Fall(GetDeltaTime());
     pEntity3->Fall(GetDeltaTime());
