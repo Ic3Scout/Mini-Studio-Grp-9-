@@ -44,62 +44,79 @@ void Entity::Repulse(Entity* other)
 	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
-int Entity::IsColliding(Entity* other) const
+bool Entity::IsColliding(Entity* other)
 {
-	AABBCollider HB = mHitbox;
-	AABBCollider otherHB = *(other->GetHitbox());
+	AABBCollider& hb = mHitbox;
+	AABBCollider& otherHb = *(other->GetHitbox()); 
 
-	if (HB.xMax >= otherHB.xMin && HB.xMin <= otherHB.xMax)
+	if (hb.isActive == false || otherHb.isActive == false)
 	{
-		if(HB.yMax >= otherHB.yMin && HB.yMin <= otherHB.yMax)
+		return false;
+	}
+
+	float hbWidth = abs(hb.xMax - hb.xMin); 
+	float hbHeight = abs(hb.yMax - hb.yMin); 
+
+	float otherHBWidth = abs(otherHb.xMax - otherHb.xMin); 
+	float otherHBHeight = abs(otherHb.yMax - otherHb.yMin); 
+
+	if (hbWidth <= 0 || hbHeight <= 0 || otherHBWidth <= 0 || otherHBHeight <= 0)
+	{
+		return false; 
+	} 
+
+	if (hb.xMax >= otherHb.xMin && hb.xMin <= otherHb.xMax)
+	{
+		if(hb.yMax >= otherHb.yMin && hb.yMin <= otherHb.yMax)
 		{
-			int mFace = 0;
 			//Face Detection
 
 			float overlapX = 0;
 			float overlapY = 0;
 
-			sf::Vector2f distBetweenCentersXY = { abs( this->GetPosition().x - other->GetPosition().x ) , abs( this->GetPosition().y - other->GetPosition().y ) };
+			sf::Vector2f pos = GetPosition();
+			sf::Vector2f otherPos = other->GetPosition();
 
-			float halfWidth = (abs(HB.xMax - HB.xMin)) *0.5f;
-			float halfHeight = (abs(HB.yMax - HB.yMin)) * 0.5f;
+			sf::Vector2f distBetweenCentersXY = { abs( pos.x + hb.offsetX - otherPos.x - otherHb.offsetX) , abs( pos.y + hb.offsetY - otherPos.y - otherHb.offsetY) }; 
 
-			float otherHalfWidth = (abs(otherHB.xMax - otherHB.xMin)) * 0.5f;
-			float otherHalfHeight = (abs(otherHB.yMax - otherHB.yMin)) * 0.5f;
+			float halfWidth = hbWidth * 0.5f; 
+			float halfHeight = hbHeight * 0.5f; 
 
-			overlapX = halfWidth + otherHalfWidth - distBetweenCentersXY.x;
-			overlapY = halfHeight + otherHalfHeight - distBetweenCentersXY.y;
-
-			//std::cout << "Overlap X = " << overlapX << "\nOverlap Y = " << overlapY << std::endl;
+			overlapX = hbWidth * 0.5f + otherHBWidth * 0.5f - distBetweenCentersXY.x;
+			overlapY = hbHeight * 0.5f + otherHBHeight * 0.5f - distBetweenCentersXY.y;
 
 			if (overlapX > overlapY)
 			{
-				if (HB.yMax < otherHB.yMax)
+				if (hb.yMax < otherHb.yMax)
 				{
-					mFace = CollideWith::Bottom;
+					hb.face = CollideWith::Bottom;
+					otherHb.face = CollideWith::Top;
 				}
 				else
 				{
-					mFace = CollideWith::Top;
+					hb.face = CollideWith::Top;
+					otherHb.face = CollideWith::Bottom;
 				}
 			}
 			else
 			{
-				if (HB.xMax < otherHB.xMax)
+				if (hb.xMax < otherHb.xMax)
 				{
-					mFace = CollideWith::Right;
+					hb.face = CollideWith::Right;
+					otherHb.face = CollideWith::Left;
 				}
 				else
-					mFace = CollideWith::Left;
+				{
+					hb.face = CollideWith::Left;
+					otherHb.face = CollideWith::Right;
+				}
 			}
 
-			return mFace;
+			return true;
 		}
 	}
 
-	system("cls");
-
-	return CollideWith::Nothing;
+	return false;
 }
 
 bool Entity::IsInside(float x, float y) const
@@ -116,6 +133,9 @@ bool Entity::IsInside(float x, float y) const
 
 void Entity::UpdateHitBox()
 {
+	if (mHitbox.isActive == false)
+		return;
+
 	sf::Vector2f pos = GetPosition();
 
 	AABBCollider h = mHitbox;
@@ -125,31 +145,36 @@ void Entity::UpdateHitBox()
 
 	if (width <= 0 || height <= 0)
 	{
-		std::cout << "Error : Invalid Width or Height !\n";
 		return;
 	}
 
-	mHitbox.xMin = pos.x - width * 0.5f;
-	mHitbox.yMin = pos.y - height * 0.5f;
+	mHitbox.xMin = pos.x - width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMin = pos.y - height * 0.5f + mHitbox.offsetY;
 
-	mHitbox.xMax = pos.x + width * 0.5f;
-	mHitbox.yMax = pos.y + height * 0.5f;
+	mHitbox.xMax = pos.x + width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMax = pos.y + height * 0.5f + mHitbox.offsetY;
 
 	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
 
-void Entity::SetHitbox(float xMin, float yMin, float xMax, float yMax)
+void Entity::SetHitbox(float width, float height)
 {
-	if (xMax - xMin < 0 || yMax - yMin < 0)
+	if (width < 0 || height < 0)
 	{
 		std::cout << "Impossible to set hitbox !\n";
 		return;
 	}
 
-	mHitbox.xMin = xMin;
-	mHitbox.yMin = yMin;
-	mHitbox.xMax = xMax;
-	mHitbox.yMax = yMax;
+	mHitbox.xMin = -width * 0.5f;
+	mHitbox.yMin = -height * 0.5f;
+	mHitbox.xMax = width * 0.5f;
+	mHitbox.yMax = height * 0.5f;
+}
+
+void Entity::SetHitboxOffset(float offsetX, float offsetY)
+{
+	mHitbox.offsetX = offsetX;
+	mHitbox.offsetY = offsetY;
 }
 
 void Entity::Destroy()

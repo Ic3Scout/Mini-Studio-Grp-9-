@@ -3,34 +3,27 @@
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	// A SUPPRIMER C JUSTE DU DEBUGAGE
-
-	system("cls");
-
-	switch (IsColliding(collidedWith))
+	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
-		std::cout << "Collision bas\n";
 		break;
 
 	case CollideWith::Top:
-		std::cout << "Collision haut\n";
 		break;
 
 	case CollideWith::Left:
-		std::cout << "Collision gauche\n";
 		break;
 
 	case CollideWith::Right:
-		std::cout << "Collision droite\n";
+		break;
+
+	case CollideWith::Nothing:
 		break;
 
 	default:
-		std::cout << "Collision buguee\n";
+		std::cout << "Bug\n";
 		break;
 	}
-
-	// TOUT CA
 
 }
 

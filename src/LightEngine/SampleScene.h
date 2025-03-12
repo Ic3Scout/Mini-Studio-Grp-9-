@@ -8,6 +8,7 @@ class SampleScene : public Scene
 {
 	PhysicalEntity* pEntity1;
 	PhysicalEntity* pEntity2;
+	PhysicalEntity* pEntity3;
 
 	PhysicalEntity* pEntitySelected;
 
