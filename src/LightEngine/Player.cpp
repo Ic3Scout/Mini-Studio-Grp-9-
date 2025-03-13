@@ -32,6 +32,8 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
+	mParameters.mJumpSpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2);
+
 	mGravitySpeed = mParameters.mJumpSpeed;
 }
 
@@ -83,7 +85,7 @@ void Player::OnUpdate()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 	{
-		if (mHitbox.face == CollideWith::Bottom || mHitbox.face == CollideWith::Left)
+		if (mHitbox.face == CollideWith::Bottom)
 		{
 			Jump();
 		}

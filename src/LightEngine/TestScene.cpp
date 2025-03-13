@@ -28,30 +28,37 @@ void TestScene::OnInitialize()
 	pEntity2->SetIsHitboxActive(false);
 	pEntity2->SetGravity(false);
 
-	pPlatforme1 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme1 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
 	pPlatforme1->SetPosition(width / 2, height / 2 + 300);
 	pPlatforme1->SetRigidBody(false);
-	pPlatforme1->SetHitbox(500, 50);
+	pPlatforme1->SetHitbox(500, 30);
 
-	pPlatforme2 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme2 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
 	pPlatforme2->SetPosition(width / 2 + 375, height / 2 + 260);
 	pPlatforme2->SetRigidBody(false);
-	pPlatforme2->SetHitbox(500, 125);
+	pPlatforme2->SetHitbox(30, 30);
 
-	pPlatforme3 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme3 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
 	pPlatforme3->SetPosition(width / 2 + 750, height / 2 + 200);
 	pPlatforme3->SetRigidBody(false);
-	pPlatforme3->SetHitbox(500, 50);
+	pPlatforme3->SetHitbox(30, 30);
 
-	pPlatforme3 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
-	pPlatforme3->SetPosition(width / 2 - 375, height / 2 + 225);
-	pPlatforme3->SetRigidBody(false);
-	pPlatforme3->SetHitbox(500, 500);
+	pPlatforme4 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
+	pPlatforme4->SetPosition(width / 2 - 375, height / 2 + 225);
+	pPlatforme4->SetRigidBody(false);
+	pPlatforme4->SetHitbox(30, 30);
 
-	pPlatforme1 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
-	pPlatforme1->SetPosition(width / 2 + 400, height / 2 - 0);
-	pPlatforme1->SetRigidBody(false);
-	pPlatforme1->SetHitbox(500, 50);
+	pPlatforme5 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
+	pPlatforme5->SetPosition(width / 2 + 400, height / 2 - 0);
+	pPlatforme5->SetRigidBody(false);
+	pPlatforme5->SetHitbox(30, 30);
+
+	pPlatforme5 = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
+	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 170);
+	pPlatforme5->SetRigidBody(false);
+	pPlatforme5->SetHitbox(30, 30);
+
+
 
 	pEntitySelected = nullptr;
 }

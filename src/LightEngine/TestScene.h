@@ -17,6 +17,7 @@ class TestScene : public Scene
 	PhysicalEntity* pPlatforme3;
 	PhysicalEntity* pPlatforme4;
 	PhysicalEntity* pPlatforme5;
+	PhysicalEntity* pPlatforme6;
 
 	PhysicalEntity* pEntitySelected;
 
