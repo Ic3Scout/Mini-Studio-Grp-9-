@@ -37,6 +37,7 @@ void Player::OnUpdate()
 {
 	float dt = GetDeltaTime();
 	
+	/*
 	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	if (sf::Joystick::isConnected(0))
@@ -74,11 +75,12 @@ void Player::OnUpdate()
 		mSpeed = 0.f;
 	}
 	std::cout << "axe X" << x << std::endl;
+	*/
 	
 
 
 
-	/*
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
@@ -103,7 +105,7 @@ void Player::OnUpdate()
 	{
 		Jump();
 	}
-	*/
+	
 }
 
 void Player::OnCollision(Entity* other)

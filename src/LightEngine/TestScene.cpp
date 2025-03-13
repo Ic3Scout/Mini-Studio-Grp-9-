@@ -1,5 +1,6 @@
 #include "TestScene.h"
 #include "PhysicalEntity.h"
+#include "Player.h"
 #include "DummyEntity.h"
 
 #include "Debug.h"
@@ -14,17 +15,20 @@ void TestScene::OnInitialize()
 
 	pCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
+	pEntity1 = CreateEntity<Player>(50, sf::Color::Cyan);
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
 	pEntity1->SetHitbox(100, 100);
 	pEntity1->SetIsHitboxActive(false);
+	pEntity1->SetGravity(true);
 
-	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
+	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Green);
 	pEntity2->SetPosition(width / 2 - 100, height / 2);
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);
+	pEntity2->SetGravity(true);
+
 
 	pEntitySelected = nullptr;
 }
@@ -83,6 +87,8 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+	pEntity1->Fall(GetDeltaTime());
+	pEntity2->Fall(GetDeltaTime());
 
 	UpdateCamera();
 }

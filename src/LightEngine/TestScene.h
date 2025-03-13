@@ -4,12 +4,13 @@
 #include "GameManager.h"
 
 class PhysicalEntity;
+class Player;
 
 class TestScene : public Scene
 {
 	Camera pCam;
 
-	PhysicalEntity* pEntity1;
+	Player* pEntity1;
 	PhysicalEntity* pEntity2;
 
 	PhysicalEntity* pEntitySelected;
