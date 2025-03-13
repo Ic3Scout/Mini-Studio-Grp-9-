@@ -1,5 +1,9 @@
 #pragma once
 #include "PhysicalEntity.h"
+#include "Water.h"
+
+class WeedKiller;
+class Gun;
 
 struct PlayerParameter
 {
@@ -13,11 +17,13 @@ struct PlayerParameter
 class Player : public PhysicalEntity
 {
 	PlayerParameter mParameters;
-
+	Gun* gun;
+	WeedKiller* wk;
 public:
 	void MoveRight(float deltaTime);
 	void MoveLeft(float deltaTime);
 	void Jump();
+	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
 };

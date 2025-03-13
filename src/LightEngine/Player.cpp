@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Gun.h"
+#include "WeedKiller.h"
 
 #include <iostream>
 
@@ -31,6 +33,15 @@ void Player::Jump()
 	std::cout << "Player::Jump" << std::endl;
 
 	mGravitySpeed = mParameters.mJumpSpeed;
+}
+
+void Player::OnInitialize()
+{
+	gun = CreateEntity<Gun>(1, sf::Color::White);
+	gun->SetOwner(this);
+
+	wk = CreateEntity<WeedKiller>(1, sf::Color::White);
+	wk->SetOwner(this);
 }
 
 void Player::OnUpdate()
@@ -81,10 +92,9 @@ void Player::OnUpdate()
 	{
 		Jump();
 	}
-	
 }
 
 void Player::OnCollision(Entity* other)
 {
-	std::cout << "DummyEntity::OnCollision" << std::endl;
+
 }
