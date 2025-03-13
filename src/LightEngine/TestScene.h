@@ -1,13 +1,15 @@
 #pragma once
-
 #include "Scene.h"
+#include "Camera.h"
+#include "GameManager.h"
 
 class PhysicalEntity;
-class Player;
 
 class TestScene : public Scene
 {
-	Player* pEntity1;
+	Camera pCam;
+
+	PhysicalEntity* pEntity1;
 	PhysicalEntity* pEntity2;
 
 	PhysicalEntity* pEntitySelected;
@@ -19,4 +21,6 @@ public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
+	void UpdateCamera();
 };
+

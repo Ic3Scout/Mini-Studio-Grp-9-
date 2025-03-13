@@ -3,7 +3,28 @@
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	std::cout << "Oof\n";
+	switch (mHitbox.face)
+	{
+	case CollideWith::Bottom:
+		break;
+
+	case CollideWith::Top:
+		break;
+
+	case CollideWith::Left:
+		break;
+
+	case CollideWith::Right:
+		break;
+
+	case CollideWith::Nothing:
+		break;
+
+	default:
+		std::cout << "Bug\n";
+		break;
+	}
+
 }
 
 void PhysicalEntity::Fall(float dt)
