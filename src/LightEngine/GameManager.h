@@ -8,6 +8,7 @@
 class Entity;
 class Scene;
 class Debug;
+class Camera;
 
 namespace sf 
 {
@@ -44,8 +45,6 @@ private:
 
 	void SetDeltaTime(float deltaTime) { mDeltaTime = deltaTime; }
 
-	sf::RenderWindow* GetWindow() const { return mpWindow; }
-
 public:
 	~GameManager();
 	static GameManager* Get();
@@ -58,6 +57,9 @@ public:
 	float GetDeltaTime() const { return mDeltaTime; }
 	Scene* GetScene() const { return mpScene; }
 	sf::Font& GetFont() { return mFont; };
+	sf::RenderWindow* GetWindow() const { return mpWindow; }
+
+	void SetCamera(const Camera& camera);
 
 	friend Debug;
 	friend Scene;

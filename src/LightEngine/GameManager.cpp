@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Debug.h"
+#include "Camera.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -46,6 +47,11 @@ void GameManager::CreateWindow(unsigned int width, unsigned int height, const ch
 	mWindowHeight = height;
 
 	mClearColor = clearColor;
+}
+
+void GameManager::SetCamera(const Camera& camera)
+{
+	mpWindow->setView(*(camera.GetView()));
 }
 
 void GameManager::Run()
