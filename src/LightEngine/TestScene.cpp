@@ -17,17 +17,21 @@ void TestScene::OnInitialize()
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
+	pEntity1->SetHitbox(100, 100);
+	pEntity1->SetIsHitboxActive(false);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity2->SetPosition(-500, height / 2);
+	pEntity2->SetPosition(width / 2 - 100, height / 2);
 	pEntity2->SetRigidBody(false);
+	pEntity2->SetHitbox(100, 100);
+	pEntity2->SetIsHitboxActive(false);
 
 	pEntitySelected = nullptr;
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed)
+	if (event.type != sf::Event::EventType::MouseButtonPressed && event.type != sf::Event::EventType::KeyPressed)
 		return;
 
 	sf::RenderWindow* win = GameManager::Get()->GetWindow();
@@ -45,6 +49,18 @@ void TestScene::OnEvent(const sf::Event& event)
 		{
 			pEntitySelected->GoToPosition(mousePos.x, mousePos.y, 200.f);
 		}
+	}
+
+	if (pEntitySelected != nullptr)
+	{
+		if (event.key.code == sf::Keyboard::H)
+		{
+			if (pEntitySelected->GetHitbox()->isActive)
+				pEntitySelected->SetIsHitboxActive(false);
+			else
+				pEntitySelected->SetIsHitboxActive();
+		}
+
 	}
 }
 

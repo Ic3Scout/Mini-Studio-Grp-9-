@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <iostream>
 
 void Entity::Initialize(float radius, const sf::Color& color)
 {
@@ -43,16 +44,74 @@ void Entity::Repulse(Entity* other)
 	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
-bool Entity::IsColliding(Entity* other) const
+bool Entity::IsColliding(Entity* other)
 {
-	AABBCollider* otherHitbox = other->GetHitbox();
+	AABBCollider& hb = mHitbox;
+	AABBCollider& otherHb = *(other->GetHitbox()); 
 
-	if ( (otherHitbox->xMax >= mHitbox.xMin && mHitbox.xMin >= otherHitbox->xMin) ||
-		( otherHitbox->xMax >= mHitbox.xMax && mHitbox.xMax >= otherHitbox->xMin))
+	if (hb.isActive == false || otherHb.isActive == false)
 	{
-		if ((otherHitbox->yMax >= mHitbox.yMin && mHitbox.yMin >= otherHitbox->yMin) ||
-			(otherHitbox->yMax >= mHitbox.yMax && mHitbox.yMax >= otherHitbox->yMin))
+		return false;
+	}
+
+	float hbWidth = abs(hb.xMax - hb.xMin); 
+	float hbHeight = abs(hb.yMax - hb.yMin); 
+
+	float otherHBWidth = abs(otherHb.xMax - otherHb.xMin); 
+	float otherHBHeight = abs(otherHb.yMax - otherHb.yMin); 
+
+	if (hbWidth <= 0 || hbHeight <= 0 || otherHBWidth <= 0 || otherHBHeight <= 0)
+	{
+		return false; 
+	} 
+
+	if (hb.xMax >= otherHb.xMin && hb.xMin <= otherHb.xMax)
+	{
+		if(hb.yMax >= otherHb.yMin && hb.yMin <= otherHb.yMax)
 		{
+			//Face Detection
+
+			float overlapX = 0;
+			float overlapY = 0;
+
+			sf::Vector2f pos = GetPosition();
+			sf::Vector2f otherPos = other->GetPosition();
+
+			sf::Vector2f distBetweenCentersXY = { abs( pos.x + hb.offsetX - otherPos.x - otherHb.offsetX) , abs( pos.y + hb.offsetY - otherPos.y - otherHb.offsetY) }; 
+
+			float halfWidth = hbWidth * 0.5f; 
+			float halfHeight = hbHeight * 0.5f; 
+
+			overlapX = hbWidth * 0.5f + otherHBWidth * 0.5f - distBetweenCentersXY.x;
+			overlapY = hbHeight * 0.5f + otherHBHeight * 0.5f - distBetweenCentersXY.y;
+
+			if (overlapX > overlapY)
+			{
+				if (hb.yMax < otherHb.yMax)
+				{
+					hb.face = CollideWith::Bottom;
+					otherHb.face = CollideWith::Top;
+				}
+				else
+				{
+					hb.face = CollideWith::Top;
+					otherHb.face = CollideWith::Bottom;
+				}
+			}
+			else
+			{
+				if (hb.xMax < otherHb.xMax)
+				{
+					hb.face = CollideWith::Right;
+					otherHb.face = CollideWith::Left;
+				}
+				else
+				{
+					hb.face = CollideWith::Left;
+					otherHb.face = CollideWith::Right;
+				}
+			}
+
 			return true;
 		}
 	}
@@ -72,19 +131,50 @@ bool Entity::IsInside(float x, float y) const
 	return (dx * dx + dy * dy) < (radius * radius);
 }
 
-void Entity::SetHitbox()
+void Entity::UpdateHitBox()
 {
+	if (mHitbox.isActive == false)
+		return;
+
 	sf::Vector2f pos = GetPosition();
 
-	float radius = GetRadius();
+	AABBCollider h = mHitbox;
 
-	mHitbox.xMin = pos.x - radius;
-	mHitbox.yMin = pos.y - radius;
+	float width = (h.xMax - h.xMin);
+	float height = (h.yMax - h.yMin);
 
-	mHitbox.xMax = pos.x + radius;
-	mHitbox.yMax = pos.y + radius;
+	if (width <= 0 || height <= 0)
+	{
+		return;
+	}
 
-	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, mHitbox.xMax - mHitbox.xMin, mHitbox.yMax - mHitbox.yMin, sf::Color::Blue);
+	mHitbox.xMin = pos.x - width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMin = pos.y - height * 0.5f + mHitbox.offsetY;
+
+	mHitbox.xMax = pos.x + width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMax = pos.y + height * 0.5f + mHitbox.offsetY;
+
+	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
+}
+
+void Entity::SetHitbox(float width, float height)
+{
+	if (width < 0 || height < 0)
+	{
+		std::cout << "Impossible to set hitbox !\n";
+		return;
+	}
+
+	mHitbox.xMin = -width * 0.5f;
+	mHitbox.yMin = -height * 0.5f;
+	mHitbox.xMax = width * 0.5f;
+	mHitbox.yMax = height * 0.5f;
+}
+
+void Entity::SetHitboxOffset(float offsetX, float offsetY)
+{
+	mHitbox.offsetX = offsetX;
+	mHitbox.offsetY = offsetY;
 }
 
 void Entity::Destroy()
@@ -190,7 +280,7 @@ void Entity::Update()
 		}
 	}
 
-	SetHitbox();
+	UpdateHitBox();
 
 	OnUpdate();
 }

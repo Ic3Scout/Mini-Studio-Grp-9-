@@ -15,8 +15,14 @@ class Entity
 {
 	struct AABBCollider
 	{
+		int face = 0;
+
+		bool isActive = true;
+
 		float xMin, yMin;
 		float xMax, yMax;
+
+		float offsetX = 0.f, offsetY = 0.f;
 	};
 
     struct Target 
@@ -37,6 +43,15 @@ protected:
 	bool mRigidBody = false;
 
 public:
+	enum CollideWith
+	{
+		Nothing,
+		Left,
+		Top,
+		Right,
+		Bottom,
+	};
+
 	bool GoToDirection(int x, int y, float speed = -1.f);
     bool GoToPosition(int x, int y, float speed = -1.f);
     void SetPosition(float x, float y, float ratioX = 0.5f, float ratioY = 0.5f);
@@ -51,13 +66,15 @@ public:
 	sf::Shape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
-    bool IsColliding(Entity* other) const;
+    bool IsColliding(Entity* other);
 	bool IsInside(float x, float y) const;
 
 	//Changes
 	AABBCollider* GetHitbox() { return &mHitbox; }
-	void SetHitbox();
-
+	void UpdateHitBox();
+	void SetHitbox(float width, float height);
+	void SetHitboxOffset(float offsetX, float offsetY);
+	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
 
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
