@@ -15,13 +15,13 @@ void TestScene::OnInitialize()
 	pCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity1->SetPosition(width / 2, height / 2);
+	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(false);
 	pEntity1->SetHitbox(100, 100);
 	pEntity1->SetIsHitboxActive(false);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity2->SetPosition(width / 2 - 100, height / 2);
+	pEntity2->SetPosition(width / 2.f - 100, height / 2.f);
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);
