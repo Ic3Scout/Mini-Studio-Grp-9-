@@ -83,7 +83,7 @@ void Player::OnUpdate()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 	{
-		if (mHitbox.face == CollideWith::Bottom)
+		if (mHitbox.face == CollideWith::Bottom || mHitbox.face == CollideWith::Left)
 		{
 			Jump();
 		}

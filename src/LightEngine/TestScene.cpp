@@ -46,7 +46,7 @@ void TestScene::OnInitialize()
 	pPlatforme3 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
 	pPlatforme3->SetPosition(width / 2 - 375, height / 2 + 225);
 	pPlatforme3->SetRigidBody(false);
-	pPlatforme3->SetHitbox(500, 200);
+	pPlatforme3->SetHitbox(500, 500);
 
 	pPlatforme1 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
 	pPlatforme1->SetPosition(width / 2 + 400, height / 2 - 0);
