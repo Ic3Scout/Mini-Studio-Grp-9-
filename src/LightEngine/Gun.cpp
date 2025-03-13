@@ -2,58 +2,90 @@
 #include "Debug.h"
 #include "Player.h"
 #include "Water.h"
+#include "TestScene.h"
+#include "Scene.h"
 #include <iostream>
+
+void Gun::OnInitialize()
+{
+	mMaxAmmos = 5;
+	mAmmos = mMaxAmmos;
+	mReloadTime = 1.f;
+	mDelayBeforeReloading = 2.f;
+
+	mShootingDelay = 0.5f;
+	mIsEquiped = true;
+}
 
 void Gun::OnUpdate()
 {
+	ReloadManager();
+
+	if (mIsEquiped == false)
+	{
+		ChangeColor(sf::Color(255, 255, 255, 0));
+		return;
+	}
+
 	if (!pOwner)
 		return;
 
+	system("cls");
+	std::cout << "Water Gun : " << mAmmos << "/" << mMaxAmmos << std::endl;
+
+	ChangeColor(sf::Color(255, 0, 0, 255));
+
 	sf::Vector2f playerPos = pOwner->GetPosition();
 
-	SetPosition(playerPos.x, playerPos.y);
+	int mFactor = 1;
 
-	sf::Vector2f dir = GetDirection();
-
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	if (pOwner->GetSide() == 1)
 	{
-		mAngle -= 2 * GetDeltaTime();
+		mFactor = -1;
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	sf::Vector2f finalDirection = { std::cos(mAngle) * mFactor, std::sin(mAngle) };
+
+	SetPosition(playerPos.x + pOwner->GetRadius() * finalDirection.x, playerPos.y + pOwner->GetRadius() * finalDirection.y);
+
+	if (mDirection.y >= -0.999)
 	{
-		mAngle += 2 * GetDeltaTime();
-	}
-
-	std::cout << mAngle << std::endl;
-
-	SetDirection(std::cos(mAngle), std::sin(mAngle));
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-	{
-		if (mDelay <= 0)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
 		{
-			Shoot();
+			mAngle -= 2 * GetDeltaTime();
 		}
 	}
 
-	if (mDelay < 0)
+	if (mDirection.y <= 0.999)
 	{
-		mDelay = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
+		{
+			mAngle += 2 * GetDeltaTime();
+		}
 	}
-	else
-		mDelay -= GetDeltaTime();
 
-	Debug::DrawLine(playerPos.x, playerPos.y, playerPos.x + GetDirection().x * 300, playerPos.y + GetDirection().y * 300, sf::Color::Red);
+	SetDirection(finalDirection.x, finalDirection.y);
+
+	ShootManager(sf::Keyboard::Key::Right, 0, 0);
+
+	float playerRadius = pOwner->GetRadius();
+
+	Debug::DrawLine(playerPos.x + playerRadius * finalDirection.x, playerPos.y + playerRadius * finalDirection.y, playerPos.x + GetDirection().x * 300, playerPos.y + GetDirection().y * 300, sf::Color::White);
 }
 
 void Gun::Shoot()
 {
-	sf::Vector2f playerPos = pOwner->GetPosition();
+	if (mAmmos <= 0)
+		return;
+
+	mProgressDelay = 0.f;
+
+	sf::Vector2f pos = GetPosition();
 
 	Water* w = CreateEntity<Water>(15, sf::Color::Blue);
-	w->SetPosition(playerPos.x, playerPos.y);
+	w->SetPosition(pos.x, pos.y);
 	w->SetDirection(mDirection.x, mDirection.y);
-	mDelay = 0.5f;
+	mShootingDelay = 0.5f;
+
+	AddRemoveAmmo(-1);
 }

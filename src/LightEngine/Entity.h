@@ -77,6 +77,8 @@ public:
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
 
+	void ChangeColor(sf::Color newColor);
+
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	

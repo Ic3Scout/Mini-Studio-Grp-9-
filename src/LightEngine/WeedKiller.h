@@ -1,21 +1,12 @@
 #pragma once
 #include "Entity.h"
+#include "Weapon.h"
 
-class Player;
-
-class WeedKiller : public Entity
+class WeedKiller : public Weapon
 {
-	Player* pOwner;
-
-	int mAmmos = 100;
-
-	float mDelay = 0.1f;
 public:
-	void OnUpdate() override;
-	void OnCollision(Entity* collidedWith) override;
 	void OnInitialize() override;
-	void OnDestroy() override;
-
-	void SetOwner(Player* pPlayer) { pOwner = pPlayer; }
+	void OnUpdate() override;
+	void Shoot() override;
 };
 

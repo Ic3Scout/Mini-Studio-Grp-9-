@@ -1,53 +1,14 @@
 #include "Player.h"
 #include "Gun.h"
 #include "WeedKiller.h"
+#include "Weapon.h"
 
 #include <iostream>
 
-void Player::MoveRight(float deltaTime)
-{
-	std::cout << "Player::MoveRight" << std::endl;
-
-	mSpeed += mParameters.mAcceleration* deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::MoveLeft(float deltaTime)
-{
-	std::cout << "Player::MoveLeft" << std::endl;
-
-	mSpeed += mParameters.mAcceleration * deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::Jump()
-{
-	std::cout << "Player::Jump" << std::endl;
-
-	mGravitySpeed = mParameters.mJumpSpeed;
-}
-
-void Player::OnInitialize()
-{
-	gun = CreateEntity<Gun>(1, sf::Color::White);
-	gun->SetOwner(this);
-
-	wk = CreateEntity<WeedKiller>(1, sf::Color::White);
-	wk->SetOwner(this);
-}
-
-void Player::OnUpdate()
+void Player::BasicControls()
 {
 	float dt = GetDeltaTime();
-	
+
 	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	if (sf::Joystick::isConnected(0))
@@ -66,8 +27,7 @@ void Player::OnUpdate()
 	{
 		std::cout << "car Pressed 4" << std::endl;
 	}
-	//std::cout << "axe X" << x << std::endl;
-	
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
@@ -94,7 +54,101 @@ void Player::OnUpdate()
 	}
 }
 
+void Player::MoveRight(float deltaTime)
+{
+	mSide = 2;
+	std::cout << "Player::MoveRight" << std::endl;
+
+	mSpeed += mParameters.mAcceleration* deltaTime;
+	if (mSpeed > mParameters.mMaxSpeed)
+	{
+		mSpeed = mParameters.mMaxSpeed;
+	}
+	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
+}
+
+void Player::MoveLeft(float deltaTime)
+{
+	mSide = 1;
+	std::cout << "Player::MoveLeft" << std::endl;
+
+	mSpeed += mParameters.mAcceleration * deltaTime;
+	if (mSpeed > mParameters.mMaxSpeed)
+	{
+		mSpeed = mParameters.mMaxSpeed;
+	}
+	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
+}
+
+void Player::Jump()
+{
+	std::cout << "Player::Jump" << std::endl;
+
+	mGravitySpeed = mParameters.mJumpSpeed;
+}
+
+void Player::OnInitialize()
+{
+	Weapon* gun = CreateEntity<Gun>(10, sf::Color::Magenta);
+	gun->SetOwner(this);
+
+	Weapon* weedKiller = CreateEntity<WeedKiller>(10, sf::Color::Yellow);;
+	weedKiller->SetOwner(this);
+
+	mWeapons.push_back(gun);
+	mWeapons.push_back(weedKiller);
+}
+
+void Player::OnUpdate()
+{
+	BasicControls();
+
+	SwapManager();
+}
+
 void Player::OnCollision(Entity* other)
 {
 
+}
+
+void Player::SwapManager()
+{
+	if (mDelayToSwap >= 1.f)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
+		{
+			SwapWeapon();
+		}
+	}
+	else
+	{
+		mDelayToSwap += GetDeltaTime();
+	}
+}
+
+void Player::SwapWeapon()
+{
+	mDelayToSwap = 0.f;
+
+	auto it = mWeapons.begin();
+
+	for (it; it < mWeapons.end(); ++it)
+	{
+		if ((*it)->GetIsEquiped())
+		{
+			(*it)->SetIsEquiped(false);
+
+			if (it == mWeapons.end() - 1)
+			{
+				it = mWeapons.begin();
+
+				(*it)->SetIsEquiped(true);
+			}
+			else
+			{
+				(*(it + 1))->SetIsEquiped(true);
+			}
+			break;
+		}
+	}
 }
