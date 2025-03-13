@@ -30,18 +30,19 @@ void TestScene::OnEvent(const sf::Event& event)
 	if (event.type != sf::Event::EventType::MouseButtonPressed)
 		return;
 
+	sf::RenderWindow* win = GameManager::Get()->GetWindow();
+	sf::Vector2f mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
+
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
-		TrySetSelectedEntity(pEntity1, event.mouseButton.x, event.mouseButton.y);
-		TrySetSelectedEntity(pEntity2, event.mouseButton.x, event.mouseButton.y);
+		TrySetSelectedEntity(pEntity1, mousePos.x, mousePos.y);
+		TrySetSelectedEntity(pEntity2, mousePos.x, mousePos.y);
 	}
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)
 	{
 		if (pEntitySelected != nullptr)
 		{
-			sf::RenderWindow* win = GameManager::Get()->GetWindow();
-			sf::Vector2f mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
 			pEntitySelected->GoToPosition(mousePos.x, mousePos.y, 200.f);
 		}
 	}
