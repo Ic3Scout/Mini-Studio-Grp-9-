@@ -9,6 +9,16 @@ Texture* AssetManager::LoadTexture(const char* path)
     return pTexture;
 }
 
+AssetManager* AssetManager::Get()
+{
+    if (instance == nullptr)
+    {
+        instance = new AssetManager();
+    }
+
+    return instance;
+}
+
 Texture* AssetManager::GetTexture(const char* path)
 {
     auto it = mTextures.find(path);
