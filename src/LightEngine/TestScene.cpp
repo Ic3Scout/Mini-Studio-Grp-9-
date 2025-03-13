@@ -7,8 +7,12 @@ void TestScene::OnInitialize()
 {
     pEntity1 = CreateEntity<Player>(50, sf::Color::Cyan);
     pEntity1->SetPosition(640, 360);
-    pEntity1->SetRigidBody(false);
+    pEntity1->SetRigidBody(true);
     pEntity1->SetGravity(true);
+
+	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Green);
+    pEntity2->SetPosition(400, 600);
+    pEntity2->SetRigidBody(true);
 
     pEntitySelected = nullptr;
 }
@@ -47,8 +51,6 @@ void TestScene::OnUpdate()
         sf::Vector2f position = pEntitySelected->GetPosition();
         Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
     }
-
-	Debug::DrawRectangle(400, 600, 500, 50, sf::Color::White);
 
     pEntity1->Fall(GetDeltaTime());
 }
