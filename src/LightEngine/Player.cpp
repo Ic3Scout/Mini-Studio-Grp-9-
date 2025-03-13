@@ -92,11 +92,10 @@ void Player::OnUpdate()
 	}
 
 
-	if (GetPosition().y > 720)
+	if (GetPosition().y > 800)
 	{
-		SetPosition(GetPosition().x, 100);
+		SetPosition(641, 594);
 	}
-	
 }
 
 void Player::OnCollision(Entity* other)
