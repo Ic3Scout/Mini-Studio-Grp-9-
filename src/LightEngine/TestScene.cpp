@@ -5,6 +5,8 @@
 #include "Debug.h"
 #include <iostream>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+
 void TestScene::OnInitialize()
 {
 	int height = GetWindowHeight();
@@ -38,7 +40,9 @@ void TestScene::OnEvent(const sf::Event& event)
 	{
 		if (pEntitySelected != nullptr)
 		{
-			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 200.f);
+			sf::RenderWindow* win = GameManager::Get()->GetWindow();
+			sf::Vector2f mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
+			pEntitySelected->GoToPosition(mousePos.x, mousePos.y, 200.f);
 		}
 	}
 }
