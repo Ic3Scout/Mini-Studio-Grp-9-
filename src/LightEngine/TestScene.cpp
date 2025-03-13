@@ -51,6 +51,18 @@ void TestScene::OnEvent(const sf::Event& event)
 		}
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+	{
+		if (pCam.GetFocus())
+		{
+			pCam.SetFocus(false);
+		}
+		else
+		{
+			pCam.SetFocus(true);
+		}
+	}
+
 	if (pEntitySelected != nullptr)
 	{
 		if (event.key.code == sf::Keyboard::H)
@@ -76,7 +88,10 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entité 1
+	if (pCam.GetFocus())
+	{
+		pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entité 1
+	}
 
 	if (pEntitySelected != nullptr)
 	{

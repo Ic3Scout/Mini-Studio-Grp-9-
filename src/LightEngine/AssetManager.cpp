@@ -1,6 +1,8 @@
 #include "AssetManager.h"
 #include "Texture.h"
 
+AssetManager* AssetManager::instance = nullptr;
+
 Texture* AssetManager::LoadTexture(const char* path)
 {
     Texture* pTexture = new Texture(path);

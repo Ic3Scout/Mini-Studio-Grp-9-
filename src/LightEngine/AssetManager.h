@@ -2,7 +2,6 @@
 #include <map>
 
 class Texture;
-class Animation;
 
 class AssetManager
 {
