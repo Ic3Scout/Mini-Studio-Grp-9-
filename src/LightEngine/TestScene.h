@@ -12,6 +12,11 @@ class TestScene : public Scene
 
 	Player* pEntity1;
 	PhysicalEntity* pEntity2;
+	PhysicalEntity* pPlatforme1;
+	PhysicalEntity* pPlatforme2;
+	PhysicalEntity* pPlatforme3;
+	PhysicalEntity* pPlatforme4;
+	PhysicalEntity* pPlatforme5;
 
 	PhysicalEntity* pEntitySelected;
 

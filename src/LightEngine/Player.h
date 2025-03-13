@@ -7,7 +7,7 @@ struct PlayerParameter
 	float mMaxSpeed = 300.f;
 	float mAcceleration = 800.f;
 	float mDeceleration = 125.f;
-	float mJumpSpeed = -400.f;
+	float mJumpSpeed = -500.f;
 };
 
 class Player : public PhysicalEntity

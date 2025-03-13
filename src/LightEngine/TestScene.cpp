@@ -19,16 +19,39 @@ void TestScene::OnInitialize()
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
 	pEntity1->SetHitbox(100, 100);
-	pEntity1->SetIsHitboxActive(false);
 	pEntity1->SetGravity(true);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Green);
-	pEntity2->SetPosition(width / 2 - 100, height / 2);
+	pEntity2->SetPosition(width / 2 - 400, height / 2);
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);
 	pEntity2->SetGravity(false);
 
+	pPlatforme1 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme1->SetPosition(width / 2, height / 2 + 300);
+	pPlatforme1->SetRigidBody(false);
+	pPlatforme1->SetHitbox(500, 50);
+
+	pPlatforme2 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme2->SetPosition(width / 2 + 375, height / 2 + 260);
+	pPlatforme2->SetRigidBody(false);
+	pPlatforme2->SetHitbox(500, 125);
+
+	pPlatforme3 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme3->SetPosition(width / 2 + 750, height / 2 + 200);
+	pPlatforme3->SetRigidBody(false);
+	pPlatforme3->SetHitbox(500, 50);
+
+	pPlatforme3 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme3->SetPosition(width / 2 - 375, height / 2 + 225);
+	pPlatforme3->SetRigidBody(false);
+	pPlatforme3->SetHitbox(500, 200);
+
+	pPlatforme1 = CreateEntity<PhysicalEntity>(25, sf::Color::Red);
+	pPlatforme1->SetPosition(width / 2 + 400, height / 2 - 0);
+	pPlatforme1->SetRigidBody(false);
+	pPlatforme1->SetHitbox(500, 50);
 
 	pEntitySelected = nullptr;
 }
@@ -64,7 +87,6 @@ void TestScene::OnEvent(const sf::Event& event)
 			else
 				pEntitySelected->SetIsHitboxActive();
 		}
-
 	}
 }
 
