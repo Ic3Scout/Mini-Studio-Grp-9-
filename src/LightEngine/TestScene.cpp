@@ -27,7 +27,7 @@ void TestScene::OnInitialize()
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);
-	pEntity2->SetGravity(true);
+	pEntity2->SetGravity(false);
 
 
 	pEntitySelected = nullptr;

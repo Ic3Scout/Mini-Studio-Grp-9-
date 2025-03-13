@@ -37,18 +37,11 @@ void Player::OnUpdate()
 {
 	float dt = GetDeltaTime();
 	
-	/*
 	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	if (sf::Joystick::isConnected(0))
 	{
-		std::cout << "JoyStick Connecte" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 1))
-	{
-		std::cout << "X Pressed 1" << std::endl;
-
-		Jump();
+		//std::cout << "JoyStick Connecte" << std::endl;
 	}
 	if (sf::Joystick::isButtonPressed(0, 2))
 	{
@@ -62,26 +55,9 @@ void Player::OnUpdate()
 	{
 		std::cout << "car Pressed 4" << std::endl;
 	}
-	if (x > 25)
-	{
-		MoveRight(dt);
-	}
-	else if (x < -25)
-	{
-		MoveLeft(dt);
-	}
-	else
-	{
-		mSpeed = 0.f;
-	}
-	std::cout << "axe X" << x << std::endl;
-	*/
+	//std::cout << "axe X" << x << std::endl;
 	
-
-
-
-	
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
 		{
@@ -89,7 +65,7 @@ void Player::OnUpdate()
 		}
 		MoveRight(dt);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
 		{
@@ -101,7 +77,7 @@ void Player::OnUpdate()
 	{
 		mSpeed = 0.f;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))
 	{
 		Jump();
 	}

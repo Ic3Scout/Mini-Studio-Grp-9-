@@ -6,6 +6,7 @@ void PhysicalEntity::OnCollision(Entity* collidedWith)
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
+		std::cout << "Bottom\n";
 		break;
 
 	case CollideWith::Top:
