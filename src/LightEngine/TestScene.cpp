@@ -18,11 +18,13 @@ void TestScene::OnInitialize()
 	pEntity1 = CreateEntity<Player>(100, sf::Color::Cyan);
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
+  
 	pEntity1->SetHitbox(200, 200);
 	pEntity1->SetGravity(true);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Green);
 	pEntity2->SetPosition(width / 2 - 400, height / 2);
+
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);

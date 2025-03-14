@@ -1,4 +1,7 @@
 #include "Player.h"
+#include "Gun.h"
+#include "WeedKiller.h"
+#include "Weapon.h"
 
 #include <iostream>
 
@@ -35,12 +38,12 @@ void Player::Jump()
 	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
 }
 
-void Player::OnUpdate()
+void Player::BasicControls()
 {
 	SetGravity(true);
 
 	float dt = GetDeltaTime();
-	
+
 	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	if (sf::Joystick::isConnected(0))
@@ -59,8 +62,7 @@ void Player::OnUpdate()
 	{
 		std::cout << "car Pressed 4" << std::endl;
 	}
-	//std::cout << "axe X" << x << std::endl;
-	
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
@@ -89,6 +91,26 @@ void Player::OnUpdate()
 		}
 	}
 
+}
+
+void Player::OnInitialize()
+{
+	Weapon* gun = CreateEntity<Gun>(10, sf::Color::Magenta);
+	gun->SetOwner(this);
+
+	Weapon* weedKiller = CreateEntity<WeedKiller>(10, sf::Color::Yellow);;
+	weedKiller->SetOwner(this);
+
+	mWeapons.push_back(gun);
+	mWeapons.push_back(weedKiller);
+}
+
+void Player::OnUpdate()
+{
+	BasicControls();
+
+	SwapManager();
+  
 	if (GetPosition().y > 800)
 	{
 		SetPosition(641, 594);
@@ -97,6 +119,7 @@ void Player::OnUpdate()
 
 void Player::OnCollision(Entity* other)
 {
+
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
@@ -125,5 +148,47 @@ void Player::OnCollision(Entity* other)
 	default:
 		std::cout << "Bug\n";
 		break;
+	}
+}
+
+void Player::SwapManager()
+{
+	if (mDelayToSwap >= 1.f)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
+		{
+			SwapWeapon();
+		}
+	}
+	else
+	{
+		mDelayToSwap += GetDeltaTime();
+	}
+}
+
+void Player::SwapWeapon()
+{
+	mDelayToSwap = 0.f;
+
+	auto it = mWeapons.begin();
+
+	for (it; it < mWeapons.end(); ++it)
+	{
+		if ((*it)->GetIsEquiped())
+		{
+			(*it)->SetIsEquiped(false);
+
+			if (it == mWeapons.end() - 1)
+			{
+				it = mWeapons.begin();
+
+				(*it)->SetIsEquiped(true);
+			}
+			else
+			{
+				(*(it + 1))->SetIsEquiped(true);
+			}
+			break;
+		}
 	}
 }

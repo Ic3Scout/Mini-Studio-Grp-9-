@@ -177,6 +177,11 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 	mHitbox.offsetY = offsetY;
 }
 
+void Entity::ChangeColor(sf::Color newColor)
+{
+	mShape.setFillColor(newColor);
+}
+
 void Entity::Destroy()
 {
 	mToDestroy = true;
