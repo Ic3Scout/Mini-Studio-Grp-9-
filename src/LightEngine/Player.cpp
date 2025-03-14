@@ -11,7 +11,7 @@ void Player::MoveRight(float deltaTime)
 
 	//std::cout << "Player::MoveRight" << std::endl;
 
-	mSpeed += mParameters.mAcceleration* deltaTime;
+	mSpeed += mParameters.mAcceleration * deltaTime;
 	if (mSpeed > mParameters.mMaxSpeed)
 	{
 		mSpeed = mParameters.mMaxSpeed;
@@ -39,7 +39,55 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
-	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
+	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius() * 2); // mettre taille de la hitbox au lieu de l'entity ?
+}
+
+Player::Player()
+{
+	for (int i = 0; i < STATE_COUNT; i++)
+	{
+		for (int j = 0; j < STATE_COUNT; j++)
+		{
+			mTransitions[i][j] = false;
+		}
+	}
+
+	////Idle, Moving,  Jumping,Dashing, Falling, TakingDmg, Dying
+	//{ 0,	  1,	   1,	   1,	    1,		 1,			1 }, // Idle
+	//{ 1,    0,       1,	   1,       1,       1,         1 }, // Moving
+	//{ 0,    1,       0,	   1,       1,       1,         1 }, // Jumping
+	//{ 1,    0,       0,	   0,       0,       0,         0 }, // Dashing
+	//{ 1,    1,       0,	   1,       0,       1,         1 }, // Falling
+	//{ 1,    0,       0,	   0,       0,       0,         1 }, // TakingDmg
+	//{ 0,    0,       0,	   0,       0,       0,         0 }  // Dying
+
+	SetTransition(Idle, Moving, true);
+	SetTransition(Idle, Jumping, true);
+	SetTransition(Idle, Dashing, true);
+	SetTransition(Idle, Falling, true);
+	SetTransition(Idle, TakingDamage, true);
+	SetTransition(Idle, Dying, true);
+
+	SetTransition(Moving, Idle, true);
+	SetTransition(Moving, Jumping, true);
+	SetTransition(Moving, Dashing, true);
+	SetTransition(Moving, Falling, true);
+	SetTransition(Moving, TakingDamage, true);
+	SetTransition(Moving, Dying, true);
+
+	SetTransition(Jumping, Moving, true);
+	SetTransition(Jumping, Dashing, true);
+	SetTransition(Jumping, Falling, true);
+	SetTransition(Jumping, TakingDamage, true);
+	SetTransition(Jumping, Dying, true);
+
+	SetTransition(Dashing, Idle, true);
+
+	SetTransition(Falling, Idle, true);
+	SetTransition(Falling, Moving, true);
+	SetTransition(Falling, Dashing, true);
+	SetTransition(Falling, TakingDamage, true);
+	SetTransition(Falling, Dying, true);
 }
 
 void Player::BasicControls()
@@ -114,7 +162,7 @@ void Player::OnUpdate()
 	BasicControls();
 
 	SwapManager();
-  
+
 	if (GetPosition().y > 800)
 	{
 		SetPosition(641, 594);
