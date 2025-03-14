@@ -13,15 +13,16 @@ void TestScene::OnInitialize()
 	int width = GetWindowWidth();
 
 	pCam.Resize(width, height);
+	pCam.SetFocus(true);
 
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity1->SetPosition(width / 2, height / 2);
+	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(false);
 	pEntity1->SetHitbox(100, 100);
 	pEntity1->SetIsHitboxActive(false);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
-	pEntity2->SetPosition(width / 2 - 100, height / 2);
+	pEntity2->SetPosition(width / 2.f - 100, height / 2.f);
 	pEntity2->SetRigidBody(false);
 	pEntity2->SetHitbox(100, 100);
 	pEntity2->SetIsHitboxActive(false);
@@ -51,6 +52,18 @@ void TestScene::OnEvent(const sf::Event& event)
 		}
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+	{
+		if (pCam.GetFocus())
+		{
+			pCam.SetFocus(false);
+		}
+		else
+		{
+			pCam.SetFocus(true);
+		}
+	}
+
 	if (pEntitySelected != nullptr)
 	{
 		if (event.key.code == sf::Keyboard::H)
@@ -76,7 +89,10 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entité 1
+	if (pCam.GetFocus())
+	{
+		pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entité 1
+	}
 
 	if (pEntitySelected != nullptr)
 	{
