@@ -5,8 +5,43 @@
 
 #include <iostream>
 
+void Player::MoveRight(float deltaTime)
+{
+	//std::cout << "Player::MoveRight" << std::endl;
+
+	mSpeed += mParameters.mAcceleration* deltaTime;
+	if (mSpeed > mParameters.mMaxSpeed)
+	{
+		mSpeed = mParameters.mMaxSpeed;
+	}
+	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
+}
+
+void Player::MoveLeft(float deltaTime)
+{
+	//std::cout << "Player::MoveLeft" << std::endl;
+
+	mSpeed += mParameters.mAcceleration * deltaTime;
+	if (mSpeed > mParameters.mMaxSpeed)
+	{
+		mSpeed = mParameters.mMaxSpeed;
+	}
+	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
+}
+
+void Player::Jump()
+{
+	//std::cout << "Player::Jump" << std::endl;
+
+	mHitbox.face = CollideWith::Nothing;
+
+	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
+}
+
 void Player::BasicControls()
 {
+	SetGravity(true);
+
 	float dt = GetDeltaTime();
 
 	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
@@ -48,43 +83,14 @@ void Player::BasicControls()
 	{
 		mSpeed = 0.f;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 	{
-		Jump();
+		if (mHitbox.face == CollideWith::Bottom)
+		{
+			Jump();
+		}
 	}
-}
 
-void Player::MoveRight(float deltaTime)
-{
-	mSide = 2;
-	std::cout << "Player::MoveRight" << std::endl;
-
-	mSpeed += mParameters.mAcceleration* deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::MoveLeft(float deltaTime)
-{
-	mSide = 1;
-	std::cout << "Player::MoveLeft" << std::endl;
-
-	mSpeed += mParameters.mAcceleration * deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::Jump()
-{
-	std::cout << "Player::Jump" << std::endl;
-
-	mGravitySpeed = mParameters.mJumpSpeed;
 }
 
 void Player::OnInitialize()
@@ -104,11 +110,45 @@ void Player::OnUpdate()
 	BasicControls();
 
 	SwapManager();
+  
+	if (GetPosition().y > 800)
+	{
+		SetPosition(641, 594);
+	}
 }
 
 void Player::OnCollision(Entity* other)
 {
 
+	switch (mHitbox.face)
+	{
+	case CollideWith::Bottom:
+		SetGravity(false);
+		SetPosition(GetPosition().x, GetPosition().y - 0.5);
+		break;
+
+	case CollideWith::Top:
+		mGravitySpeed = 0.f;
+		SetPosition(GetPosition().x, GetPosition().y + 0.3);
+		break;
+
+	case CollideWith::Left:
+		mSpeed = 0.f;
+		SetPosition(GetPosition().x + 1, GetPosition().y);
+		break;
+
+	case CollideWith::Right:
+		mSpeed = 0.f;
+		SetPosition(GetPosition().x - 1, GetPosition().y);
+		break;
+
+	case CollideWith::Nothing:
+		break;
+
+	default:
+		std::cout << "Bug\n";
+		break;
+	}
 }
 
 void Player::SwapManager()
