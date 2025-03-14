@@ -98,7 +98,7 @@ protected:
     virtual void OnCollision(Entity* collidedWith) {};
 	virtual void OnInitialize() {};
 	virtual void OnDestroy() {};
-	
+
 private:
     void Update();
 	void Initialize(float radius, const sf::Color& color);
