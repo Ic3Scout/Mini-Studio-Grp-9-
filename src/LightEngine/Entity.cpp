@@ -165,6 +165,8 @@ void Entity::SetHitbox(float width, float height)
 		return;
 	}
 
+	mHitbox.size = { width, height };
+
 	mHitbox.xMin = -width * 0.5f;
 	mHitbox.yMin = -height * 0.5f;
 	mHitbox.xMax = width * 0.5f;

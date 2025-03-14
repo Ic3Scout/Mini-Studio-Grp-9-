@@ -23,6 +23,8 @@ class Entity
 		float xMax, yMax;
 
 		float offsetX = 0.f, offsetY = 0.f;
+
+		sf::Vector2f size;
 	};
 
     struct Target 
