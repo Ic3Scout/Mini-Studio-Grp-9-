@@ -45,7 +45,7 @@ void WeedKiller::OnUpdate()
 
 	SetPosition(playerPos.x + pOwner->GetRadius() * mFactor, playerPos.y);
 
-	ShootManager(sf::Keyboard::Key::Right, 0, 0);
+	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 }
 
 void WeedKiller::Shoot()

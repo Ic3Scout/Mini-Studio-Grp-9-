@@ -48,17 +48,19 @@ void Gun::OnUpdate()
 
 	SetPosition(playerPos.x + pOwner->GetRadius() * finalDirection.x, playerPos.y + pOwner->GetRadius() * finalDirection.y);
 
-	if (mDirection.y >= -0.999)
+	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit
+
+	if (mDirection.y >= -0.995)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || y < -25)
 		{
 			mAngle -= 2 * GetDeltaTime();
 		}
 	}
 
-	if (mDirection.y <= 0.999)
+	if (mDirection.y <= 0.995)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || y > 25)
 		{
 			mAngle += 2 * GetDeltaTime();
 		}
@@ -66,7 +68,7 @@ void Gun::OnUpdate()
 
 	SetDirection(finalDirection.x, finalDirection.y);
 
-	ShootManager(sf::Keyboard::Key::Right, 0, 0);
+	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 
 	float playerRadius = pOwner->GetRadius();
 

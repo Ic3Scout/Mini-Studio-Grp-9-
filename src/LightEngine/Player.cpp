@@ -48,7 +48,7 @@ void Player::BasicControls()
 
 	float dt = GetDeltaTime();
 
-	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
+	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);// pos horizontal du joystick gauche
 
 	if (sf::Joystick::isConnected(0))
 	{
@@ -62,7 +62,7 @@ void Player::BasicControls()
 	{
 		std::cout << "tri Pressed 3" << std::endl;
 	}
-	if (sf::Joystick::isButtonPressed(0, 4))
+	if (sf::Joystick::isButtonPressed(0, 0))
 	{
 		std::cout << "car Pressed 4" << std::endl;
 	}
@@ -159,7 +159,7 @@ void Player::SwapManager()
 {
 	if (mDelayToSwap >= 1.f)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1) || sf::Joystick::isButtonPressed(0, 3))
 		{
 			SwapWeapon();
 		}
