@@ -7,6 +7,8 @@
 
 void Player::MoveRight(float deltaTime)
 {
+	mSide = 2;
+
 	//std::cout << "Player::MoveRight" << std::endl;
 
 	mSpeed += mParameters.mAcceleration* deltaTime;
@@ -19,6 +21,8 @@ void Player::MoveRight(float deltaTime)
 
 void Player::MoveLeft(float deltaTime)
 {
+	mSide = 1;
+
 	//std::cout << "Player::MoveLeft" << std::endl;
 
 	mSpeed += mParameters.mAcceleration * deltaTime;
