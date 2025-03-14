@@ -7,11 +7,11 @@ void WeedKiller::OnInitialize()
 {
 	SetRigidBody(false);
 
-	mShootingDelay = 0.1f;
+	mShootingDelay = 0.025f;
 
-	mMaxAmmos = 25;
+	mMaxAmmos = 100;
 	mAmmos = mMaxAmmos;
-	mReloadTime = 0.1f;
+	mReloadTime = 0.025f;
 
 	mDelayBeforeReloading = 3.f;
 }
@@ -59,7 +59,7 @@ void WeedKiller::Shoot()
 	a->SetOwner(this);
 	a->SetPlayerSide(pOwner->GetSide());
 
-	mShootingDelay = 0.1f;
+	mShootingDelay = 0.025f;
 
 	AddRemoveAmmo(-1);
 }

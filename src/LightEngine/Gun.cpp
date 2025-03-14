@@ -8,7 +8,7 @@
 
 void Gun::OnInitialize()
 {
-	mMaxAmmos = 5;
+	mMaxAmmos = 4;
 	mAmmos = mMaxAmmos;
 	mReloadTime = 1.f;
 	mDelayBeforeReloading = 2.f;
@@ -19,6 +19,9 @@ void Gun::OnInitialize()
 
 void Gun::OnUpdate()
 {
+	if (!pOwner)
+		return;
+
 	ReloadManager();
 
 	if (mIsEquiped == false)
@@ -26,9 +29,6 @@ void Gun::OnUpdate()
 		ChangeColor(sf::Color(255, 255, 255, 0));
 		return;
 	}
-
-	if (!pOwner)
-		return;
 
 	system("cls");
 	std::cout << "Water Gun : " << mAmmos << "/" << mMaxAmmos << std::endl;

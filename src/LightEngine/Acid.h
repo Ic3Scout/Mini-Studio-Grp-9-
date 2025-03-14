@@ -7,7 +7,7 @@ class Acid : public Entity
 {
 	WeedKiller* pOwner;
 	int mPlayerSide = 1;
-	float mSurvivalTime = 0.1f;
+	float mSurvivalTime = 0.025f;
 	float mProgress = 0.f;
 public:
 
