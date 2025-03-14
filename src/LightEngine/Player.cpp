@@ -32,9 +32,7 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
-	mParameters.mJumpSpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
-
-	mGravitySpeed = mParameters.mJumpSpeed;
+	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
 }
 
 void Player::OnUpdate()
@@ -90,7 +88,6 @@ void Player::OnUpdate()
 			Jump();
 		}
 	}
-
 
 	if (GetPosition().y > 800)
 	{
