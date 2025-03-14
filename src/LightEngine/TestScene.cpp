@@ -13,6 +13,7 @@ void TestScene::OnInitialize()
 	int width = GetWindowWidth();
 
 	pCam.Resize(width, height);
+	pCam.SetFocus(true);
 
 	pEntity1 = CreateEntity<PhysicalEntity>(50, sf::Color::Red);
 	pEntity1->SetPosition(width / 2.f, height / 2.f);

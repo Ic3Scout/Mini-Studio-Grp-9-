@@ -1,4 +1,6 @@
 #pragma once
+#include "json.hpp"
+
 class Animation
 {
 	int mCurrentFrame;
