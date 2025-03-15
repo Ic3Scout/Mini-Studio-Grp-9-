@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -35,7 +36,7 @@ class Entity
     };
 
 protected:
-    sf::RectangleShape mShape;
+	std::unique_ptr<sf::Shape> mShape;
     sf::Vector2f mDirection;
 	AABBCollider mHitbox;
 	Target mTarget;
@@ -61,12 +62,13 @@ public:
 	void SetDirection(float x, float y, float speed = -1.f);
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
-	sf::Vector2f GetSize() const { return mShape.getSize(); }
+	sf::Vector2f GetSize() const;
+	float GetRadius() const;
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
-	sf::Shape* GetShape() { return &mShape; }
+	sf::Shape* GetShape() { return mShape.get(); }
 
 	bool IsTag(int tag) const { return mTag == tag; }
     bool IsColliding(Entity* other);
@@ -91,7 +93,10 @@ public:
 	float GetDeltaTime() const;
 
     template<typename T>
-    T* CreateEntity(float radius, const sf::Color& color);
+    T* CreateEntity(sf::Vector2f size, const sf::Color& color);
+
+	template<typename T>
+	T* CreateEntity(float radius, const sf::Color& color);
 
 protected:
     Entity() = default;
@@ -105,6 +110,7 @@ protected:
 private:
     void Update();
 	void Initialize(sf::Vector2f size, const sf::Color& color);
+	void Initialize(float radius, const sf::Color& color);
 	void Repulse(Entity* other);
 
     friend class GameManager;
