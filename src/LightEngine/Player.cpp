@@ -202,7 +202,7 @@ void Player::OnCollision(Entity* other)
 
 void Player::SwapManager()
 {
-	if (mDelayToSwap >= 1.f)
+	if (mDelayToSwap >= 0.5f)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1) || sf::Joystick::isButtonPressed(0, 3))
 		{
