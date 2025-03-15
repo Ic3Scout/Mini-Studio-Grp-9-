@@ -69,26 +69,37 @@ void Player::BasicControls()
 		std::cout << "car Pressed 4" << std::endl;
 	}
 
+	bool isMoving = false;
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
+		isMoving = true;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
 		{
-			mSpeed = 0.f;
+			isMoving = false;
 		}
-		MoveRight(dt);
+		else
+			MoveRight(dt);
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+		isMoving = true;
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 		{
-			mSpeed = 0.f;
+			isMoving = false;
 		}
-		MoveLeft(dt);
+		else
+			MoveLeft(dt);
 	}
-	else
+
+	if (isMoving == false)
 	{
-		mSpeed = 0.f;
+		mSpeed = 0;
 	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 	{
 		if (mHitbox.face == CollideWith::Bottom)
