@@ -136,7 +136,7 @@ void Player::OnUpdate()
 	{
 		w->SetPosition(pos.x + mSide * mHitbox.size.x * 0.5f, pos.y);
 
-		if (w->IsTag(GetScene<TestScene>()->TGun))
+		if (w->IsTag(GetScene<TestScene>()->TGun) && w->GetIsEquiped() == true)
 		{
 			sf::Vector2f gunPos = w->GetPosition();
 			sf::Vector2f gunDir = w->GetDirection();
