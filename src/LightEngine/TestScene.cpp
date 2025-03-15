@@ -14,6 +14,7 @@ void TestScene::OnInitialize()
 	int width = GetWindowWidth();
 
 	pCam.Resize(width, height);
+	pCam.SetFocus(true);
 
 	pEntity1 = CreateEntity<Player>(50, sf::Color::Cyan);
 	pEntity1->SetPosition(width / 2, height / 2);
@@ -87,6 +88,18 @@ void TestScene::OnEvent(const sf::Event& event)
 		}
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+	{
+		if (pCam.GetFocus())
+		{
+			pCam.SetFocus(false);
+		}
+		else
+		{
+			pCam.SetFocus(true);
+		}
+	}
+
 	if (pEntitySelected != nullptr)
 	{
 		if (event.key.code == sf::Keyboard::H)
@@ -111,7 +124,10 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entit� 1
+	if (pCam.GetFocus())
+	{
+		pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entit� 1
+	}
 
 	if (pEntitySelected != nullptr)
 	{

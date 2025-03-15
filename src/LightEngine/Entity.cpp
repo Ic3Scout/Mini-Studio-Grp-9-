@@ -8,13 +8,14 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
 
-void Entity::Initialize(float radius, const sf::Color& color)
+void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 {
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 
 	mShape.setOrigin(0.f, 0.f);
-	mShape.setRadius(radius);
+	mShape.setSize(size);
 	mShape.setFillColor(color);
+	SetHitbox(size.x, size.y);
 	
 	mTarget.isSet = false;
 
@@ -24,16 +25,34 @@ void Entity::Initialize(float radius, const sf::Color& color)
 void Entity::Repulse(Entity* other) 
 {
 	sf::Vector2f distance = GetPosition(0.5f, 0.5f) - other->GetPosition(0.5f, 0.5f);
-	
+
 	float sqrLength = (distance.x * distance.x) + (distance.y * distance.y);
 	float length = std::sqrt(sqrLength);
+	float overlap = 0.f;
+	sf::Vector2f normal(0.f, 0.f);
 
-	float radius1 = mShape.getRadius();
-	float radius2 = other->mShape.getRadius();
+	sf::Vector2f halfSize1 = GetSize() * 0.5f;
+	sf::Vector2f halfSize2 = other->GetSize() * 0.5f;
 
-	float overlap = (length - (radius1 + radius2)) * 0.5f;
+	sf::Vector2f absDistance = { std::abs(distance.x), std::abs(distance.y) };
+	sf::Vector2f totalSize = halfSize1 + halfSize2;
 
-	sf::Vector2f normal = distance / length;
+	float overlapX = totalSize.x - absDistance.x;
+	float overlapY = totalSize.y - absDistance.y;
+
+	if (overlapX < overlapY)
+	{
+		overlap = overlapX * 0.5f;
+		normal = { (distance.x > 0 ? -1.0f : 1.0f), 0.0f };
+	}
+	else
+	{
+		overlap = overlapY * 0.5f;
+		normal = { 0.0f, (distance.y > 0 ? -1.0f : 1.0f) };
+	}
+
+	if (overlap < 0.001f)
+		overlap = 0.f;
 
 	sf::Vector2f translation = overlap * normal;
 
@@ -126,9 +145,9 @@ bool Entity::IsInside(float x, float y) const
 	float dx = x - position.x;
 	float dy = y - position.y;
 
-	float radius = mShape.getRadius();
+	sf::Vector2f size = mShape.getSize();
 
-	return (dx * dx + dy * dy) < (radius * radius);
+	return (dx * dx + dy * dy) < (size.x * size.y);
 }
 
 void Entity::UpdateHitBox()
@@ -165,6 +184,8 @@ void Entity::SetHitbox(float width, float height)
 		return;
 	}
 
+	mHitbox.size = { width, height };
+
 	mHitbox.xMin = -width * 0.5f;
 	mHitbox.yMin = -height * 0.5f;
 	mHitbox.xMax = width * 0.5f;
@@ -191,10 +212,10 @@ void Entity::Destroy()
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 {
-	float size = mShape.getRadius() * 2;
+	sf::Vector2f size = mShape.getSize();
 
-	x -= size * ratioX;
-	y -= size * ratioY;
+	x -= size.x * ratioX;
+	y -= size.y * ratioY;
 
 	mShape.setPosition(x, y);
 
@@ -210,11 +231,11 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
-	float size = mShape.getRadius() * 2;
+	sf::Vector2f size = mShape.getSize();
 	sf::Vector2f position = mShape.getPosition();
 
-	position.x += size * ratioX;
-	position.y += size * ratioY;
+	position.x += size.x * ratioX;
+	position.y += size.y * ratioY;
 
 	return position;
 }
