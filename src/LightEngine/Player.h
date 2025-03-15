@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 
+class AmmoBar;
 class Weapon;
 class WeedKiller;
 class Gun;
@@ -20,6 +21,8 @@ struct PlayerParameter
 class Player : public PhysicalEntity
 {
 	PlayerParameter mParameters;
+
+	AmmoBar* mBar;
 
 	std::vector<Weapon*> mWeapons;
 
@@ -39,6 +42,8 @@ public:
 
 	void SwapManager();
 	void SwapWeapon();
+
+	Weapon* GetCurrentEquipedWeapon();
 
 	int GetSide() { return mSide; }
 };

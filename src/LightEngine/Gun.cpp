@@ -6,7 +6,7 @@
 
 void Gun::OnInitialize()
 {
-	SetTag(GetScene<TestScene>()->TGun);
+	SetTag(TestScene::TGun); 
 	mHitbox.isActive = false;
 	SetRigidBody(false);
 

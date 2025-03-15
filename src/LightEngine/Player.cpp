@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "TestScene.h"
 #include "Debug.h"
+#include "AmmoBar.h"
 
 #include <iostream>
 
@@ -112,7 +113,7 @@ void Player::BasicControls()
 
 void Player::OnInitialize()
 {
-	SetTag((int) GetScene<TestScene>()->TPlayer);
+	SetTag((int) TestScene::TPlayer); 
 
 	Weapon* gun = CreateEntity<Gun>(10, sf::Color::White);
 	gun->SetOwner(this);
@@ -122,6 +123,10 @@ void Player::OnInitialize()
 
 	mWeapons.push_back(gun);
 	mWeapons.push_back(weedKiller);
+
+	mBar = new AmmoBar();
+
+	mBar->SetOwner(this);
 }
 
 void Player::OnUpdate()
@@ -143,7 +148,14 @@ void Player::OnUpdate()
 
 			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 300, gunPos.y + gunDir.y * 300, sf::Color::Red);
 		}
+
+		if (w->GetIsEquiped() == true)
+		{
+		}
+
 	}
+
+	mBar->UpdateBar(); 
 
 	if (GetPosition().y > 800)
 	{
@@ -153,14 +165,13 @@ void Player::OnUpdate()
 
 void Player::OnCollision(Entity* other)
 {
-	TestScene* currentScene = GetScene<TestScene>();
-
-	if ( other->IsTag(currentScene->TWater) || other->IsTag(currentScene->TAcid) )
+	if ( other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) )
 		return;
 
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
+		mGravitySpeed = 0;
 		SetGravity(false);
 		SetPosition(GetPosition().x, GetPosition().y - 0.5);
 		break;
@@ -228,5 +239,14 @@ void Player::SwapWeapon()
 			}
 			break;
 		}
+	}
+}
+
+Weapon* Player::GetCurrentEquipedWeapon()
+{
+	for (Weapon* w : mWeapons)
+	{
+		if (w->GetIsEquiped() == true)
+			return w;
 	}
 }

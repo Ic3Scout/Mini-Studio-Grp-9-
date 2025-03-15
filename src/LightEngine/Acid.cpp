@@ -26,7 +26,7 @@ void Acid::OnCollision(Entity* collidedWith)
 
 void Acid::OnInitialize()
 {
-	SetTag(GetScene<TestScene>()->TAcid);
+	SetTag(TestScene::TAcid); 
 }
 
 void Acid::OnDestroy()

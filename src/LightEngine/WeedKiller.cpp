@@ -5,7 +5,7 @@
 
 void WeedKiller::OnInitialize()
 {
-	SetTag(GetScene<TestScene>()->TWeedKiller); 
+	SetTag(TestScene::TWeedKiller); 
 	mHitbox.isActive = false;
 	SetRigidBody(false);
 

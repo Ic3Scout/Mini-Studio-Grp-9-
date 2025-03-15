@@ -12,7 +12,7 @@ void Water::OnUpdate()
 
 void Water::OnCollision(Entity* collidedWith)
 {
-	if (collidedWith->IsTag(GetScene<TestScene>()->TPlayer))
+	if (collidedWith->IsTag(TestScene::TPlayer)) 
 		return;
 
 	Destroy();
@@ -20,7 +20,7 @@ void Water::OnCollision(Entity* collidedWith)
 
 void Water::OnInitialize()
 {
-	SetTag(GetScene<TestScene>()->TWater);
+	SetTag(TestScene::TWater);
 
 	SetRigidBody(false);
 
