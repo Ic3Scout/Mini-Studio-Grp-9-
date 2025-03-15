@@ -2,12 +2,14 @@
 #include "Gun.h"
 #include "WeedKiller.h"
 #include "Weapon.h"
+#include "TestScene.h"
+#include "Debug.h"
 
 #include <iostream>
 
 void Player::MoveRight(float deltaTime)
 {
-	mSide = 2;
+	mSide = 1;
 
 	//std::cout << "Player::MoveRight" << std::endl;
 
@@ -21,7 +23,7 @@ void Player::MoveRight(float deltaTime)
 
 void Player::MoveLeft(float deltaTime)
 {
-	mSide = 1;
+	mSide = -1;
 
 	//std::cout << "Player::MoveLeft" << std::endl;
 
@@ -39,7 +41,7 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
-	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetRadius()*2); // mettre taille de la hitbox au lieu de l'entity ?
+	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
 }
 
 void Player::BasicControls()
@@ -99,7 +101,9 @@ void Player::BasicControls()
 
 void Player::OnInitialize()
 {
-	Weapon* gun = CreateEntity<Gun>(10, sf::Color::Magenta);
+	SetTag((int) GetScene<TestScene>()->TPlayer);
+
+	Weapon* gun = CreateEntity<Gun>(10, sf::Color::White);
 	gun->SetOwner(this);
 
 	Weapon* weedKiller = CreateEntity<WeedKiller>(10, sf::Color::Yellow);;
@@ -114,7 +118,22 @@ void Player::OnUpdate()
 	BasicControls();
 
 	SwapManager();
-  
+	
+	sf::Vector2f pos = GetPosition();
+
+	for (Weapon* w : mWeapons)
+	{
+		w->SetPosition(pos.x + mSide * mHitbox.size.x * 0.5f, pos.y);
+
+		if (w->IsTag(GetScene<TestScene>()->TGun))
+		{
+			sf::Vector2f gunPos = w->GetPosition();
+			sf::Vector2f gunDir = w->GetDirection();
+
+			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 300, gunPos.y + gunDir.y * 300, sf::Color::Red);
+		}
+	}
+
 	if (GetPosition().y > 800)
 	{
 		SetPosition(641, 594);
@@ -123,6 +142,10 @@ void Player::OnUpdate()
 
 void Player::OnCollision(Entity* other)
 {
+	TestScene* currentScene = GetScene<TestScene>();
+
+	if ( other->IsTag(currentScene->TWater) || other->IsTag(currentScene->TAcid) )
+		return;
 
 	switch (mHitbox.face)
 	{

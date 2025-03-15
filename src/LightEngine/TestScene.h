@@ -25,6 +25,16 @@ private:
 	void TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y);
 
 public:
+	enum Tag
+	{
+		TPlayer,
+		TPlatform,
+		TGun,
+		TWeedKiller,
+		TWater,
+		TAcid,
+	};
+
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;

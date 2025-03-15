@@ -5,6 +5,8 @@
 
 void WeedKiller::OnInitialize()
 {
+	SetTag(GetScene<TestScene>()->TWeedKiller);
+	mHitbox.isActive = false;
 	SetRigidBody(false);
 
 	mShootingDelay = 0.025f;
@@ -36,14 +38,7 @@ void WeedKiller::OnUpdate()
 
 	sf::Vector2f playerPos = pOwner->GetPosition();
 
-	int mFactor = 1;
-
-	if (pOwner->GetSide() == 1)
-	{
-		mFactor = -1;
-	}
-
-	SetPosition(playerPos.x + pOwner->GetRadius() * mFactor, playerPos.y);
+	SetPosition(playerPos.x + pOwner->GetSize().x * 0.5f * pOwner->GetSide(), playerPos.y);
 
 	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 }

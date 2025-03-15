@@ -16,7 +16,7 @@ void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 	mShape->setOrigin(0.f, 0.f);
 	mShape->setFillColor(color);
 	SetHitbox(size.x, size.y);
-	
+
 	mTarget.isSet = false;
 	
 	OnInitialize();
@@ -173,19 +173,21 @@ void Entity::UpdateHitBox()
 
 	AABBCollider h = mHitbox;
 
-	float width = (h.xMax - h.xMin);
-	float height = (h.yMax - h.yMin);
+	float width = mHitbox.size.x; 
+	float height = mHitbox.size.y; 
 
-	if (width <= 0 || height <= 0)
+	if (width <= 0 || height <= 0) 
 	{
 		return;
 	}
 
-	mHitbox.xMin = pos.x - width * 0.5f + mHitbox.offsetX;
-	mHitbox.yMin = pos.y - height * 0.5f + mHitbox.offsetY;
+	sf::Vector2f hbOffset = { mHitbox.offsetX, mHitbox.offsetY };
 
-	mHitbox.xMax = pos.x + width * 0.5f + mHitbox.offsetX;
-	mHitbox.yMax = pos.y + height * 0.5f + mHitbox.offsetY;
+	mHitbox.xMin = pos.x - width * 0.5f + hbOffset.x; 
+	mHitbox.yMin = pos.y - height * 0.5f + hbOffset.y;   
+
+	mHitbox.xMax = pos.x + width * 0.5f + hbOffset.x; 
+	mHitbox.yMax = pos.y + height * 0.5f + hbOffset.y; 
 
 	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
@@ -200,10 +202,13 @@ void Entity::SetHitbox(float width, float height)
 
 	mHitbox.size = { width, height };
 
-	mHitbox.xMin = -width * 0.5f;
-	mHitbox.yMin = -height * 0.5f;
-	mHitbox.xMax = width * 0.5f;
-	mHitbox.yMax = height * 0.5f;
+	float halfWidth = width * 0.5f;
+	float halfHeight = height * 0.5f;
+
+	mHitbox.xMin = -halfWidth;
+	mHitbox.yMin = -halfHeight;
+	mHitbox.xMax = halfWidth;
+	mHitbox.yMax = halfHeight;
 }
 
 void Entity::SetHitboxOffset(float offsetX, float offsetY)
@@ -233,7 +238,6 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 
 	mShape->setPosition(x, y);
 
-	//#TODO Optimise
 	if (mTarget.isSet) 
 	{
 		sf::Vector2f position = GetPosition(0.5f, 0.5f);
@@ -316,6 +320,7 @@ void Entity::Update()
 {
 	float dt = GetDeltaTime();
 	float distance = dt * mSpeed;
+
 	sf::Vector2f translation = distance * mDirection;
 	mShape->move(translation);
 
@@ -341,9 +346,8 @@ void Entity::Update()
 		}
 	}
 
-	UpdateHitBox();
-
 	OnUpdate();
+	UpdateHitBox();
 }
 
 Scene* Entity::GetScene() const

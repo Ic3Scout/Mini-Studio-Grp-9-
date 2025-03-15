@@ -25,7 +25,7 @@ class Player : public PhysicalEntity
 
 	float mDelayToSwap = 1.f;
 
-	int mSide = 2; //Right
+	int mSide = 1; //Right
 
 public:
 	void BasicControls();

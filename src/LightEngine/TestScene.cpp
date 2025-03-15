@@ -16,19 +16,15 @@ void TestScene::OnInitialize()
 	pCam.Resize(width, height);
 	pCam.SetFocus(true);
 
-	pEntity1 = CreateEntity<Player>(sf::Vector2f(50,50), sf::Color::Cyan);
+	pEntity1 = CreateEntity<Player>(sf::Vector2f(100,100), sf::Color::Cyan); 
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
-  
-	pEntity1->SetHitbox(100, 100);
 	pEntity1->SetGravity(true);
 
-	pEntity2 = CreateEntity<PhysicalEntity>(sf::Vector2f(50, 50), sf::Color::Green);
+	pEntity2 = CreateEntity<PhysicalEntity>(sf::Vector2f(100, 100), sf::Color::Green);
 	pEntity2->SetPosition(width / 2 - 400, height / 2);
 
 	pEntity2->SetRigidBody(false);
-	pEntity2->SetHitbox(100, 100);
-	pEntity2->SetIsHitboxActive(false);
 	pEntity2->SetGravity(false);
 
 	pPlatforme1 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);

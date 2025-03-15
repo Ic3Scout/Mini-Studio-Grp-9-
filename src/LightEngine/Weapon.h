@@ -34,5 +34,7 @@ public:
 
 	bool GetIsEquiped() { return mIsEquiped; }
 	void SetIsEquiped(bool value) { mIsEquiped = value; }
+
+	Player* GetOwner() {return pOwner; }
 };
 

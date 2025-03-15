@@ -1,19 +1,14 @@
 #include "Acid.h"
 #include "WeedKiller.h"
+#include "TestScene.h"
+#include "Player.h"
 
 void Acid::OnUpdate()
 {
 	if (!pOwner)
 		return;
 
-	int mFactor = 1;
-
-	if (mPlayerSide == 1)
-	{
-		mFactor = -1;
-	}
-
-	SetHitboxOffset(100 * mFactor, 0);
+	SetHitboxOffset(100 * pOwner->GetOwner()->GetSide(), 0);
 	SetHitbox(200, 100);
 
 	sf::Vector2f wkPos = pOwner->GetPosition();
@@ -31,6 +26,7 @@ void Acid::OnCollision(Entity* collidedWith)
 
 void Acid::OnInitialize()
 {
+	SetTag(GetScene<TestScene>()->TAcid);
 }
 
 void Acid::OnDestroy()

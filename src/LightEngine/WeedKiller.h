@@ -4,6 +4,7 @@
 
 class WeedKiller : public Weapon
 {
+
 public:
 	void OnInitialize() override;
 	void OnUpdate() override;

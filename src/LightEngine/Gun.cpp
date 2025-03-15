@@ -1,13 +1,15 @@
 #include "Gun.h"
-#include "Debug.h"
 #include "Player.h"
 #include "Water.h"
 #include "TestScene.h"
-#include "Scene.h"
 #include <iostream>
 
 void Gun::OnInitialize()
 {
+	SetTag(GetScene<TestScene>()->TGun);
+	mHitbox.isActive = false;
+	SetRigidBody(false);
+
 	mMaxAmmos = 4;
 	mAmmos = mMaxAmmos;
 	mReloadTime = 1.f;
@@ -30,23 +32,16 @@ void Gun::OnUpdate()
 		return;
 	}
 
+	sf::Vector2f playerPos = pOwner->GetPosition();
+	sf::Vector2f pos = this->GetPosition();
+
 	system("cls");
 	std::cout << "Water Gun : " << mAmmos << "/" << mMaxAmmos << std::endl;
 
-	ChangeColor(sf::Color(255, 0, 0, 255));
+	ChangeColor(sf::Color(255, 255, 255, 255));
 
-	sf::Vector2f playerPos = pOwner->GetPosition();
-
-	int mFactor = 1;
-
-	if (pOwner->GetSide() == 1)
-	{
-		mFactor = -1;
-	}
-
-	sf::Vector2f finalDirection = { std::cos(mAngle) * mFactor, std::sin(mAngle) };
-
-	SetPosition(playerPos.x + pOwner->GetRadius() * finalDirection.x, playerPos.y + pOwner->GetRadius() * finalDirection.y);
+	
+	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle)};
 
 	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit
 
@@ -67,12 +62,7 @@ void Gun::OnUpdate()
 	}
 
 	SetDirection(finalDirection.x, finalDirection.y);
-
 	ShootManager(sf::Keyboard::Key::Right, 0, 7);
-
-	float playerRadius = pOwner->GetRadius();
-
-	Debug::DrawLine(playerPos.x + playerRadius * finalDirection.x, playerPos.y + playerRadius * finalDirection.y, playerPos.x + GetDirection().x * 300, playerPos.y + GetDirection().y * 300, sf::Color::White);
 }
 
 void Gun::Shoot()
@@ -84,7 +74,7 @@ void Gun::Shoot()
 
 	sf::Vector2f pos = GetPosition();
 
-	Water* w = CreateEntity<Water>(15, sf::Color::Blue);
+	Water* w = CreateEntity<Water>(12, sf::Color::Blue);
 	w->SetPosition(pos.x, pos.y);
 	w->SetDirection(mDirection.x, mDirection.y);
 	mShootingDelay = 0.5f;
