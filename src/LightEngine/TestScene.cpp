@@ -15,11 +15,11 @@ void TestScene::OnInitialize()
 
 	pCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>(100, sf::Color::Cyan);
+	pEntity1 = CreateEntity<Player>(30, sf::Color::Cyan);
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
   
-	pEntity1->SetHitbox(200, 200);
+	pEntity1->SetHitbox(60, 60);
 	pEntity1->SetGravity(true);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(50, sf::Color::Green);
