@@ -20,6 +20,9 @@ void WeedKiller::OnInitialize()
 
 void WeedKiller::OnUpdate()
 {
+	if (pOwner->ToDestroy())
+		return;
+
 	ReloadManager();
 
 	if (mIsEquiped == false)
@@ -27,12 +30,6 @@ void WeedKiller::OnUpdate()
 		ChangeColor(sf::Color(255, 255, 0, 0));
 		return;
 	}
-
-	if (!pOwner)
-		return;
-
-	system("cls");
-	std::cout << "WeedKiller : " << mAmmos << "/" << mMaxAmmos << std::endl;
 
 	ChangeColor(sf::Color(255, 255, 0, 255));
 

@@ -27,11 +27,14 @@ public:
 	virtual void OnUpdate() = 0;
 	virtual void SetOwner(Player* pOwner) { this->pOwner = pOwner; }
 	virtual void Shoot() = 0;
+	void OnDestroy() override;
 
 	void ReloadManager();
 	void ShootManager(sf::Keyboard::Key key, int valueJoystick1, int valueJoystick2);
 	void ShootManager(sf::Mouse::Button mouseButton, int valueJoystick1, int valueJoystick2);
 
+	int GetCurrentAmmos() { return mAmmos; }
+	int GetMaxAmmos() { return mMaxAmmos; }
 	float GetRatioMunition() { return (float) mAmmos / (float) mMaxAmmos; }
 
 	bool GetIsEquiped() { return mIsEquiped; }

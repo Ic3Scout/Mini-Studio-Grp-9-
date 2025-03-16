@@ -1,6 +1,11 @@
 #include "PhysicalEntity.h"
 #include <iostream>
 
+void PhysicalEntity::OnUpdate()
+{
+	Fall(GetDeltaTime());
+}
+
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
 	std::cout << "collision" << std::endl;
@@ -37,8 +42,8 @@ void PhysicalEntity::Fall(float dt)
 	}
 
 	mGravitySpeed += mGravityAcceleration * dt;
-
-	sf::Vector2f pos = GetPosition();
+	
+	sf::Vector2f pos = GetPosition(); 
 	float newPosY = pos.y + mGravitySpeed * dt;
 	SetPosition(pos.x, newPosY);
 }

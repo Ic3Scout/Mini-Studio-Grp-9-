@@ -13,8 +13,8 @@ void TestScene::OnInitialize()
 	int height = GetWindowHeight();
 	int width = GetWindowWidth();
 
-	pCam.Resize(width, height);
-	pCam.SetFocus(true);
+	mCam.Resize(width, height);
+	mCam.SetFocus(true);
 
 	pEntity1 = CreateEntity<Player>(sf::Vector2f(100,100), sf::Color::Cyan); 
 	pEntity1->SetPosition(width / 2, height / 2);
@@ -86,13 +86,14 @@ void TestScene::OnEvent(const sf::Event& event)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
-		if (pCam.GetFocus())
+		if (mCam.GetFocus())
 		{
-			pCam.SetFocus(false);
+			mCam.SetFocus(false);
 		}
 		else
 		{
-			pCam.SetFocus(true);
+			if(pEntity1->ToDestroy() == false)
+				mCam.SetFocus(true);
 		}
 	}
 
@@ -120,9 +121,12 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	if (pCam.GetFocus())
+	std::cout << "Working\n";
+
+	if (mCam.GetFocus())
 	{
-		pCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entit� 1
+		if (pEntity1->ToDestroy() == false)
+			mCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entite 1 
 	}
 
 	if (pEntitySelected != nullptr)
@@ -130,13 +134,11 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
-	pEntity1->Fall(GetDeltaTime());
-	pEntity2->Fall(GetDeltaTime());
 
 	UpdateCamera();
 }
 
 void TestScene::UpdateCamera()
 {
-	GameManager::Get()->SetCamera(pCam);
+	GameManager::Get()->SetCamera(mCam);
 }

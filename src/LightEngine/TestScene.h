@@ -8,7 +8,7 @@ class Player;
 
 class TestScene : public Scene
 {
-	Camera pCam;
+	Camera mCam;
 
 	Player* pEntity1;
 	PhysicalEntity* pEntity2;
@@ -39,5 +39,6 @@ public:
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
 	void UpdateCamera();
+	Camera& GetCam() { return mCam; }
 };
 

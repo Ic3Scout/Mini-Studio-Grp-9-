@@ -21,7 +21,7 @@ void Gun::OnInitialize()
 
 void Gun::OnUpdate()
 {
-	if (!pOwner)
+	if (pOwner->ToDestroy())
 		return;
 
 	ReloadManager();
@@ -35,12 +35,8 @@ void Gun::OnUpdate()
 	sf::Vector2f playerPos = pOwner->GetPosition();
 	sf::Vector2f pos = this->GetPosition();
 
-	system("cls");
-	std::cout << "Water Gun : " << mAmmos << "/" << mMaxAmmos << std::endl;
-
 	ChangeColor(sf::Color(255, 255, 255, 255));
 
-	
 	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle)};
 
 	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit

@@ -3,11 +3,14 @@
 #include "Water.h"
 #include <vector>
 #include <iostream>
+#include "Health.h"
+#include "Character.h"
 
+#define PLAYER_HP 2
+
+class PlayerUI;
 class AmmoBar;
 class Weapon;
-class WeedKiller;
-class Gun;
 
 struct PlayerParameter
 {
@@ -18,20 +21,46 @@ struct PlayerParameter
 	float mAcceleration = 670.f;
 };
 
-class Player : public PhysicalEntity
+class Player : public Character
 {
+public:
+	enum State
+	{
+		Idle,
+		Moving,
+		Jumping,
+		Dashing,
+		Falling,
+		TakingDamage,
+		Dying,
+
+		Count
+	};
+
+	static constexpr int STATE_COUNT = static_cast<int>(State::Count);
+
+private:
+	State mState = Idle;
+
 	PlayerParameter mParameters;
 
-	AmmoBar* mBar;
+	std::vector<PlayerUI*> mUI;
 
 	std::vector<Weapon*> mWeapons;
 
 	float mDelayToSwap = 1.f;
 
-	int mSide = 1; //Right
+	int mSide = 1; //Right : Left = -1
 
+	int mTransitions[STATE_COUNT][STATE_COUNT];
+
+	void SetTransition(State from, State to, bool value) { mTransitions[(int)from][(int)to] = value; }
 public:
+	Player();
+
 	void BasicControls();
+
+	void InitStates();
 
 	void MoveRight(float deltaTime);
 	void MoveLeft(float deltaTime);
@@ -39,11 +68,13 @@ public:
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
+	void OnDestroy() override;
 
 	void SwapManager();
 	void SwapWeapon();
 
 	Weapon* GetCurrentEquipedWeapon();
+	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
 };

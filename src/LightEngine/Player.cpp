@@ -4,7 +4,9 @@
 #include "Weapon.h"
 #include "TestScene.h"
 #include "Debug.h"
-#include "AmmoBar.h"
+#include "PlayerAmmoBar.h"
+#include "PlayerHealthBar.h"
+#include "PlayerUI.h"
 
 #include <iostream>
 
@@ -43,6 +45,20 @@ void Player::Jump()
 	mHitbox.face = CollideWith::Nothing;
 
 	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
+}
+
+Player::Player() : Character(PLAYER_HP)  
+{
+	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
+	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
+
+	mUI.push_back(pPlayerHB);
+	mUI.push_back(pPlayerAB);
+
+	for (PlayerUI* ui : mUI)
+	{
+		ui->SetOwner(this);
+	}
 }
 
 void Player::BasicControls()
@@ -111,8 +127,58 @@ void Player::BasicControls()
 
 }
 
+void Player::InitStates()
+{
+	for (int i = 0; i < STATE_COUNT; i++)
+	{
+		for (int j = 0; j < STATE_COUNT; j++)
+		{
+			mTransitions[i][j] = false;
+		}
+	}
+
+	////Idle, Moving,  Jumping,Dashing, Falling, TakingDmg, Dying
+	//{ 0,	  1,	   1,	   1,	    1,		 1,			1 }, // Idle
+	//{ 1,    0,       1,	   1,       1,       1,         1 }, // Moving
+	//{ 0,    1,       0,	   1,       1,       1,         1 }, // Jumping
+	//{ 1,    0,       0,	   0,       0,       0,         0 }, // Dashing
+	//{ 1,    1,       0,	   1,       0,       1,         1 }, // Falling
+	//{ 1,    0,       0,	   0,       0,       0,         1 }, // TakingDmg
+	//{ 0,    0,       0,	   0,       0,       0,         0 }  // Dying
+
+	SetTransition(Idle, Moving, true);
+	SetTransition(Idle, Jumping, true);
+	SetTransition(Idle, Dashing, true);
+	SetTransition(Idle, Falling, true);
+	SetTransition(Idle, TakingDamage, true);
+	SetTransition(Idle, Dying, true);
+
+	SetTransition(Moving, Idle, true);
+	SetTransition(Moving, Jumping, true);
+	SetTransition(Moving, Dashing, true);
+	SetTransition(Moving, Falling, true);
+	SetTransition(Moving, TakingDamage, true);
+	SetTransition(Moving, Dying, true);
+
+	SetTransition(Jumping, Moving, true);
+	SetTransition(Jumping, Dashing, true);
+	SetTransition(Jumping, Falling, true);
+	SetTransition(Jumping, TakingDamage, true);
+	SetTransition(Jumping, Dying, true);
+
+	SetTransition(Dashing, Idle, true);
+
+	SetTransition(Falling, Idle, true);
+	SetTransition(Falling, Moving, true);
+	SetTransition(Falling, Dashing, true);
+	SetTransition(Falling, TakingDamage, true);
+	SetTransition(Falling, Dying, true);
+}
+
 void Player::OnInitialize()
 {
+	InitStates();
+
 	SetTag((int) TestScene::TPlayer); 
 
 	Weapon* gun = CreateEntity<Gun>(10, sf::Color::White);
@@ -123,14 +189,14 @@ void Player::OnInitialize()
 
 	mWeapons.push_back(gun);
 	mWeapons.push_back(weedKiller);
-
-	mBar = new AmmoBar();
-
-	mBar->SetOwner(this);
 }
 
 void Player::OnUpdate()
 {
+	if (mIsDead)
+		Destroy();
+
+	PhysicalEntity::OnUpdate();
 	BasicControls();
 
 	SwapManager();
@@ -148,17 +214,16 @@ void Player::OnUpdate()
 
 			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 300, gunPos.y + gunDir.y * 300, sf::Color::Red);
 		}
-
-		if (w->GetIsEquiped() == true)
-		{
-		}
-
 	}
 
-	mBar->UpdateBar(); 
+	for (PlayerUI* ui : mUI)
+	{
+		ui->UpdateUI(); 
+	}
 
 	if (GetPosition().y > 800)
 	{
+		AddRemoveHP(-1);
 		SetPosition(641, 594);
 	}
 }
@@ -198,6 +263,24 @@ void Player::OnCollision(Entity* other)
 		std::cout << "Bug\n";
 		break;
 	}
+}
+
+void Player::OnDestroy()
+{
+	for (Weapon* w : mWeapons)
+	{
+		w->Destroy();
+	}
+
+	mWeapons.clear();
+
+	for (PlayerUI* ui : mUI)
+	{
+		delete ui;
+		ui = nullptr;
+	}
+
+	mUI.clear();
 }
 
 void Player::SwapManager()

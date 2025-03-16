@@ -1,4 +1,5 @@
 #include "Weapon.h"
+#include <iostream>
 
 void Weapon::AddRemoveAmmo(int value)
 {
@@ -11,6 +12,11 @@ void Weapon::AddRemoveAmmo(int value)
 	{
 		mAmmos = 0;
 	}
+}
+
+void Weapon::OnDestroy()
+{
+	std::cout << "Weapon deleted\n";
 }
 
 void Weapon::ReloadManager()
