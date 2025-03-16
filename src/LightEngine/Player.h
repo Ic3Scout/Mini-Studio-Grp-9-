@@ -6,7 +6,7 @@
 #include "Health.h"
 #include "Character.h"
 
-#define PLAYER_HP 2
+#define PLAYER_HP 4
 
 class PlayerUI;
 class AmmoBar;

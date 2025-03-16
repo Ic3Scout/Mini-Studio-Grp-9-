@@ -20,7 +20,7 @@ void WeedKiller::OnInitialize()
 
 void WeedKiller::OnUpdate()
 {
-	if (pOwner->ToDestroy())
+	if (!pOwner)
 		return;
 
 	ReloadManager();

@@ -16,7 +16,6 @@ void Weapon::AddRemoveAmmo(int value)
 
 void Weapon::OnDestroy()
 {
-	std::cout << "Weapon deleted\n";
 }
 
 void Weapon::ReloadManager()

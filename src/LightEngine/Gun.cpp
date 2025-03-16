@@ -21,7 +21,7 @@ void Gun::OnInitialize()
 
 void Gun::OnUpdate()
 {
-	if (pOwner->ToDestroy())
+	if (!pOwner)
 		return;
 
 	ReloadManager();

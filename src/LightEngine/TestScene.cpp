@@ -14,12 +14,14 @@ void TestScene::OnInitialize()
 	int width = GetWindowWidth();
 
 	mCam.Resize(width, height);
-	mCam.SetFocus(true);
 
-	pEntity1 = CreateEntity<Player>(sf::Vector2f(100,100), sf::Color::Cyan); 
+	pEntity1 = CreateEntity<Player>(sf::Vector2f(100, 100), sf::Color::Cyan);
 	pEntity1->SetPosition(width / 2, height / 2);
 	pEntity1->SetRigidBody(false);
 	pEntity1->SetGravity(true);
+
+	mCam.SetOwner(pEntity1);
+	mCam.SetFocus(true);
 
 	pEntity2 = CreateEntity<PhysicalEntity>(sf::Vector2f(100, 100), sf::Color::Green);
 	pEntity2->SetPosition(width / 2 - 400, height / 2);
@@ -92,8 +94,11 @@ void TestScene::OnEvent(const sf::Event& event)
 		}
 		else
 		{
-			if(pEntity1->ToDestroy() == false)
-				mCam.SetFocus(true);
+			if (pEntity1 != nullptr)
+			{
+				if (pEntity1->ToDestroy() == false)
+					mCam.SetFocus(true);
+			}
 		}
 	}
 
@@ -121,12 +126,9 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	std::cout << "Working\n";
-
-	if (mCam.GetFocus())
+	if (mCam.GetFocus() == true)
 	{
-		if (pEntity1->ToDestroy() == false)
-			mCam.SetPosition(pEntity1->GetPosition()); // Pour suivre l'entite 1 
+		mCam.FollowPlayer(); // Pour suivre l'entite 1   
 	}
 
 	if (pEntitySelected != nullptr)

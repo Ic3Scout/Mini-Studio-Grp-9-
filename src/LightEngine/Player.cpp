@@ -194,8 +194,11 @@ void Player::OnInitialize()
 void Player::OnUpdate()
 {
 	if (mIsDead)
+	{
 		Destroy();
-
+		return;
+	}
+	
 	PhysicalEntity::OnUpdate();
 	BasicControls();
 
@@ -267,8 +270,11 @@ void Player::OnCollision(Entity* other)
 
 void Player::OnDestroy()
 {
+	GetScene<TestScene>()->GetCam().SetOwner(nullptr);
+
 	for (Weapon* w : mWeapons)
 	{
+		w->SetOwner(nullptr);
 		w->Destroy();
 	}
 
