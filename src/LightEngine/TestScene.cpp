@@ -70,14 +70,14 @@ void TestScene::OnInitialize()
 
 	inputFile.close();
 
-	const int BLOCK_SIZE = 30;
-	int startX = width / 2;
-	int startY = height / 2;
+	const int BLOCK_SIZE = 24;
+	int startX = width / 2 - 250;
+	int startY = height / 2 - 200;
 
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
 			if (map[y][x] == 'X') {
-				PhysicalEntity* block = CreateEntity<PhysicalEntity>(15, sf::Color::Red);
+				PhysicalEntity* block = CreateEntity<PhysicalEntity>(12, sf::Color::Red);
 				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				block->SetRigidBody(false);
 				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
@@ -85,43 +85,6 @@ void TestScene::OnInitialize()
 			}
 		}
 	}
-
-
-
-
-
-
-	pPlatforme1 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme1->SetPosition(width / 2, height / 2 + 300);
-	pPlatforme1->SetRigidBody(false);
-	pPlatforme1->SetHitbox(500, 30);
-
-	pPlatforme2 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme2->SetPosition(width / 2 + 375, height / 2 + 260);
-	pPlatforme2->SetRigidBody(false);
-	pPlatforme2->SetHitbox(30, 30);
-
-	pPlatforme3 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme3->SetPosition(width / 2 + 750, height / 2 + 200);
-	pPlatforme3->SetRigidBody(false);
-	pPlatforme3->SetHitbox(30, 30);
-
-	pPlatforme4 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme4->SetPosition(width / 2 - 375, height / 2 + 225);
-	pPlatforme4->SetRigidBody(false);
-	pPlatforme4->SetHitbox(30, 30);
-
-	pPlatforme5 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 70);
-	pPlatforme5->SetRigidBody(false);
-	pPlatforme5->SetHitbox(30, 30);
-
-	pPlatforme5 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 170);
-	pPlatforme5->SetRigidBody(false);
-	pPlatforme5->SetHitbox(30, 30);
-
-
 
 	pEntitySelected = nullptr;
 }

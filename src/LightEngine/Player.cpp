@@ -227,7 +227,7 @@ void Player::OnUpdate()
 	if (GetPosition().y > 800)
 	{
 		AddRemoveHP(-1);
-		SetPosition(641, 594);
+		SetPosition(640, 380);
 	}
 }
 
