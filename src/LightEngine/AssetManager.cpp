@@ -1,11 +1,17 @@
 #include "AssetManager.h"
-#include "Texture.h"
+#include <iostream>
 
 AssetManager* AssetManager::instance = nullptr;
 
-Texture* AssetManager::LoadTexture(const char* path)
+sf::Texture* AssetManager::LoadTexture(const char* path)
 {
-    Texture* pTexture = new Texture(path);
+    sf::Texture* pTexture = new sf::Texture();
+
+    if (!pTexture->loadFromFile(path))
+    {
+        std::cerr << "Chargement texture mal";
+    }
+
     mTextures[path] = pTexture;
 
     return pTexture;
@@ -21,7 +27,7 @@ AssetManager* AssetManager::Get()
     return instance;
 }
 
-Texture* AssetManager::GetTexture(const char* path)
+sf::Texture* AssetManager::GetTexture(const char* path)
 {
     auto it = mTextures.find(path);
 

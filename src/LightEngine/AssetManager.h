@@ -1,20 +1,19 @@
 #pragma once
 #include <map>
-
-class Texture;
+#include <SFML/Graphics/Texture.hpp>
 
 class AssetManager
 {
 	static AssetManager* instance;
 
-	std::map<const char*, Texture*> mTextures;
+	std::map<const char*, sf::Texture*> mTextures;
 
 private:
-	Texture* LoadTexture(const char* path);
+	sf::Texture* LoadTexture(const char* path);
 
 public:
 	static AssetManager* Get();
 
-	Texture* GetTexture(const char* path);
+	sf::Texture* GetTexture(const char* path);
 };
 
