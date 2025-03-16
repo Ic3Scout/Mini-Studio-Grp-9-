@@ -40,6 +40,11 @@ void WeedKiller::OnUpdate()
 	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 }
 
+void WeedKiller::OnDestroy()
+{
+	SetOwner(nullptr);
+}
+
 void WeedKiller::Shoot()
 {
 	if (mAmmos <= 0)
@@ -48,8 +53,14 @@ void WeedKiller::Shoot()
 	mProgressDelay = 0.f;
 
 	Acid* a = CreateEntity<Acid>(5, sf::Color::Green);
-	a->SetOwner(this);
-	a->SetPlayerSide(pOwner->GetSide());
+
+	if (pOwner != nullptr)
+	{
+		a->SetOwner(this);
+		a->SetPlayerSide(pOwner->GetSide());
+	}
+	else
+		a->SetOwner(nullptr);
 
 	mShootingDelay = 0.025f;
 

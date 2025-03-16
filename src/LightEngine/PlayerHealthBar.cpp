@@ -17,11 +17,11 @@ void PlayerHealthBar::UpdateUI()
 
 	for (int i = 0; i < currentHp; ++i)
 	{
-		Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 200, 15, sf::Color(100, 255, 0));
+		Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 245, 15, sf::Color(100, 255, 0));
 	}
 
 	for (int i = currentHp; i < maxHp; ++i)
 	{
-		Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 200, 15, sf::Color(0, 75, 0));
+		Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 245, 15, sf::Color(0, 75, 0));
 	}
 }

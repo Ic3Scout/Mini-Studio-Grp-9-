@@ -5,11 +5,10 @@
 
 void Acid::OnUpdate()
 {
-	if (!pOwner)
+	if (pOwner == nullptr)
+	{
 		return;
-
-	SetHitboxOffset(100 * pOwner->GetOwner()->GetSide(), 0);
-	SetHitbox(200, 100);
+	}
 
 	sf::Vector2f wkPos = pOwner->GetPosition();
 
@@ -41,4 +40,11 @@ void Acid::SetOwner(WeedKiller* pWK)
 
 	SetPosition(wkPos.x, wkPos.y);
 	SetRigidBody(false);
+
+	if (pOwner != nullptr)
+	{
+		Player* p = pOwner->GetOwner();
+		SetHitboxOffset(100 * p->GetSide(), 0);
+		SetHitbox(200, 100);
+	}
 }
