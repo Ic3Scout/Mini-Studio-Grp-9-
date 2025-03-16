@@ -49,11 +49,11 @@ void TestScene::OnInitialize()
 
 
 
-	std::string filepath = "C:/Users/alfre/OneDrive/Documents/GitHub/Mini-Studio-Grp-9-/res/map.txt";
+	std::string filepath = "../../../res/map.txt";
 	std::ifstream inputFile(filepath);
 
 	if (!std::filesystem::exists(filepath)) {
-		std::cerr << "Erreur : Le fichier n'existe pas à l'emplacement : " << filepath << std::endl;
+		std::cerr << "Erreur : Le fichier n'existe pas a l'emplacement : " << filepath << std::endl;
 	}
 
 	if (!inputFile) {
