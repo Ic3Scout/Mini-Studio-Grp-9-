@@ -47,4 +47,8 @@ void Acid::SetOwner(WeedKiller* pWK)
 		SetHitboxOffset(100 * p->GetSide(), 0);
 		SetHitbox(200, 100);
 	}
+	else
+	{
+		pOwner = nullptr;
+	}
 }

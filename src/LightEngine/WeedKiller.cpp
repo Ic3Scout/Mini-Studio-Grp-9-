@@ -52,17 +52,14 @@ void WeedKiller::Shoot()
 
 	mProgressDelay = 0.f;
 
-	Acid* a = CreateEntity<Acid>(5, sf::Color::Green);
-
 	if (pOwner != nullptr)
 	{
+		Acid* a = CreateEntity<Acid>(5, sf::Color::Green);
 		a->SetOwner(this);
 		a->SetPlayerSide(pOwner->GetSide());
+
+		mShootingDelay = 0.025f;
+
+		AddRemoveAmmo(-1);
 	}
-	else
-		a->SetOwner(nullptr);
-
-	mShootingDelay = 0.025f;
-
-	AddRemoveAmmo(-1);
 }
