@@ -28,6 +28,7 @@ public:
 		TWeedKiller,
 		TWater,
 		TAcid,
+		TAlly
 	};
 
 	void OnInitialize() override;

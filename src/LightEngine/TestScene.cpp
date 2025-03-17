@@ -2,6 +2,10 @@
 #include "PhysicalEntity.h"
 #include "Player.h"
 #include "Platform.h"
+#include "Vine.h"
+#include "Station.h"
+#include "Bulb.h"
+#include "Nenuphloat.h"
 #include "DummyEntity.h"
 
 #include "Debug.h"
@@ -12,7 +16,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "SFML/Graphics.hpp"
 #include <filesystem>
 
 void TestScene::OnInitialize()
@@ -22,7 +25,7 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 50.f, 150.f }, sf::Color::White);
+	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
 	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
@@ -46,6 +49,10 @@ void TestScene::OnInitialize()
 	}
 
 	std::vector<Platform*> platforms;
+	std::vector<Vine*> vines;
+	std::vector<Nenuphloat*> nenuphloats;
+	std::vector<Station*> stations;
+	std::vector<Bulb*> bulbs;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -62,11 +69,37 @@ void TestScene::OnInitialize()
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>({ 24,24 }, sf::Color::Red);
+				Platform* block = CreateEntity<Platform>({ 24,24 }, sf::Color(1,75,63));
 				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				block->SetRigidBody(false);
 				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
 				platforms.push_back(block);
+			}
+			if (map[y][x] == 'V') {
+				Vine* vine = CreateEntity<Vine>({ 24,24 }, sf::Color(172, 210, 128));
+				vine->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				vines.push_back(vine);
+			}
+			if (map[y][x] == 'N') {
+				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ 24,24 }, sf::Color(65, 106, 36));
+				nenuphloat->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				nenuphloat->SetRigidBody(false);
+				nenuphloat->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				nenuphloats.push_back(nenuphloat);
+			}
+			if (map[y][x] == 'S') {
+				Station* station = CreateEntity<Station>({ 24,24 }, sf::Color(158, 144, 193));
+				station->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				station->SetRigidBody(false);
+				station->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				stations.push_back(station);
+			}
+			if (map[y][x] == 'B') {
+				Bulb* bulb = CreateEntity<Bulb>({ 24,24 }, sf::Color(213, 170, 63));
+				bulb->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				bulb->SetRigidBody(false);
+				bulb->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				bulbs.push_back(bulb);
 			}
 		}
 	}

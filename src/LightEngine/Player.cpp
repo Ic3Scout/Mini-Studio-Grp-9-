@@ -7,6 +7,7 @@
 #include "PlayerAmmoBar.h"
 #include "PlayerHealthBar.h"
 #include "PlayerUI.h"
+#include "Ally.h"
 
 #include <iostream>
 
@@ -44,7 +45,7 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
-	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
+	mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
 }
 
 Player::Player() : Character(PLAYER_HP)  
@@ -224,16 +225,16 @@ void Player::OnUpdate()
 		ui->UpdateUI(); 
 	}
 
-	if (GetPosition().y > 800)
-	{
-		AddRemoveHP(-1);
-		SetPosition(640, 380);
-	}
+	//if (GetPosition().y > 800)
+	//{
+	//	AddRemoveHP(-1);
+	//	SetPosition(640, 380);
+	//}
 }
 
 void Player::OnCollision(Entity* other)
 {
-	if ( other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) )
+	if ( other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
 		return;
 
 	switch (mHitbox.face)
