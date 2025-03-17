@@ -8,7 +8,6 @@ void PhysicalEntity::OnUpdate()
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	std::cout << "collision" << std::endl;
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:

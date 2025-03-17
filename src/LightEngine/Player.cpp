@@ -181,10 +181,10 @@ void Player::OnInitialize()
 
 	SetTag((int) TestScene::TPlayer); 
 
-	Weapon* gun = CreateEntity<Gun>(10, sf::Color::White);
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>(10, sf::Color::Yellow);;
+	Weapon* weedKiller = CreateEntity<WeedKiller>({20, 20}, sf::Color::Yellow);;
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);

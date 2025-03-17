@@ -8,31 +8,17 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
 
-void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
+void Entity::Initialize(sf::Vector2f size, const sf::Color& color) 
 {
-	mShape = std::make_unique<sf::RectangleShape>(size);
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 
-	mShape->setOrigin(0.f, 0.f);
-	mShape->setFillColor(color);
-	SetHitbox(size.x, size.y);
+	mShape.setOrigin(0.f, 0.f);
+	mShape.setFillColor(color); 
+	mShape.setSize(size); 
+	SetHitbox(size.x, size.y); 
 
 	mTarget.isSet = false;
 	
-	OnInitialize();
-}
-
-void Entity::Initialize(float radius, const sf::Color& color)
-{
-	mShape = std::make_unique<sf::CircleShape>(radius);
-	mDirection = sf::Vector2f(0.0f, 0.0f);
-
-	mShape->setOrigin(0.f, 0.f);
-	mShape->setFillColor(color);
-	SetHitbox(radius *2 , radius * 2);
-
-	mTarget.isSet = false;
-
 	OnInitialize();
 }
 
@@ -219,7 +205,7 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 
 void Entity::ChangeColor(sf::Color newColor)
 {
-	mShape->setFillColor(newColor);
+	mShape.setFillColor(newColor); 
 }
 
 void Entity::Destroy()
@@ -236,7 +222,7 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 	x -= size.x * ratioX;
 	y -= size.y * ratioY;
 
-	mShape->setPosition(x, y);
+	mShape.setPosition(x, y);
 
 	if (mTarget.isSet) 
 	{
@@ -250,7 +236,7 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
 	sf::Vector2f size = GetSize();
-	sf::Vector2f position = mShape->getPosition();
+	sf::Vector2f position = mShape.getPosition();
 
 	position.x += size.x * ratioX;
 	position.y += size.y * ratioY;
@@ -297,23 +283,7 @@ void Entity::SetDirection(float x, float y, float speed)
 
 sf::Vector2f Entity::GetSize() const
 {
-	if (auto rect = dynamic_cast<sf::RectangleShape*>(mShape.get())) 
-	{
-		return rect->getSize();
-	}
-	else if (auto circle = dynamic_cast<sf::CircleShape*>(mShape.get()))
-	{
-		float r = circle->getRadius();
-		return sf::Vector2f(r * 2.f, r * 2.f);
-	}
-}
-
-float Entity::GetRadius() const
-{
-	if (auto circle = dynamic_cast<sf::CircleShape*>(mShape.get()))
-	{
-		return circle->getRadius();
-	}
+	return mShape.getSize();
 }
 
 void Entity::Update()
@@ -321,8 +291,8 @@ void Entity::Update()
 	float dt = GetDeltaTime();
 	float distance = dt * mSpeed;
 
-	sf::Vector2f translation = distance * mDirection;
-	mShape->move(translation);
+	sf::Vector2f translation = distance * mDirection; 
+	mShape.move(translation); 
 
 	if (mTarget.isSet) 
 	{

@@ -36,7 +36,7 @@ class Entity
     };
 
 protected:
-	std::unique_ptr<sf::Shape> mShape;
+	sf::RectangleShape mShape;
     sf::Vector2f mDirection;
 	AABBCollider mHitbox;
 	Target mTarget;
@@ -63,12 +63,11 @@ public:
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
 	sf::Vector2f GetSize() const;
-	float GetRadius() const;
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
-	sf::Shape* GetShape() { return mShape.get(); }
+	sf::RectangleShape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
     bool IsColliding(Entity* other);
@@ -94,9 +93,6 @@ public:
 
     template<typename T>
     T* CreateEntity(sf::Vector2f size, const sf::Color& color);
-
-	template<typename T>
-	T* CreateEntity(float radius, const sf::Color& color);
 
 protected:
     Entity() = default;

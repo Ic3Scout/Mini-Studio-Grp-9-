@@ -26,7 +26,7 @@ void Water::OnInitialize()
 
 	SetSpeed(750);
 
-	SetHitbox(GetRadius() * 2.f, GetRadius() * 2.f);
+	SetHitbox(GetSize().x, GetSize().y);
 }
 
 void Water::OnDestroy()
