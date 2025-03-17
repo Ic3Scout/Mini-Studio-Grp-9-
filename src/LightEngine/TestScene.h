@@ -33,6 +33,7 @@ public:
 		TWeedKiller,
 		TWater,
 		TAcid,
+		TEnnemy,
 	};
 
 	void OnInitialize() override;
