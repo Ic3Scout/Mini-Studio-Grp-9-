@@ -18,6 +18,7 @@ class Animation
 	float mDuration = 0.5f;
 	float mElapsedTime = 0.f;
 	bool mLoop;
+	bool mStatic = false;
 
 public:
 	void LoadJsonData(const char* path);
@@ -31,6 +32,7 @@ public:
 	sf::IntRect* GetCurrentFrame();
 
 private:
-	int FindIndex(const char* name);
+	int FindIndexA(const char* name);
+	int FindIndexE(const char* eltName);
 };
 
