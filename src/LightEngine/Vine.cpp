@@ -31,7 +31,7 @@ void Vine::Grow()
 		return;
 	grown = true;
 	SetHitbox(GetSize().x, GetSize().y * 10);
-	SetPosition(GetPosition().x, GetPosition().y - GetSize().y );
+	SetPosition(GetPosition().x, GetPosition().y - (GetSize().y * 4));
 }
 
 void Vine::Retract()
@@ -41,5 +41,5 @@ void Vine::Retract()
 		return;
 	grown = false;
 	SetHitbox(GetSize().x, GetSize().y);
-	SetPosition(GetPosition().x, GetPosition().y + 108);
+	SetPosition(GetPosition().x, GetPosition().y + (GetSize().y * 4));
 }

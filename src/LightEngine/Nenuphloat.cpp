@@ -1,5 +1,6 @@
 #include "Nenuphloat.h"
 #include "TestScene.h"
+#include <chrono>
 
 void Nenuphloat::OnInitialize()
 {
@@ -11,27 +12,29 @@ void Nenuphloat::OnInitialize()
 
 void Nenuphloat::OnUpdate()
 {
+	if (grown && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - growTime).count() >= 3)
+	{
+		Retract();
+	}
 }
 
 void Nenuphloat::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TWater))
 	{
-		if (!grown)
-			Grow();
-		else
-			Retract();
+		Grow();
 	}
 }
 
 void Nenuphloat::Grow()
 {
 	SetTagAlly(TNenuphloatG);
-	if (grown)
-		return;
-	grown = true;
-	SetHitbox(GetSize().x * 3, GetSize().y);
-	SetPosition(GetPosition().x, GetPosition().y - 108);
+	if (!grown)
+	{
+		grown = true;
+		SetHitbox(GetSize().x * 5, GetSize().y);
+	}
+	growTime = std::chrono::steady_clock::now();
 }
 
 void Nenuphloat::Retract()
@@ -41,5 +44,4 @@ void Nenuphloat::Retract()
 		return;
 	grown = false;
 	SetHitbox(GetSize().x, GetSize().y);
-	SetPosition(GetPosition().x, GetPosition().y + 108);
 }

@@ -247,16 +247,15 @@ void Player::OnCollision(Entity* other)
 	}
 	if (other->IsTagAlly(Ally::TVineG))
 	{
-		std::cout << "VineG" << std::endl;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 		{
-			std::cout << "VineG Jump" << std::endl;
 			mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
 		}
 	}
 	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
 	{
-		return;
+		if (!other->IsTagAlly(Ally::TNenuphloatG))
+			return;
 	}
 
 	switch (mHitbox.face)
