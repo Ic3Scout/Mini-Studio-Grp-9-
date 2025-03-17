@@ -153,24 +153,55 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dying::Start(Player* pPlayer)
 {
-	std::cout << "Dying" << std::endl;
+
 }
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
-
+		std::cout << "Dying" << std::endl;
 }
 
 
 
 void PlayerAction_Dashing::Start(Player* pPlayer)
 {
-	std::cout << "Dashing" << std::endl;
+	mDuration = 0.1f;
 }
 
 void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 {
+	std::cout << "Dashing" << std::endl;
 
+	float* speedBoost = &(pPlayer->mSpeed);
+	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 100;
+	if (*speedBoost > pPlayer->mParameters.mMaxSpeed * 20)   
+	{
+		*speedBoost = pPlayer->mParameters.mMaxSpeed;  
+	}
+	sf::Vector2f pos = pPlayer->GetPosition();
+
+	if (mDuration > 0)
+	{
+		if (pPlayer->mHitbox.face != Player::CollideWith::Left && pPlayer->mHitbox.face != Player::CollideWith::Right)
+		{
+			pPlayer->SetGravity(false);
+
+			pPlayer->SetPosition(pos.x + *speedBoost * deltatime * pPlayer->GetSide(), pos.y);
+		
+		}
+		else
+			mDuration = 0.f;
+	}
+	else
+	{
+		pPlayer->SetGravity(true);
+
+		*speedBoost = 0.f;
+
+		pPlayer->TransitionTo(Player::Falling);
+	}
+
+	mDuration -= deltatime;
 }
 
 

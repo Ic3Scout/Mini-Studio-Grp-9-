@@ -109,6 +109,7 @@ void Player::InitStates()
 	SetTransition(Jumping, Dying, true);
 
 	SetTransition(Dashing, Idle, true);
+	SetTransition(Dashing, Falling, true);
 
 	SetTransition(Falling, Idle, true);
 	SetTransition(Falling, Moving, true);
@@ -168,6 +169,23 @@ void Player::OnUpdate()
 	PhysicalEntity::OnUpdate();
 
 	BasicControls();
+
+
+	if (mParameters.mDashReloadTime >= 2.f)
+	{
+		Debug::DrawCircle(GetPosition().x, GetPosition().y, 10, sf::Color::Magenta);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+		{
+			TransitionTo(Dashing);
+			mParameters.mDashReloadTime = 0.f;
+		}
+	}
+	else
+	{
+		mParameters.mDashReloadTime += GetDeltaTime();
+	}
+
 	SwapManager();
 
 	sf::Vector2f pos = GetPosition();

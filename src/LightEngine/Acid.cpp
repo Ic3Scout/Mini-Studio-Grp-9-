@@ -44,8 +44,10 @@ void Acid::SetOwner(WeedKiller* pWK)
 	if (pOwner != nullptr)
 	{
 		Player* p = pOwner->GetOwner();
-		SetHitboxOffset(100 * p->GetSide(), 0);
-		SetHitbox(200, 100);
+		sf::Vector2f playerSize = p->GetSize();
+
+		SetHitboxOffset(playerSize.x * p->GetSide(), 0);
+		SetHitbox(playerSize.x * 2, playerSize.x);
 	}
 	else
 	{

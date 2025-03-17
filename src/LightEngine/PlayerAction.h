@@ -63,6 +63,7 @@ public:
 
 class PlayerAction_Dashing : public PlayerAction
 {
+	float mDuration;
 public:
 	void Start(Player* pPlayer) override;
 	void Update(Player* pPlayer, float deltatime) override;
