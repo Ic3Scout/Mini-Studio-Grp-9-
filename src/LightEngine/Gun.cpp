@@ -3,6 +3,7 @@
 #include "Water.h"
 #include "TestScene.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 void Gun::OnInitialize()
 {
@@ -39,7 +40,14 @@ void Gun::OnUpdate()
 
 	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle)};
 
-	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit
+	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // pos vertical du joystick droit
+
+	if (y > -25 || y < 25)
+	{
+		y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V);  
+	}
+
+	std::cout << y << std::endl;
 
 	if (mDirection.y >= -0.995)
 	{
