@@ -62,7 +62,7 @@ void TestScene::OnInitialize()
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>(12, sf::Color::Red);
+				Platform* block = CreateEntity<Platform>({ 24,24 }, sf::Color::Red);
 				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				block->SetRigidBody(false);
 				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
