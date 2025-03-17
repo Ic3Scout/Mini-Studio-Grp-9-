@@ -56,6 +56,8 @@ private:
 
 	float mJoyX;
 
+	bool mIsMoving = false;
+
 	int mTransitions[STATE_COUNT][STATE_COUNT];
 	PlayerAction* mAction[STATE_COUNT];
 
@@ -67,9 +69,6 @@ public:
 
 	void InitStates();
 	bool TransitionTo(State newState);
-	void MoveRight(float deltaTime);
-	void MoveLeft(float deltaTime);
-	void Jump();
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;

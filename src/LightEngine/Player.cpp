@@ -11,44 +11,7 @@
 
 #include <iostream>
 
-void Player::MoveRight(float deltaTime)
-{
-	mSide = 1;
-
-	//std::cout << "Player::MoveRight" << std::endl;
-
-	mSpeed += mParameters.mAcceleration* deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::MoveLeft(float deltaTime)
-{
-	mSide = -1;
-
-	//std::cout << "Player::MoveLeft" << std::endl;
-
-	mSpeed += mParameters.mAcceleration * deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::Jump()
-{
-	//std::cout << "Player::Jump" << std::endl;
-
-	mHitbox.face = CollideWith::Nothing;
-
-	mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
-}
-
-Player::Player() : Character(PLAYER_HP)  
+Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
@@ -70,72 +33,40 @@ void Player::BasicControls()
 
 	mJoyX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
-	if (sf::Joystick::isConnected(0))
-	{
-		//std::cout << "JoyStick Connecte" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 2))
-	{
-		std::cout << "O Pressed 2" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 3))
-	{
-		std::cout << "tri Pressed 3" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 0))
-	{
-		std::cout << "car Pressed 4" << std::endl;
-	}
-
-	bool isMoving = false;
+	mIsMoving = false;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
 	{
-		isMoving = true;
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 		{
-			isMoving = false;
+			mIsMoving = false;
+			mSide = -1;
 		}
 		else
 		{
+			mIsMoving = true;
 			mSide = 1;
-			TransitionTo(Player::Moving);
 		}
-
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 	{
-		isMoving = true;
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
 		{
-			isMoving = false;
+			mIsMoving = false;
+			mSide = 1;
 		}
 		else
 		{
+			mIsMoving = true;
 			mSide = -1;
-			TransitionTo(Player::Moving); 
-		}
-
-	}
-
-	if (isMoving == false)
-	{
-		TransitionTo(Idle);
-		mSpeed = 0;
-	}
-
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
-	{
-		if (mHitbox.face == CollideWith::Bottom)
-		{
-			
-			TransitionTo(Player::Jumping);
 		}
 	}
+
+	if (mIsMoving && mState != Falling)
+		TransitionTo(Player::Moving);
+
+	if (mIsMoving == false)
+		mSpeed = 0.f;
 
 }
 
@@ -180,6 +111,7 @@ void Player::InitStates()
 	SetTransition(Dashing, Idle, true);
 
 	SetTransition(Falling, Idle, true);
+	SetTransition(Falling, Moving, true);
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
@@ -211,12 +143,12 @@ void Player::OnInitialize()
 {
 	InitStates();
 
-	SetTag((int) TestScene::TPlayer); 
+	SetTag((int)TestScene::TPlayer);
 
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({20, 20}, sf::Color::Yellow);;
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);
@@ -225,19 +157,19 @@ void Player::OnInitialize()
 
 void Player::OnUpdate()
 {
+	mAction[mState]->Update(this, GetDeltaTime());
+
 	if (mIsDead)
 	{
 		TransitionTo(Player::Dying);
 		return;
 	}
-	
-	mAction[mState]->Update(this, GetDeltaTime());
 
 	PhysicalEntity::OnUpdate();
-	BasicControls();
 
+	BasicControls();
 	SwapManager();
-	
+
 	sf::Vector2f pos = GetPosition();
 
 	for (Weapon* w : mWeapons)
@@ -255,7 +187,7 @@ void Player::OnUpdate()
 
 	for (PlayerUI* ui : mUI)
 	{
-		ui->UpdateUI(); 
+		ui->UpdateUI();
 	}
 
 	if (GetPosition().y > 800)
@@ -264,18 +196,17 @@ void Player::OnUpdate()
 		SetPosition(640, 380);
 	}
 
-	mHitbox.face = CollideWith::Nothing;
 }
 
 void Player::OnCollision(Entity* other)
 {
-	if ( other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) )
+	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))
 		return;
 
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
-		mGravitySpeed = 0;
+		mGravitySpeed = 0.f;
 		SetGravity(false);
 		SetPosition(GetPosition().x, GetPosition().y - 0.5);
 		break;

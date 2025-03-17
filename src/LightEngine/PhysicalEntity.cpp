@@ -36,9 +36,11 @@ void PhysicalEntity::Fall(float dt)
 	if (mGravity == false)
 	{
 		mGravitySpeed = 0.f;
-
+		mGravityAcceleration = 0;
 		return;
 	}
+
+	mGravityAcceleration = GRAVITY_ACCELERATION;
 
 	mGravitySpeed += mGravityAcceleration * dt;
 	
