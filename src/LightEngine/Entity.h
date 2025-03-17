@@ -46,6 +46,7 @@ protected:
     bool mToDestroy = false;
     int mTag = -1;
 	bool mRigidBody = false;
+	bool mKineticBody = false;
 
 public:
 	enum CollideWith
@@ -84,6 +85,8 @@ public:
 	void UpdateFrame(float dt);
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
+	void SetKineticBody(bool value) { mKineticBody = value; }
+	bool IsKineticBody() { return mKineticBody; }
 
 	virtual void LoadAnimation();
 	

@@ -58,6 +58,15 @@ void Entity::Repulse(Entity* other)
 	if (overlap < 0.001f)
 		overlap = 0.f;
 
+	if (!mKineticBody)
+	{
+		overlap = 0.f;
+	}
+	else if (mKineticBody && other->IsKineticBody() == false)
+	{
+		overlap *= 2.f;
+	}
+
 	sf::Vector2f translation = overlap * normal;
 
 	sf::Vector2f position1 = GetPosition(0.5f, 0.5f) - translation;
@@ -65,6 +74,12 @@ void Entity::Repulse(Entity* other)
 
 	SetPosition(position1.x, position1.y, 0.5f, 0.5f);
 	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
+
+	if (mKineticBody)
+		SetPosition(position1.x, position1.y, 0.5f, 0.5f);
+
+	if (other->IsKineticBody())
+		other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
 bool Entity::IsColliding(Entity* other)
