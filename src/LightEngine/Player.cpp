@@ -171,11 +171,11 @@ void Player::OnUpdate()
 	BasicControls();
 
 
-	if (mParameters.mDashReloadTime >= 2.f)
+	if (mParameters.mDashReloadTime >= 5.f)
 	{
-		Debug::DrawCircle(GetPosition().x, GetPosition().y, 10, sf::Color::Magenta);
+		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
 		{
 			TransitionTo(Dashing);
 			mParameters.mDashReloadTime = 0.f;

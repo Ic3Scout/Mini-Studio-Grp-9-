@@ -106,7 +106,7 @@ void PlayerAction_Falling::Start(Player* pPlayer)
 
 void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 {
-	std::cout << "Falling\n";
+	std::cout << "Falling" << std::endl;
 
 	bool isMoving = false;
 
@@ -165,16 +165,26 @@ void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dashing::Start(Player* pPlayer)
 {
-	mDuration = 0.1f;
+	mDuration = 0.2f;
 }
 
 void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 {
-	std::cout << "Dashing" << std::endl;
+
+	if (pPlayer->mSpeed > 0)
+	{
+		std::cout << " Super Dashing" << std::endl;
+
+		pPlayer->mSpeed = 500.f;
+	}
+	else
+	{
+		std::cout << "Dashing" << std::endl;
+	}
 
 	float* speedBoost = &(pPlayer->mSpeed);
-	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 100;
-	if (*speedBoost > pPlayer->mParameters.mMaxSpeed * 20)   
+	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 50;
+	if (*speedBoost > pPlayer->mParameters.mMaxSpeed * 15)   
 	{
 		*speedBoost = pPlayer->mParameters.mMaxSpeed;  
 	}

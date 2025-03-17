@@ -22,7 +22,7 @@ struct PlayerParameter
 	float mMaxSpeed = 250.f;
 	float mAcceleration = 670.f;
 
-	float mDashReloadTime = 2.f;
+	float mDashReloadTime = 5.f;
 };
 
 class Player : public Character
