@@ -2,13 +2,15 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "GameManager.h"
+#include "AssetManager.h"
 
 class PhysicalEntity;
 class Player;
 
 class TestScene : public Scene
 {
-	Camera mCam;
+	Camera pCam;
+	AssetManager* assetManager = AssetManager::Get();
 
 	Player* pEntity1;
 	PhysicalEntity* pEntity2;

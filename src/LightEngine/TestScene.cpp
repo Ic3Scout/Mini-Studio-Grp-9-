@@ -6,7 +6,7 @@
 #include "Debug.h"
 #include <iostream>
 
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics.hpp>
 
 void TestScene::OnInitialize()
 {
@@ -15,10 +15,14 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>(sf::Vector2f(100, 100), sf::Color::Cyan);
-	pEntity1->SetPosition(width / 2, height / 2);
-	pEntity1->SetRigidBody(false);
+	pEntity1 = CreateEntity<PhysicalEntity>({ 50.f, 150.f }, sf::Color::White);
+	pEntity1->SetPosition(width / 2.f, height / 2.f);
+	pEntity1->SetRigidBody(true);
+	pEntity1->SetIsHitboxActive(false);
 	pEntity1->SetGravity(true);
+	
+	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
+	pEntity1->GetShape()->setTexture(texture);
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -58,6 +62,7 @@ void TestScene::OnInitialize()
 	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 170);
 	pPlatforme5->SetRigidBody(false);
 	pPlatforme5->SetHitbox(30, 30);
+
 
 
 
