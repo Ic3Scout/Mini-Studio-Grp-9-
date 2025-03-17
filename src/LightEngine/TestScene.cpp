@@ -108,3 +108,4 @@ void TestScene::UpdateCamera()
 {
 	GameManager::Get()->SetCamera(pCam);
 }
+

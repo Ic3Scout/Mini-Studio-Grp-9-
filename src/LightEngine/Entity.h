@@ -10,6 +10,7 @@ namespace sf
 }
 
 class Scene;
+class Animation;
 
 class Entity
 {
@@ -39,6 +40,7 @@ protected:
     sf::Vector2f mDirection;
 	AABBCollider mHitbox;
 	Target mTarget;
+	Animation* mAnimations;
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
@@ -77,6 +79,7 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
+	void UpdateFrame(float dt);
 
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }

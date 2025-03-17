@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
+#include "Animation.h"
 
 void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 {
@@ -18,6 +19,8 @@ void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 	SetHitbox(size.x, size.y);
 	
 	mTarget.isSet = false;
+
+	mAnimations = new Animation();
 
 	OnInitialize();
 }
@@ -196,6 +199,12 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 {
 	mHitbox.offsetX = offsetX;
 	mHitbox.offsetY = offsetY;
+}
+
+void Entity::UpdateFrame(float dt)
+{
+	mAnimations->Update(dt);
+	sf::IntRect* frame = mAnimations->GetCurrentFrame();
 }
 
 void Entity::Destroy()
