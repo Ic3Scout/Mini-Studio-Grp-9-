@@ -8,6 +8,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
 #include "Animation.h"
+#include "AssetManager.h"
 
 void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 {
@@ -201,10 +202,28 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 	mHitbox.offsetY = offsetY;
 }
 
+void Entity::SetTexture(const char* path)
+{
+	AssetManager* assetManager = AssetManager::Get();
+	mTexture = assetManager->GetTexture(path);
+}
+
 void Entity::UpdateFrame(float dt)
 {
+	if (mTexture == nullptr)
+		return;
+
 	mAnimations->Update(dt);
 	sf::IntRect* frame = mAnimations->GetCurrentFrame();
+	
+	if (frame == nullptr)
+	{
+		std::cout << "pas de frame trouve" << std::endl;
+		return;
+	}
+
+	mShape.setTexture(mTexture);
+	mShape.setTextureRect(*frame);
 }
 
 void Entity::Destroy()
@@ -281,6 +300,11 @@ void Entity::SetDirection(float x, float y, float speed)
 	mTarget.isSet = false;
 }
 
+void Entity::LoadAnimation()
+{
+	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
+}
+
 void Entity::Update()
 {
 	float dt = GetDeltaTime();
@@ -311,6 +335,7 @@ void Entity::Update()
 	}
 
 	UpdateHitBox();
+	UpdateFrame(dt);
 
 	OnUpdate();
 }

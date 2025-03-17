@@ -41,6 +41,7 @@ protected:
 	AABBCollider mHitbox;
 	Target mTarget;
 	Animation* mAnimations;
+	sf::Texture* mTexture;
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
@@ -79,10 +80,12 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
+	void SetTexture(const char* path);
 	void UpdateFrame(float dt);
-
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
+
+	virtual void LoadAnimation();
 	
 	template<typename T>
 	T* GetScene() const;

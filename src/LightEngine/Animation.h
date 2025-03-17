@@ -11,21 +11,26 @@ using json = nlohmann::json;
 class Animation
 {
 	std::vector<sf::IntRect> mTextureRects;
+	json data;
 
 	int mMaxFrame = 0;
 	int mCurrentFrame = 0;
-	float mDuration = 100.f;
+	float mDuration = 0.5f;
 	float mElapsedTime = 0.f;
 	bool mLoop;
 
 public:
-	void LoadAnimationSingle(const char* name, json data);
-	void LoadAnimationByRow(const char* name, json data);
-	void LoadAnimationGrid(const char* name, json data);
+	void LoadJsonData(const char* path);
+	void LoadAnimationSingle(const char* name);
+	void LoadAnimationByRow(const char* name);
+	void LoadAnimationGrid(const char* name);
 	void Update(float dt);
 
 	void SetLoop(bool value) { mLoop = value; }
 
 	sf::IntRect* GetCurrentFrame();
+
+private:
+	int FindIndex(const char* name);
 };
 

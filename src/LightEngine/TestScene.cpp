@@ -19,9 +19,6 @@ void TestScene::OnInitialize()
 	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(false);
-	
-	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
-	pEntity1->GetShape()->setTexture(texture);
 
 	pEntity2 = CreateEntity<PhysicalEntity>({ 50.f,50.f }, sf::Color::Red);
 	pEntity2->SetPosition(width / 2.f - 100, height / 2.f);
