@@ -9,4 +9,5 @@ public:
 	void OnUpdate() override;
 	void OnCollision(Entity* collidedWith) override;
 	void Grow();
+	void Retract();
 };

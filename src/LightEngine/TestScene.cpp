@@ -83,22 +83,16 @@ void TestScene::OnInitialize()
 			if (map[y][x] == 'N') {
 				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ 24,24 }, sf::Color(65, 106, 36));
 				nenuphloat->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
-				nenuphloat->SetRigidBody(false);
-				nenuphloat->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
 				nenuphloats.push_back(nenuphloat);
 			}
 			if (map[y][x] == 'S') {
 				Station* station = CreateEntity<Station>({ 24,24 }, sf::Color(158, 144, 193));
 				station->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
-				station->SetRigidBody(false);
-				station->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
 				stations.push_back(station);
 			}
 			if (map[y][x] == 'B') {
 				Bulb* bulb = CreateEntity<Bulb>({ 24,24 }, sf::Color(213, 170, 63));
 				bulb->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
-				bulb->SetRigidBody(false);
-				bulb->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
 				bulbs.push_back(bulb);
 			}
 		}

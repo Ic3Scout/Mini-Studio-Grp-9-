@@ -8,6 +8,7 @@
 #include "PlayerHealthBar.h"
 #include "PlayerUI.h"
 #include "Ally.h"
+#include "Station.h"
 
 #include <iostream>
 
@@ -225,22 +226,43 @@ void Player::OnUpdate()
 		ui->UpdateUI(); 
 	}
 
-	//if (GetPosition().y > 800)
-	//{
-	//	AddRemoveHP(-1);
-	//	SetPosition(640, 380);
-	//}
+	Respawn(mParameters.respawnX, mParameters.respawnY);
+}
+
+void Player::Respawn(int x, int y)
+{
+	if (GetPosition().y > 800)
+	{
+		AddRemoveHP(-1);
+		SetPosition(x, y);
+	}
 }
 
 void Player::OnCollision(Entity* other)
 {
-	if ( other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
+	if (other->IsTagAlly(Ally::TStation))
+	{
+		mParameters.respawnX = other->GetPosition().x;
+		mParameters.respawnY = other->GetPosition().y;
+	}
+	if (other->IsTagAlly(Ally::TVineG))
+	{
+		std::cout << "VineG" << std::endl;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
+		{
+			std::cout << "VineG Jump" << std::endl;
+			mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
+		}
+	}
+	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
+	{
 		return;
+	}
 
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
-		mGravitySpeed = 0;
+		mGravitySpeed = 0.f;
 		SetGravity(false);
 		SetPosition(GetPosition().x, GetPosition().y - 0.5);
 		break;

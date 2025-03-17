@@ -3,13 +3,14 @@
 
 class Ally : public PhysicalEntity
 {
-	int mTagAlly = - 1;
 public:
 	enum TagAlly
 	{
-		TVine,
+		TVineR,
+		TVineG,
+		TNenuphloatR,
+		TNenuphloatG,
 		TStation,
-		TNenuphloat,
 		TBulb,
 	};
 	virtual void OnInitialize();
