@@ -7,6 +7,7 @@
 #include "PlayerAmmoBar.h"
 #include "PlayerHealthBar.h"
 #include "PlayerUI.h"
+#include "PlayerAction.h"
 
 #include <iostream>
 
@@ -67,7 +68,7 @@ void Player::BasicControls()
 
 	float dt = GetDeltaTime();
 
-	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);// pos horizontal du joystick gauche
+	mJoyX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	if (sf::Joystick::isConnected(0))
 	{
@@ -88,40 +89,51 @@ void Player::BasicControls()
 
 	bool isMoving = false;
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
 	{
 		isMoving = true;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 		{
 			isMoving = false;
 		}
 		else
-			MoveRight(dt);
+		{
+			mSide = 1;
+			TransitionTo(Player::Moving);
+		}
+
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 	{
 		isMoving = true;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
 		{
 			isMoving = false;
 		}
 		else
-			MoveLeft(dt);
+		{
+			mSide = -1;
+			TransitionTo(Player::Moving); 
+		}
+
 	}
 
 	if (isMoving == false)
 	{
+		TransitionTo(Idle);
 		mSpeed = 0;
 	}
+
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 	{
 		if (mHitbox.face == CollideWith::Bottom)
 		{
-			Jump();
+			
+			TransitionTo(Player::Jumping);
 		}
 	}
 
@@ -160,7 +172,6 @@ void Player::InitStates()
 	SetTransition(Moving, TakingDamage, true);
 	SetTransition(Moving, Dying, true);
 
-	SetTransition(Jumping, Moving, true);
 	SetTransition(Jumping, Dashing, true);
 	SetTransition(Jumping, Falling, true);
 	SetTransition(Jumping, TakingDamage, true);
@@ -169,10 +180,31 @@ void Player::InitStates()
 	SetTransition(Dashing, Idle, true);
 
 	SetTransition(Falling, Idle, true);
-	SetTransition(Falling, Moving, true);
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
+
+	mAction[Idle] = new PlayerAction_Idle();
+	mAction[Moving] = new PlayerAction_Moving();
+	mAction[Jumping] = new PlayerAction_Jumping();
+	mAction[Falling] = new PlayerAction_Falling();
+	mAction[TakingDamage] = new PlayerAction_TakingDamage();
+	mAction[Dying] = new PlayerAction_Dying();
+	mAction[Dashing] = new PlayerAction_Dashing();
+
+}
+
+bool Player::TransitionTo(State newState)
+{
+	if (mTransitions[(int)mState][(int)newState])
+	{
+		mAction[(int)newState]->Start(this);
+		mState = newState;
+
+		return true;
+	}
+
+	return false;
 }
 
 void Player::OnInitialize()
@@ -195,10 +227,12 @@ void Player::OnUpdate()
 {
 	if (mIsDead)
 	{
-		Destroy();
+		TransitionTo(Player::Dying);
 		return;
 	}
 	
+	mAction[mState]->Update(this, GetDeltaTime());
+
 	PhysicalEntity::OnUpdate();
 	BasicControls();
 
@@ -229,6 +263,8 @@ void Player::OnUpdate()
 		AddRemoveHP(-1);
 		SetPosition(640, 380);
 	}
+
+	mHitbox.face = CollideWith::Nothing;
 }
 
 void Player::OnCollision(Entity* other)

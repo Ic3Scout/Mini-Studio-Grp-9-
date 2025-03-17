@@ -6,11 +6,13 @@
 #include "Health.h"
 #include "Character.h"
 
+
 #define PLAYER_HP 4
 
 class PlayerUI;
 class AmmoBar;
 class Weapon;
+class PlayerAction;
 
 struct PlayerParameter
 {
@@ -52,7 +54,10 @@ private:
 
 	int mSide = 1; //Right : Left = -1
 
+	float mJoyX;
+
 	int mTransitions[STATE_COUNT][STATE_COUNT];
+	PlayerAction* mAction[STATE_COUNT];
 
 	void SetTransition(State from, State to, bool value) { mTransitions[(int)from][(int)to] = value; }
 public:
@@ -61,7 +66,7 @@ public:
 	void BasicControls();
 
 	void InitStates();
-
+	bool TransitionTo(State newState);
 	void MoveRight(float deltaTime);
 	void MoveLeft(float deltaTime);
 	void Jump();
@@ -77,4 +82,13 @@ public:
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
+
+	friend class PlayerAction;
+	friend class PlayerAction_Idle;
+	friend class PlayerAction_Moving;
+	friend class PlayerAction_Jumping;
+	friend class PlayerAction_Falling;
+	friend class PlayerAction_TakingDamage;
+	friend class PlayerAction_Dying;
+	friend class PlayerAction_Dashing;
 };
