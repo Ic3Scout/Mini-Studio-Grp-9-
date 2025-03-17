@@ -320,6 +320,10 @@ void Entity::LoadAnimation()
 	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
 }
 
+void Entity::FixedUpdate(float dt)
+{
+}
+
 void Entity::Update()
 {
 	float dt = GetDeltaTime();

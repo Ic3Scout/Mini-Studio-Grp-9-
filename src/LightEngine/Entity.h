@@ -86,7 +86,7 @@ public:
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	void SetKineticBody(bool value) { mKineticBody = value; }
-	bool IsKineticBody() { return mKineticBody; }
+	bool IsKineticBody() const { return mKineticBody; }
 
 	virtual void LoadAnimation();
 	
@@ -107,6 +107,7 @@ protected:
     virtual void OnCollision(Entity* collidedWith) {};
 	virtual void OnInitialize() {};
 	virtual void OnDestroy() {};
+	virtual void FixedUpdate(float dt);
 
 private:
     void Update();
