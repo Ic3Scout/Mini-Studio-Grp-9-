@@ -15,10 +15,10 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<PhysicalEntity>({ 50.f, 150.f }, sf::Color::White);
+	pEntity1 = CreateEntity<Player>({ 50.f, 150.f }, sf::Color::White);
 	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(true);
-	pEntity1->SetIsHitboxActive(false);
+	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
 	
 	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");

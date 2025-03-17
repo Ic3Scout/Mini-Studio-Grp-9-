@@ -9,7 +9,7 @@ class Player;
 
 class TestScene : public Scene
 {
-	Camera pCam;
+	Camera mCam;
 	AssetManager* assetManager = AssetManager::Get();
 
 	Player* pEntity1;
