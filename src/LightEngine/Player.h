@@ -60,6 +60,8 @@ private:
 
 	bool mIsMoving = false;
 
+	float mProgressDashReload = 0.f;
+
 	int mTransitions[STATE_COUNT][STATE_COUNT];
 	PlayerAction* mAction[STATE_COUNT];
 

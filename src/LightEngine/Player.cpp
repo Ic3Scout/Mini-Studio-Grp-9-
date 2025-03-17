@@ -171,19 +171,19 @@ void Player::OnUpdate()
 	BasicControls();
 
 
-	if (mParameters.mDashReloadTime >= 5.f)
+	if (mProgressDashReload <= 0)
 	{
 		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::isButtonPressed(0, 5))
 		{
 			TransitionTo(Dashing);
-			mParameters.mDashReloadTime = 0.f;
+			mProgressDashReload = mParameters.mDashReloadTime;
 		}
 	}
 	else
 	{
-		mParameters.mDashReloadTime += GetDeltaTime();
+		mProgressDashReload -= GetDeltaTime();
 	}
 
 	SwapManager();
