@@ -22,7 +22,7 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 50.f, 150.f }, sf::Color::White);
+	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
 	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
@@ -56,7 +56,7 @@ void TestScene::OnInitialize()
 	inputFile.close();
 
 	const int BLOCK_SIZE = 24;
-	int startX = width / 2 - 250;
+	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	for (size_t y = 0; y < map.size(); ++y) {

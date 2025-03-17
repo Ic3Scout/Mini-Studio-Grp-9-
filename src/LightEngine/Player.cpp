@@ -44,7 +44,7 @@ void Player::Jump()
 
 	mHitbox.face = CollideWith::Nothing;
 
-	mGravitySpeed = -std::sqrt(2 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
+	mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
 }
 
 Player::Player() : Character(PLAYER_HP)  
