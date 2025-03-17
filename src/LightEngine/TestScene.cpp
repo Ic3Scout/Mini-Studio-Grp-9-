@@ -1,12 +1,19 @@
 #include "TestScene.h"
 #include "PhysicalEntity.h"
 #include "Player.h"
+#include "Platform.h"
 #include "DummyEntity.h"
 
 #include "Debug.h"
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
+
+#include <fstream>
+#include <vector>
+#include <string>
+#include "SFML/Graphics.hpp"
+#include <filesystem>
 
 void TestScene::OnInitialize()
 {
@@ -27,43 +34,42 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	pEntity2 = CreateEntity<PhysicalEntity>(sf::Vector2f(100, 100), sf::Color::Green);
-	pEntity2->SetPosition(width / 2 - 400, height / 2);
+	std::string filepath = "../../../res/map.txt";
+	std::ifstream inputFile(filepath);
 
-	pEntity2->SetRigidBody(false);
-	pEntity2->SetGravity(false);
+	if (!std::filesystem::exists(filepath)) {
+		std::cerr << "Erreur : Le fichier n'existe pas a l'emplacement : " << filepath << std::endl;
+	}
 
-	pPlatforme1 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme1->SetPosition(width / 2, height / 2 + 300);
-	pPlatforme1->SetRigidBody(false);
-	pPlatforme1->SetHitbox(500, 30);
+	if (!inputFile) {
+		std::cerr << "Erreur : Impossible d'ouvrir " << filepath << std::endl;
+	}
 
-	pPlatforme2 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme2->SetPosition(width / 2 + 375, height / 2 + 260);
-	pPlatforme2->SetRigidBody(false);
-	pPlatforme2->SetHitbox(30, 30);
+	std::vector<Platform*> platforms;
+	std::vector<std::string> map;
 
-	pPlatforme3 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme3->SetPosition(width / 2 + 750, height / 2 + 200);
-	pPlatforme3->SetRigidBody(false);
-	pPlatforme3->SetHitbox(30, 30);
+	std::string line;
+	while (std::getline(inputFile, line)) {
+		map.push_back(line);
+	}
 
-	pPlatforme4 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme4->SetPosition(width / 2 - 375, height / 2 + 225);
-	pPlatforme4->SetRigidBody(false);
-	pPlatforme4->SetHitbox(30, 30);
+	inputFile.close();
 
-	pPlatforme5 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 70);
-	pPlatforme5->SetRigidBody(false);
-	pPlatforme5->SetHitbox(30, 30);
+	const int BLOCK_SIZE = 24;
+	int startX = width / 2 - 250;
+	int startY = height / 2 - 200;
 
-	pPlatforme5 = CreateEntity<PhysicalEntity>(sf::Vector2f(30, 30), sf::Color::Red);
-	pPlatforme5->SetPosition(width / 2 - 65, height / 2 + 170);
-	pPlatforme5->SetRigidBody(false);
-	pPlatforme5->SetHitbox(30, 30);
-
-
+	for (size_t y = 0; y < map.size(); ++y) {
+		for (size_t x = 0; x < map[y].size(); ++x) {
+			if (map[y][x] == 'X') {
+				Platform* block = CreateEntity<Platform>(12, sf::Color::Red);
+				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				block->SetRigidBody(false);
+				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				platforms.push_back(block);
+			}
+		}
+	}
 
 
 	pEntitySelected = nullptr;
@@ -80,7 +86,6 @@ void TestScene::OnEvent(const sf::Event& event)
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
 		TrySetSelectedEntity(pEntity1, mousePos.x, mousePos.y);
-		TrySetSelectedEntity(pEntity2, mousePos.x, mousePos.y);
 	}
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)
