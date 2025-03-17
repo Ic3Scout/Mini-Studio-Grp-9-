@@ -1,6 +1,7 @@
 #include "TestScene.h"
 #include "PhysicalEntity.h"
 #include "Player.h"
+#include "Platform.h"
 #include "DummyEntity.h"
 
 #include "Debug.h"
@@ -8,20 +9,11 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-
-
-
-
 #include <fstream>
 #include <vector>
 #include <string>
 #include "SFML/Graphics.hpp"
 #include <filesystem>
-
-
-
-
-
 
 void TestScene::OnInitialize()
 {
@@ -38,17 +30,6 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	pEntity2 = CreateEntity<PhysicalEntity>(sf::Vector2f(100, 100), sf::Color::Green);
-	pEntity2->SetPosition(width / 2 - 400, height / 2);
-
-	pEntity2->SetRigidBody(false);
-	pEntity2->SetGravity(false);
-
-
-
-
-
-
 	std::string filepath = "../../../res/map.txt";
 	std::ifstream inputFile(filepath);
 
@@ -60,7 +41,7 @@ void TestScene::OnInitialize()
 		std::cerr << "Erreur : Impossible d'ouvrir " << filepath << std::endl;
 	}
 
-	std::vector<PhysicalEntity*> platforms;
+	std::vector<Platform*> platforms;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -77,7 +58,7 @@ void TestScene::OnInitialize()
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
 			if (map[y][x] == 'X') {
-				PhysicalEntity* block = CreateEntity<PhysicalEntity>(12, sf::Color::Red);
+				Platform* block = CreateEntity<Platform>(12, sf::Color::Red);
 				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				block->SetRigidBody(false);
 				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
@@ -100,7 +81,6 @@ void TestScene::OnEvent(const sf::Event& event)
 	if (event.mouseButton.button == sf::Mouse::Button::Right)
 	{
 		TrySetSelectedEntity(pEntity1, mousePos.x, mousePos.y);
-		TrySetSelectedEntity(pEntity2, mousePos.x, mousePos.y);
 	}
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)
