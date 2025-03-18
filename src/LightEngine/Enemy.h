@@ -1,6 +1,8 @@
 #pragma once
 #include "Character.h"
 
+class Player;
+
 class Enemy : public Character
 {
 public:
@@ -12,8 +14,11 @@ public:
 		TIvy,
 	};
 
+	Player* player;
+
 	int mTagEnemy = -1;
 
+	Enemy(int maxHP);
 	
 	virtual void OnInitialize() ;
 

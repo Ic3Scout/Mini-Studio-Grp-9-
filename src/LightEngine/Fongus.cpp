@@ -4,7 +4,7 @@
 
 void Fongus::OnInitialize()
 {
-	SetTag(TestScene::TFongus);
+	//SetTag(TestScene::TFongus);
 	mMaxHP = 2;
 	mIsDead = false;
 }

@@ -6,6 +6,8 @@
 #include "Station.h"
 #include "Bulb.h"
 #include "Nenuphloat.h"
+#include "Thorn.h"
+
 #include "DummyEntity.h"
 
 #include "Debug.h"
@@ -53,6 +55,7 @@ void TestScene::OnInitialize()
 	std::vector<Nenuphloat*> nenuphloats;
 	std::vector<Station*> stations;
 	std::vector<Bulb*> bulbs;
+	std::vector<Thorn*> thorns;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -65,6 +68,16 @@ void TestScene::OnInitialize()
 	const int BLOCK_SIZE = 24;
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
+
+	/*
+	map légende :
+	X : platform
+	V : Vine
+	N : Nennuphloat
+	S : Station
+	B : Bulb
+	T : Thorn
+	*/
 
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
@@ -94,6 +107,11 @@ void TestScene::OnInitialize()
 				Bulb* bulb = CreateEntity<Bulb>({ 24,24 }, sf::Color(213, 170, 63));
 				bulb->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				bulbs.push_back(bulb);
+			}
+			if (map[y][x] == 'T') {
+				Thorn* thorn = CreateEntity<Thorn>({ 24,24 }, sf::Color(133, 46, 46));
+				thorn->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				thorns.push_back(thorn);
 			}
 		}
 	}

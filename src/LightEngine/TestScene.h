@@ -28,7 +28,7 @@ public:
 		TWeedKiller,
 		TWater,
 		TAcid,
-		TAlly
+		TAlly,
 		TEnemy,
 	};
 
@@ -37,5 +37,7 @@ public:
 	void OnUpdate() override;
 	void UpdateCamera();
 	Camera& GetCam() { return mCam; }
+
+	Player* GetPlayer() { return pEntity1; }
 };
 

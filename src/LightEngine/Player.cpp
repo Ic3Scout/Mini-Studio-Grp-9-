@@ -9,6 +9,7 @@
 #include "PlayerUI.h"
 #include "Ally.h"
 #include "Station.h"
+#include "Enemy.h"
 
 #include <iostream>
 
@@ -221,7 +222,6 @@ void Player::Respawn(int x, int y)
 		AddRemoveHP(-1);
 		SetPosition(x, y);
 	}
-
 }
 
 void Player::OnCollision(Entity* other)
@@ -249,12 +249,18 @@ void Player::OnCollision(Entity* other)
 				mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
 			}
 		}
-		if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
+		if (other->IsTag(TestScene::TAlly))
 		{
 			if (!ally->IsTagAlly(Ally::TNenuphloatG))
 				return;
 		}
 	}
+
+	if (Enemy* enemy = dynamic_cast<Enemy*>(other))
+	{
+		
+	}
+
 	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))
 		return;
 
