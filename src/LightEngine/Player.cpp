@@ -60,12 +60,11 @@ void Player::BasicControls()
 
 	mDirection.x = mSide;
 
-	if (mIsMoving && mState != Falling)
+	if (mIsMoving)
 		TransitionTo(Player::Moving);
-
-	if (mIsMoving == false)
+	else
 		mSpeed = 0.f;
-
+	
 }
 
 void Player::InitStates()
@@ -78,47 +77,37 @@ void Player::InitStates()
 		}
 	}
 
-	////Idle, Moving,  Jumping,Dashing, Falling, TakingDmg, Dying
-	//{ 0,	  1,	   1,	   1,	    1,		 1,			1 }, // Idle
-	//{ 1,    0,       1,	   1,       1,       1,         1 }, // Moving
-	//{ 0,    1,       0,	   1,       1,       1,         1 }, // Jumping
-	//{ 1,    0,       0,	   0,       0,       0,         0 }, // Dashing
-	//{ 1,    1,       0,	   1,       0,       1,         1 }, // Falling
-	//{ 1,    0,       0,	   0,       0,       0,         1 }, // TakingDmg
-	//{ 0,    0,       0,	   0,       0,       0,         0 }  // Dying
+	////Idle, Moving,  Jumping, Dashing, TakingDmg, Dying
+	//{ 0,	  1,	   1,	    1,	     1,		    1 }, // Idle
+	//{ 1,    0,       1,	    1,       1,         1 }, // Moving
+	//{ 1,    1,       0,	    1,       1,         1 }, // Jumping
+	//{ 1,    0,       0,	    0,       0,         0 }, // Dashing
+	//{ 1,    0,       0,	    0,       0,         1 }, // TakingDmg
+	//{ 0,    0,       0,	    0,       0,         0 }  // Dying
 
 	SetTransition(Idle, Moving, true);
 	SetTransition(Idle, Jumping, true);
 	SetTransition(Idle, Dashing, true);
-	SetTransition(Idle, Falling, true);
 	SetTransition(Idle, TakingDamage, true);
 	SetTransition(Idle, Dying, true);
 
 	SetTransition(Moving, Idle, true);
 	SetTransition(Moving, Jumping, true);
 	SetTransition(Moving, Dashing, true);
-	SetTransition(Moving, Falling, true);
 	SetTransition(Moving, TakingDamage, true);
 	SetTransition(Moving, Dying, true);
 
+	SetTransition(Jumping, Idle, true);
+	SetTransition(Jumping, Moving, true);
 	SetTransition(Jumping, Dashing, true);
-	SetTransition(Jumping, Falling, true);
 	SetTransition(Jumping, TakingDamage, true);
 	SetTransition(Jumping, Dying, true);
 
 	SetTransition(Dashing, Idle, true);
-	SetTransition(Dashing, Falling, true);
-
-	SetTransition(Falling, Idle, true);
-	SetTransition(Falling, Moving, true);
-	SetTransition(Falling, Dashing, true);
-	SetTransition(Falling, TakingDamage, true);
-	SetTransition(Falling, Dying, true);
 
 	mAction[Idle] = new PlayerAction_Idle();
 	mAction[Moving] = new PlayerAction_Moving();
 	mAction[Jumping] = new PlayerAction_Jumping();
-	mAction[Falling] = new PlayerAction_Falling();
 	mAction[TakingDamage] = new PlayerAction_TakingDamage();
 	mAction[Dying] = new PlayerAction_Dying();
 	mAction[Dashing] = new PlayerAction_Dashing();

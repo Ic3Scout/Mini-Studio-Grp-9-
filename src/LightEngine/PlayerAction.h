@@ -35,14 +35,6 @@ public:
 	~PlayerAction_Jumping() = default;
 };
 
-class PlayerAction_Falling : public PlayerAction
-{
-public:
-	void Start(Player* pPlayer) override;
-	void Update(Player* pPlayer, float deltatime) override;
-	~PlayerAction_Falling() = default;
-};
-
 class PlayerAction_TakingDamage : public PlayerAction
 {
 public:

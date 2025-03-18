@@ -94,12 +94,15 @@ void PhysicalEntity::FixedUpdate(float dt)
 		velocity.y = 0.f;
 	}
 
+	mPrevVelocity = velocity;
+
 	mForces.clear();
 	mSpeed = Utils::GetMagnitude(velocity);
-	Utils::Normalize(velocity);
-	mDirection = velocity;
 
-	mPrevVelocity = mDirection * mSpeed;
+	if (mSpeed > 0.f)
+		Utils::Normalize(velocity);
+
+	mDirection = velocity;
 
 	Entity::FixedUpdate(dt);
 }
