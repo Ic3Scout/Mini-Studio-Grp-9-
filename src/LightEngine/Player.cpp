@@ -12,44 +12,9 @@
 
 #include <iostream>
 
-void Player::MoveRight(float deltaTime)
-{
-	mSide = 1;
+#include "PlayerAction.h"
 
-	//std::cout << "Player::MoveRight" << std::endl;
-
-	mSpeed += mParameters.mAcceleration* deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x + mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::MoveLeft(float deltaTime)
-{
-	mSide = -1;
-
-	//std::cout << "Player::MoveLeft" << std::endl;
-
-	mSpeed += mParameters.mAcceleration * deltaTime;
-	if (mSpeed > mParameters.mMaxSpeed)
-	{
-		mSpeed = mParameters.mMaxSpeed;
-	}
-	SetPosition(GetPosition().x - mSpeed * deltaTime, GetPosition().y);
-}
-
-void Player::Jump()
-{
-	//std::cout << "Player::Jump" << std::endl;
-
-	mHitbox.face = CollideWith::Nothing;
-
-	mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y); // mettre taille de la hitbox au lieu de l'entity ?
-}
-
-Player::Player() : Character(PLAYER_HP)  
+Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
@@ -69,63 +34,42 @@ void Player::BasicControls()
 
 	float dt = GetDeltaTime();
 
-	float x = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);// pos horizontal du joystick gauche
+	mJoyX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
-	if (sf::Joystick::isConnected(0))
-	{
-		//std::cout << "JoyStick Connecte" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 2))
-	{
-		std::cout << "O Pressed 2" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 3))
-	{
-		std::cout << "tri Pressed 3" << std::endl;
-	}
-	if (sf::Joystick::isButtonPressed(0, 0))
-	{
-		std::cout << "car Pressed 4" << std::endl;
-	}
+	mIsMoving = false;
 
-	bool isMoving = false;
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
 	{
-		isMoving = true;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 		{
-			isMoving = false;
+			mIsMoving = false;
+			mSide = -1;
 		}
 		else
-			MoveRight(dt);
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || x < -25)
-	{
-		isMoving = true;
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || x > 25)
 		{
-			isMoving = false;
+			mIsMoving = true;
+			mSide = 1;
+		}
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || mJoyX > 25)
+		{
+			mIsMoving = false;
+			mSide = 1;
 		}
 		else
-			MoveLeft(dt);
-	}
-
-	if (isMoving == false)
-	{
-		mSpeed = 0;
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
-	{
-		if (mHitbox.face == CollideWith::Bottom)
 		{
-			Jump();
+			mIsMoving = true;
+			mSide = -1;
 		}
 	}
+
+	if (mIsMoving && mState != Falling)
+		TransitionTo(Player::Moving);
+
+	if (mIsMoving == false)
+		mSpeed = 0.f;
 
 }
 
@@ -162,31 +106,53 @@ void Player::InitStates()
 	SetTransition(Moving, TakingDamage, true);
 	SetTransition(Moving, Dying, true);
 
-	SetTransition(Jumping, Moving, true);
 	SetTransition(Jumping, Dashing, true);
 	SetTransition(Jumping, Falling, true);
 	SetTransition(Jumping, TakingDamage, true);
 	SetTransition(Jumping, Dying, true);
 
 	SetTransition(Dashing, Idle, true);
+	SetTransition(Dashing, Falling, true);
 
 	SetTransition(Falling, Idle, true);
 	SetTransition(Falling, Moving, true);
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
+
+	mAction[Idle] = new PlayerAction_Idle();
+	mAction[Moving] = new PlayerAction_Moving();
+	mAction[Jumping] = new PlayerAction_Jumping();
+	mAction[Falling] = new PlayerAction_Falling();
+	mAction[TakingDamage] = new PlayerAction_TakingDamage();
+	mAction[Dying] = new PlayerAction_Dying();
+	mAction[Dashing] = new PlayerAction_Dashing();
+
+}
+
+bool Player::TransitionTo(State newState)
+{
+	if (mTransitions[(int)mState][(int)newState])
+	{
+		mAction[(int)newState]->Start(this);
+		mState = newState;
+
+		return true;
+	}
+
+	return false;
 }
 
 void Player::OnInitialize()
 {
 	InitStates();
 
-	SetTag((int) TestScene::TPlayer); 
+	SetTag((int)TestScene::TPlayer);
 
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({20, 20}, sf::Color::Yellow);;
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);
@@ -195,17 +161,36 @@ void Player::OnInitialize()
 
 void Player::OnUpdate()
 {
+	mAction[mState]->Update(this, GetDeltaTime());
+
 	if (mIsDead)
 	{
-		Destroy();
+		TransitionTo(Player::Dying);
 		return;
 	}
-	
+
 	PhysicalEntity::OnUpdate();
+
 	BasicControls();
 
+
+	if (mProgressDashReload <= 0)
+	{
+		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::isButtonPressed(0, 5))
+		{
+			TransitionTo(Dashing);
+			mProgressDashReload = mParameters.mDashReloadTime;
+		}
+	}
+	else
+	{
+		mProgressDashReload -= GetDeltaTime();
+	}
+
 	SwapManager();
-	
+
 	sf::Vector2f pos = GetPosition();
 
 	for (Weapon* w : mWeapons)
@@ -223,7 +208,7 @@ void Player::OnUpdate()
 
 	for (PlayerUI* ui : mUI)
 	{
-		ui->UpdateUI(); 
+		ui->UpdateUI();
 	}
 
 	Respawn(mParameters.respawnX, mParameters.respawnY);
@@ -236,6 +221,7 @@ void Player::Respawn(int x, int y)
 		AddRemoveHP(-1);
 		SetPosition(x, y);
 	}
+
 }
 
 void Player::OnCollision(Entity* other)
@@ -260,6 +246,8 @@ void Player::OnCollision(Entity* other)
 				return;
 		}
 	}
+	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))
+		return;
 
 	if (other->IsTag(TestScene::TPlatform))
 	{

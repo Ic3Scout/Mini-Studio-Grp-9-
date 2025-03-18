@@ -6,7 +6,7 @@
 void WeedKiller::OnInitialize()
 {
 	SetTag(TestScene::TWeedKiller); 
-	mHitbox.isActive = false;
+	mHitbox.isActive = false; 
 	SetRigidBody(false);
 
 	mShootingDelay = 0.025f;

@@ -3,6 +3,7 @@
 #include "Water.h"
 #include "TestScene.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 void Gun::OnInitialize()
 {

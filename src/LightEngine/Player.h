@@ -6,12 +6,14 @@
 #include "Health.h"
 #include "Character.h"
 
+
 #define PLAYER_HP 4
 
 class PlayerUI;
 class AmmoBar;
 class Weapon;
 class Station;
+class PlayerAction;
 
 struct PlayerParameter
 {
@@ -23,6 +25,8 @@ struct PlayerParameter
 
 	int respawnX = 640.f;
 	int respawnY = 380.f;
+	
+	float mDashReloadTime = 5.f;
 };
 
 class Player : public Character
@@ -56,7 +60,14 @@ private:
 
 	int mSide = 1; //Right : Left = -1
 
+	float mJoyX;
+
+	bool mIsMoving = false;
+
+	float mProgressDashReload = 0.f;
+
 	int mTransitions[STATE_COUNT][STATE_COUNT];
+	PlayerAction* mAction[STATE_COUNT];
 
 	void SetTransition(State from, State to, bool value) { mTransitions[(int)from][(int)to] = value; }
 public:
@@ -66,10 +77,8 @@ public:
 
 	void InitStates();
 
-	void MoveRight(float deltaTime);
-	void MoveLeft(float deltaTime);
-	void Jump();
 	void Respawn(int x, int y);
+	bool TransitionTo(State newState);
 	void OnInitialize() override;
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
@@ -82,4 +91,13 @@ public:
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
+
+	friend class PlayerAction;
+	friend class PlayerAction_Idle;
+	friend class PlayerAction_Moving;
+	friend class PlayerAction_Jumping;
+	friend class PlayerAction_Falling;
+	friend class PlayerAction_TakingDamage;
+	friend class PlayerAction_Dying;
+	friend class PlayerAction_Dashing;
 };

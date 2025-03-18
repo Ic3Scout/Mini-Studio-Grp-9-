@@ -73,6 +73,8 @@ bool Entity::IsColliding(Entity* other)
 
 	if (hb.isActive == false || otherHb.isActive == false)
 	{
+		hb.face = CollideWith::Nothing;
+		otherHb.face = CollideWith::Nothing;
 		return false;
 	}
 
@@ -84,6 +86,8 @@ bool Entity::IsColliding(Entity* other)
 
 	if (hbWidth <= 0 || hbHeight <= 0 || otherHBWidth <= 0 || otherHBHeight <= 0)
 	{
+		hb.face = CollideWith::Nothing;
+		otherHb.face = CollideWith::Nothing;
 		return false; 
 	} 
 
@@ -137,6 +141,9 @@ bool Entity::IsColliding(Entity* other)
 			return true;
 		}
 	}
+
+	hb.face = CollideWith::Nothing;  
+	otherHb.face = CollideWith::Nothing; 
 
 	return false;
 }

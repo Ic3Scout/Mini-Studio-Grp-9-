@@ -63,7 +63,7 @@ void TestScene::OnInitialize()
 	inputFile.close();
 
 	const int BLOCK_SIZE = 24;
-	int startX = width / 2 - 250;
+	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	for (size_t y = 0; y < map.size(); ++y) {
