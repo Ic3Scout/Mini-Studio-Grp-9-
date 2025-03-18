@@ -120,10 +120,12 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 
 	if (pPlayer->mOnGround == true && isMoving == false)
 	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Landing")->play();
 		pPlayer->TransitionTo(Player::Idle);
 	}
 	else if (pPlayer->mOnGround == true && isMoving == true)
 	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Landing")->play();
 		pPlayer->TransitionTo(Player::Moving);
 	}
 }
@@ -133,12 +135,22 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 void PlayerAction_TakingDamage::Start(Player* pPlayer)
 {
 	std::cout << "TakingDamage" << std::endl;
+	pPlayer->mOnGround = false;
 	pPlayer->AddRemoveHP(-1);
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
 }
 
 void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 {
+	if (pPlayer->GetRatioHP() <= 0)
+	{
+		pPlayer->TransitionTo(Player::Dying);
+	}
 
+	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
+	{
+		pPlayer->TransitionTo(Player::Falling);
+	}
 }
 
 
@@ -151,6 +163,30 @@ void PlayerAction_Dying::Start(Player* pPlayer)
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Dying" << std::endl;
+	
+	static float pitch = 0.1f;
+
+	if (mProgress >= mTimer)
+	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->setPitch(pitch);
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
+
+		mProgress = 0.f;
+
+		if (pitch <= 2)
+		{
+			pitch += 0.2f;
+		}
+		else
+		{
+			pitch = 0.1f;
+		}
+	}
+	else
+	{
+		mProgress += deltatime;
+	}
+
 }
 
 
@@ -167,7 +203,6 @@ void PlayerAction_Dashing::Start(Player* pPlayer)
 		std::cout << "Dashing" << std::endl;
 		mDuration = 0.1f;
 	}
-
 
 	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerDash")->play(); 
 }

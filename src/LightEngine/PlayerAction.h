@@ -53,6 +53,8 @@ public:
 
 class PlayerAction_Dying : public PlayerAction
 {
+	float mTimer = 0.5f;
+	float mProgress = 0.f;
 public:
 	void Start(Player* pPlayer) override;
 	void Update(Player* pPlayer, float deltatime) override;

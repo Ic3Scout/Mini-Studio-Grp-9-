@@ -107,7 +107,6 @@ void Player::InitStates()
 	SetTransition(Jumping, TakingDamage, true);
 	SetTransition(Jumping, Dying, true);
 
-	SetTransition(Dashing, Idle, true);
 	SetTransition(Dashing, Falling, true);
 
 	SetTransition(Falling, Idle, true);
@@ -115,6 +114,9 @@ void Player::InitStates()
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
+
+	SetTransition(TakingDamage, Falling, true);
+	SetTransition(TakingDamage, Dying, true);
 
 	mAction[Idle] = new PlayerAction_Idle();
 	mAction[Moving] = new PlayerAction_Moving();
@@ -209,7 +211,7 @@ void Player::OnUpdate()
 			sf::Vector2f gunPos = w->GetPosition();
 			sf::Vector2f gunDir = w->GetDirection();
 
-			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 300, gunPos.y + gunDir.y * 300, sf::Color::Red);
+			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 100, gunPos.y + gunDir.y * 100, sf::Color::Red);
 		}
 	}
 
@@ -220,8 +222,11 @@ void Player::OnUpdate()
 
 	if (GetPosition().y > 1250)
 	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 		SetPosition(640, 750);
+		TransitionTo(Player::TakingDamage);
 	}
+
 }
 
 void Player::OnCollision(Entity* other)
@@ -243,6 +248,8 @@ void Player::OnCollision(Entity* other)
 		{
 			mGravitySpeed = 1.f;
 			mOnGround = false;
+
+			GetScene<TestScene>()->GetAssetManager()->GetSound("Bonk")->play();
 		}
 		break;
 
@@ -297,6 +304,11 @@ void Player::FixedUpdate(float dt)
 
 	pScene->UpdateCamera();
 
+	int fpsCounter = (int)(1.f / GetDeltaTime());
+
+	sf::Vector2f camPos = pCam->GetView()->getCenter(); 
+
+	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
 
 void Player::SwapManager()

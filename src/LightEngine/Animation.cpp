@@ -74,7 +74,7 @@ void Animation::LoadAnimationGrid(const char* name)
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
 	sf::Vector2i frameIndex = { data["elements"][name]["x"], data["elements"][name]["y"]}; 
 
-	sf::Vector2i framePosition = { frameSize.x * frameIndex.x + 1, frameSize.y * frameIndex.y + 1};
+	sf::Vector2i framePosition = { (frameSize.x + 1) * frameIndex.x, (frameSize.y + 1) * frameIndex.y };
 	sf::IntRect frame = sf::IntRect(framePosition, frameSize);
 
 	mTextureRects.push_back(frame);
