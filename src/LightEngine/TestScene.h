@@ -29,6 +29,7 @@ public:
 		TWater,
 		TAcid,
 		TAlly
+		TEnemy,
 	};
 
 	void OnInitialize() override;
