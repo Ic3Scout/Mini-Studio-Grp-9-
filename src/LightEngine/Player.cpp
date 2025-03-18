@@ -144,6 +144,10 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
+
+	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("../../../res/Assets/248259.png");
+	GetShape()->setTexture(texture);
+
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 

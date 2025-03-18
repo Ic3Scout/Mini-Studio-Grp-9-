@@ -30,9 +30,6 @@ void TestScene::OnInitialize()
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
 	pEntity1->SetKineticBody(true);
-	
-	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
-	pEntity1->GetShape()->setTexture(texture);
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -167,7 +164,7 @@ void TestScene::UpdateCamera()
 
 bool TestScene::IsAllowedToCollide(int tag1, int tag2)
 {
-	return mTransitions[tag1][tag2];
+	return mInteractions[tag1][tag2];
 }
 
 void TestScene::InitTransitions()
@@ -176,10 +173,11 @@ void TestScene::InitTransitions()
 	{
 		for (int j = 0; j < TAG_COUNT; j++)
 		{
-			mTransitions[i][j] = false;
+			mInteractions[i][j] = false;
 		}
 	}
 
-	SetTransition(TPlayer, TPlatform, true);
-	SetTransition(TPlatform, TPlayer, true);
+	SetInteractionWith(TPlayer, TPlatform, true);
+
+	SetInteractionWith(TWater, TPlatform, true); 
 }

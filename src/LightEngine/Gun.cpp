@@ -27,6 +27,15 @@ void Gun::OnUpdate()
 
 	ReloadManager();
 
+	if (mIsEquiped == true)
+		ShootManager(sf::Keyboard::Key::Right, 0, 7);
+}
+
+void Gun::FixedUpdate(float dt)
+{
+	if (!pOwner)
+		return;
+
 	if (mIsEquiped == false)
 	{
 		ChangeColor(sf::Color(255, 255, 255, 0));
@@ -38,7 +47,7 @@ void Gun::OnUpdate()
 
 	ChangeColor(sf::Color(255, 255, 255, 255));
 
-	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle)};
+	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle) };
 
 	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit
 
@@ -46,7 +55,7 @@ void Gun::OnUpdate()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || y < -25)
 		{
-			mAngle -= 2 * GetDeltaTime();
+			mAngle -= 2 * dt; 
 		}
 	}
 
@@ -54,12 +63,11 @@ void Gun::OnUpdate()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || y > 25)
 		{
-			mAngle += 2 * GetDeltaTime();
-		}
+			mAngle += 2 * dt; 
+		} 
 	}
 
 	SetDirection(finalDirection.x, finalDirection.y);
-	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 }
 
 void Gun::Shoot()
