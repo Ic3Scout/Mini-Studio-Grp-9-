@@ -44,48 +44,43 @@ public:
 	static constexpr int STATE_COUNT = static_cast<int>(State::Count);
 
 private:
-	State mState = Idle;
-
 	PlayerParameter mParameters;
 
 	std::vector<PlayerUI*> mUI;
-
 	std::vector<Weapon*> mWeapons;
 
-	float mDelayToSwap = 1.f;
-
+	bool mIsGrounded;
+	bool mIsMoving = false;
 	int mSide = 1; //Right : Left = -1
-
 	float mJoyX;
 
-	bool mIsMoving = false;
-
+	float mDelayToSwap = 1.f;
 	float mProgressDashReload = 0.f;
 
+	State mState = Idle;
 	int mTransitions[STATE_COUNT][STATE_COUNT];
 	PlayerAction* mAction[STATE_COUNT];
 
 	void SetTransition(State from, State to, bool value) { mTransitions[(int)from][(int)to] = value; }
+
 public:
 	Player();
 
-	void BasicControls();
+	Weapon* GetCurrentEquipedWeapon();
+	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
+	int GetSide() { return mSide; }
 
+	void BasicControls();
 	void InitStates();
 	bool TransitionTo(State newState);
-	void OnInitialize() override;
-	void OnUpdate() override;
-	void OnCollision(Entity* other) override;
-	void OnDestroy() override;
-	void FixedUpdate(float dt) override;
-
 	void SwapManager();
 	void SwapWeapon();
 
-	Weapon* GetCurrentEquipedWeapon();
-	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
-
-	int GetSide() { return mSide; }
+	void OnInitialize() override;
+	void OnDestroy() override;
+	void OnCollision(Entity* other) override;
+	void OnUpdate() override;
+	void FixedUpdate(float dt) override;
 
 	friend class PlayerAction;
 	friend class PlayerAction_Idle;

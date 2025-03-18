@@ -209,7 +209,6 @@ void Player::OnUpdate()
 		AddRemoveHP(-1);
 		SetPosition(640, 380);
 	}*/
-	std::cout << mGravitySpeed << std::endl;
 }
 
 void Player::OnCollision(Entity* other)
@@ -220,11 +219,11 @@ void Player::OnCollision(Entity* other)
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
-		mGravitySpeed = 0.f;
+		mIsGrounded = true;
+		AddForce(sf::Vector2f(0.f, -1.f), GRAVITY_ACCELERATION, Force::Force);
 		break;
 
 	case CollideWith::Top:
-		mGravitySpeed = 0.f;
 		break;
 
 	case CollideWith::Left:

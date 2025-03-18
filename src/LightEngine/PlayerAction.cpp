@@ -10,7 +10,7 @@ void PlayerAction_Idle::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Idle" << std::endl;
 
-	if (pPlayer->mHitbox.face == Player::CollideWith::Nothing)
+	if (pPlayer->GetVelocity().y >= GRAVITY_ACCELERATION)
 	{
 		pPlayer->TransitionTo(Player::Falling);
 	}
@@ -43,7 +43,7 @@ void PlayerAction_Moving::Update(Player* pPlayer, float deltatime)
 		pPlayer->TransitionTo(Player::Idle);
 
 
-	if (pPlayer->mHitbox.face == Player::CollideWith::Nothing)
+	if (pPlayer->GetVelocity().y > GRAVITY_ACCELERATION)
 	{
 		pPlayer->TransitionTo(Player::Falling);
 	}
@@ -60,14 +60,12 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 {
 	pPlayer->mHitbox.face = Player::CollideWith::Nothing;
 
-	pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
+	pPlayer->AddForce(sf::Vector2f(0.f, -1.f), GRAVITY_ACCELERATION, PhysicalEntity::Force::Impulse);
 }
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Jumping" << std::endl;
-
-	pPlayer->SetGravity(true);
 
 	if (pPlayer->mIsMoving)
 	{
@@ -79,7 +77,7 @@ void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 		}
 	}
 
-	if (pPlayer->mGravitySpeed >= 0)
+	if (pPlayer->GetVelocity().y <= 0)
 	{
 		pPlayer->TransitionTo(Player::Falling);
 	}
@@ -89,16 +87,14 @@ void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Falling::Start(Player* pPlayer)
 {
-
+	pPlayer->mIsGrounded = false;
 }
 
 void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Falling" << std::endl;
 
-	bool isMoving = false;
-
-	isMoving = pPlayer->mIsMoving;
+	bool isMoving = pPlayer->mIsMoving;
 
 	if (isMoving)
 	{
@@ -111,13 +107,16 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 
 	}
 
-	if (pPlayer->mGravitySpeed < 50.f && isMoving == false)
+	if (pPlayer->mIsGrounded)
 	{
-		pPlayer->TransitionTo(Player::Idle);
-	}
-	else if (pPlayer->mGravitySpeed < 50 && isMoving == true)
-	{
-		pPlayer->TransitionTo(Player::Moving);
+		if (isMoving)
+		{
+			pPlayer->TransitionTo(Player::Moving);
+		}
+		else
+		{
+			pPlayer->TransitionTo(Player::Idle);
+		}
 	}
 }
 
@@ -178,14 +177,14 @@ void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 	{
 		if (pPlayer->mHitbox.face != Player::CollideWith::Left && pPlayer->mHitbox.face != Player::CollideWith::Right)
 		{
-			pPlayer->SetGravity(false);
+			pPlayer->ToggleGravity(false);
 		}
 		else
 			mDuration = 0.f;
 	}
 	else
 	{
-		pPlayer->SetGravity(true);
+		pPlayer->ToggleGravity(true);
 
 		*speedBoost = 0.f;
 

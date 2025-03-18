@@ -1,6 +1,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <cmath>
+#include "Utils.h"
 
 namespace Utils 
 {
@@ -34,4 +35,21 @@ namespace Utils
 
 		return std::atan2(det, dot) * 180 / 3.14159265;
 	}
+
+	float Clamp(float value, float max, float min)
+	{
+		if (value > max)
+			return max;
+
+		if (value < min)
+			return min;
+
+		return value;
+	}
+
+	float GetMagnitude(const sf::Vector2f& vector)
+	{
+		return std::sqrt(vector.x * vector.x + vector.y * vector.y);
+	}
+
 }

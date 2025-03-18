@@ -26,7 +26,7 @@ void TestScene::OnInitialize()
 	pEntity1->SetPosition(width / 2.f, height / 2.f);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
-	pEntity1->SetGravity(true);
+	pEntity1->ToggleGravity(true);
 	pEntity1->SetKineticBody(true);
 	
 	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
