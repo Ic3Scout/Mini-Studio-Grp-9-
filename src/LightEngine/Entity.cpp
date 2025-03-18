@@ -62,7 +62,7 @@ void Entity::Repulse(Entity* other)
 	{
 		overlap = 0.f;
 	}
-	else if (mKineticBody && other->IsKineticBody() == false)
+	else if (mKineticBody && !other->mKineticBody)
 	{
 		overlap *= 2.f;
 	}
@@ -72,13 +72,10 @@ void Entity::Repulse(Entity* other)
 	sf::Vector2f position1 = GetPosition(0.5f, 0.5f) - translation;
 	sf::Vector2f position2 = other->GetPosition(0.5f, 0.5f) + translation;
 
-	SetPosition(position1.x, position1.y, 0.5f, 0.5f);
-	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
-
 	if (mKineticBody)
 		SetPosition(position1.x, position1.y, 0.5f, 0.5f);
 
-	if (other->IsKineticBody())
+	if (other->mKineticBody)
 		other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
@@ -332,18 +329,11 @@ void Entity::LoadAnimation()
 
 void Entity::FixedUpdate(float dt)
 {
-	UpdateFrame(dt);
-	OnUpdate();
-}
-
-void Entity::Update()
-{
-	float dt = GetDeltaTime();
 	float distance = dt * mSpeed;
 	sf::Vector2f translation = distance * mDirection;
 	mShape.move(translation);
 
-	if (mTarget.isSet) 
+	if (mTarget.isSet)
 	{
 		float x1 = GetPosition(0.5f, 0.5f).x;
 		float y1 = GetPosition(0.5f, 0.5f).y;
@@ -364,8 +354,15 @@ void Entity::Update()
 			mTarget.isSet = false;
 		}
 	}
+}
 
+void Entity::Update()
+{
+	float dt = GetDeltaTime();
+
+	UpdateFrame(dt);
 	UpdateHitBox();
+	OnUpdate();
 }
 
 Scene* Entity::GetScene() const

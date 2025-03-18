@@ -5,8 +5,6 @@ class Player;
 
 class PlayerAction
 {
-protected:
-	bool Move(Player* pPlayer);
 public:
 	virtual void Start(Player* pPlayer) = 0;
 	virtual void Update(Player* pPlayer, float deltatime) = 0;

@@ -77,6 +77,7 @@ public:
 	void OnUpdate() override;
 	void OnCollision(Entity* other) override;
 	void OnDestroy() override;
+	void FixedUpdate(float dt) override;
 
 	void SwapManager();
 	void SwapWeapon();

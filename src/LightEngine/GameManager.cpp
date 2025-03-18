@@ -99,28 +99,28 @@ void GameManager::Update()
 {
 	mpScene->OnUpdate();
 
-    //Update
-    for (auto it = mEntities.begin(); it != mEntities.end(); )
-    {
-		Entity* entity = *it;
-
-        entity->Update();
-
-        if (entity->ToDestroy() == false)
-        {
-            ++it;
-            continue;
-        }
-
-        mEntitiesToDestroy.push_back(entity);
-        it = mEntities.erase(it);
-    }
-
 	mAccumulatedDt += mDeltaTime;
 	while (mAccumulatedDt >= FIXED_DT)
 	{
 		FixedUpdate();
 		mAccumulatedDt -= FIXED_DT;
+	}
+
+	//Update
+	for (auto it = mEntities.begin(); it != mEntities.end(); )
+	{
+		Entity* entity = *it;
+
+		entity->Update();
+
+		if (entity->ToDestroy() == false)
+		{
+			++it;
+			continue;
+		}
+
+		mEntitiesToDestroy.push_back(entity);
+		it = mEntities.erase(it);
 	}
 
 	for (auto it = mEntitiesToDestroy.begin(); it != mEntitiesToDestroy.end(); ++it) 

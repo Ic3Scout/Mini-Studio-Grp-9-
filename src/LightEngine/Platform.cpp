@@ -3,6 +3,7 @@
 
 void Platform::OnInitialize()
 {
+	mKineticBody = false;
 	SetTag((int)TestScene::TPlatform);
 }
 

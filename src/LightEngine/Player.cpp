@@ -27,10 +27,6 @@ Player::Player() : Character(PLAYER_HP)
 
 void Player::BasicControls()
 {
-	SetGravity(true);
-
-	float dt = GetDeltaTime();
-
 	mJoyX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	mIsMoving = false;
@@ -61,6 +57,8 @@ void Player::BasicControls()
 			mSide = -1;
 		}
 	}
+
+	mDirection.x = mSide;
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -166,8 +164,6 @@ void Player::OnUpdate()
 		return;
 	}
 
-	PhysicalEntity::OnUpdate();
-
 	BasicControls();
 
 
@@ -208,12 +204,12 @@ void Player::OnUpdate()
 		ui->UpdateUI();
 	}
 
-	if (GetPosition().y > 800)
+	/*if (GetPosition().y > 800)
 	{
 		AddRemoveHP(-1);
 		SetPosition(640, 380);
-	}
-
+	}*/
+	std::cout << mGravitySpeed << std::endl;
 }
 
 void Player::OnCollision(Entity* other)
@@ -225,23 +221,16 @@ void Player::OnCollision(Entity* other)
 	{
 	case CollideWith::Bottom:
 		mGravitySpeed = 0.f;
-		SetGravity(false);
-		SetPosition(GetPosition().x, GetPosition().y - 0.5);
 		break;
 
 	case CollideWith::Top:
 		mGravitySpeed = 0.f;
-		SetPosition(GetPosition().x, GetPosition().y + 0.3);
 		break;
 
 	case CollideWith::Left:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x + 1, GetPosition().y);
 		break;
 
 	case CollideWith::Right:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x - 1, GetPosition().y);
 		break;
 
 	case CollideWith::Nothing:
@@ -272,6 +261,12 @@ void Player::OnDestroy()
 	}
 
 	mUI.clear();
+}
+
+void Player::FixedUpdate(float dt)
+{
+	Entity::FixedUpdate(dt);
+	PhysicalEntity::FixedUpdate(dt);
 }
 
 void Player::SwapManager()

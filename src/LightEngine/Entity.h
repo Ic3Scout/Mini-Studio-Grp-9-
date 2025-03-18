@@ -47,7 +47,7 @@ protected:
     bool mToDestroy = false;
     int mTag = -1;
 	bool mRigidBody = false;
-	bool mKineticBody = false;
+	bool mKineticBody;
 
 public:
 	enum CollideWith
