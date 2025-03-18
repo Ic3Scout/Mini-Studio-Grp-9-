@@ -240,53 +240,59 @@ void Player::Respawn(int x, int y)
 
 void Player::OnCollision(Entity* other)
 {
-	if (other->IsTagAlly(Ally::TStation))
+	if (Ally* ally = dynamic_cast<Ally*>(other))
 	{
-		mParameters.respawnX = other->GetPosition().x;
-		mParameters.respawnY = other->GetPosition().y;
-	}
-	if (other->IsTagAlly(Ally::TVineG))
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
+		if (ally->IsTagAlly(Ally::TStation))
 		{
-			mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
+			mParameters.respawnX = other->GetPosition().x;
+			mParameters.respawnY = other->GetPosition().y;
+		}
+		if (ally->IsTagAlly(Ally::TVineG))
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
+			{
+				mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
+			}
+		}
+		if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
+		{
+			if (!ally->IsTagAlly(Ally::TNenuphloatG))
+				return;
 		}
 	}
-	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid) || other->IsTag(TestScene::TAlly))
+
+	if (other->IsTag(TestScene::TPlatform))
 	{
-		if (!other->IsTagAlly(Ally::TNenuphloatG))
-			return;
-	}
+		switch (mHitbox.face)
+		{
+		case CollideWith::Bottom:
+			mGravitySpeed = 0.f;
+			SetGravity(false);
+			SetPosition(GetPosition().x, GetPosition().y - 0.5);
+			break;
 
-	switch (mHitbox.face)
-	{
-	case CollideWith::Bottom:
-		mGravitySpeed = 0.f;
-		SetGravity(false);
-		SetPosition(GetPosition().x, GetPosition().y - 0.5);
-		break;
+		case CollideWith::Top:
+			mGravitySpeed = 0.f;
+			SetPosition(GetPosition().x, GetPosition().y + 0.3);
+			break;
 
-	case CollideWith::Top:
-		mGravitySpeed = 0.f;
-		SetPosition(GetPosition().x, GetPosition().y + 0.3);
-		break;
+		case CollideWith::Left:
+			mSpeed = 0.f;
+			SetPosition(GetPosition().x + 1, GetPosition().y);
+			break;
 
-	case CollideWith::Left:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x + 1, GetPosition().y);
-		break;
+		case CollideWith::Right:
+			mSpeed = 0.f;
+			SetPosition(GetPosition().x - 1, GetPosition().y);
+			break;
 
-	case CollideWith::Right:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x - 1, GetPosition().y);
-		break;
+		case CollideWith::Nothing:
+			break;
 
-	case CollideWith::Nothing:
-		break;
-
-	default:
-		std::cout << "Bug\n";
-		break;
+		default:
+			std::cout << "Bug\n";
+			break;
+		}
 	}
 }
 

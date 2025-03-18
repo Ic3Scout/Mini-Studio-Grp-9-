@@ -12,7 +12,7 @@ void Nenuphloat::OnInitialize()
 
 void Nenuphloat::OnUpdate()
 {
-	if (grown && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - growTime).count() >= 3)
+	if (grown && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - growTime).count() >= 5)
 	{
 		Retract();
 	}

@@ -13,6 +13,11 @@ public:
 		TStation,
 		TBulb,
 	};
+
+	int mTagAlly = -1;
+
+	bool IsTagAlly(int tagAlly) const { return mTagAlly == tagAlly; }
+
 	virtual void OnInitialize();
 
 	void SetTagAlly(int tagAlly) { mTagAlly = tagAlly; }

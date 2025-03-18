@@ -45,7 +45,6 @@ protected:
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
-	int mTagAlly = -1;
 	bool mRigidBody = false;
 
 public:
@@ -73,7 +72,6 @@ public:
 	sf::RectangleShape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
-	bool IsTagAlly(int tagAlly) const { return mTagAlly == tagAlly; }
     bool IsColliding(Entity* other);
 	bool IsInside(float x, float y) const;
 
