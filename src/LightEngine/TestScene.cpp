@@ -151,6 +151,13 @@ void TestScene::OnUpdate()
 	}
 
 	UpdateCamera();
+
+	int fpsCounter = (int) (1.f / GetDeltaTime());
+
+	sf::Vector2f camPos = mCam.GetView()->getCenter();
+	std::cout << "FPS : " << fpsCounter << std::endl;
+
+	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
 
 void TestScene::UpdateCamera()
