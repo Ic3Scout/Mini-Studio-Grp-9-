@@ -88,6 +88,7 @@ public:
 	void SetTexture(const char* path);
 	void UpdateFrame(float dt);
 	void ChangeColor(sf::Color newColor);
+	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
 
 	virtual void LoadAnimation();
 

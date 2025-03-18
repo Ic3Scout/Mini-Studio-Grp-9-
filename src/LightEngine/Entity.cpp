@@ -3,7 +3,7 @@
 #include "GameManager.h"
 #include "Utils.h"
 #include "Debug.h"
-
+#include "TestScene.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
@@ -81,9 +81,33 @@ void Entity::Repulse(Entity* other)
 
 bool Entity::IsColliding(Entity* other)
 {
+	//If the collision between 2 entities isn't allowed, Skip
+	if (GetScene<TestScene>()->IsAllowedToCollide(this->mTag, other->mTag) == false)
+	{
+		return false;
+	}
+
 	AABBCollider& hb = mHitbox;
 	AABBCollider& otherHb = *(other->GetHitbox()); 
 
+	sf::Vector2f pos = GetPosition();
+	sf::Vector2f otherPos = other->GetPosition();
+
+	sf::Vector2f centerOfHB = { pos.x + hb.offsetX, pos.y + hb.offsetY }; 
+	sf::Vector2f centerOfOtherHB = { otherPos.x + otherHb.offsetX, otherPos.y + otherHb.offsetY }; 
+
+	float radiusBasedOndiagonalHB = GetDistance(centerOfHB, { hb.xMin, hb.yMin }); 
+	float radiusBasedOndiagonalOtherHB = GetDistance(centerOfOtherHB, { otherHb.xMin, otherHb.yMin });  
+
+	float distanceBetweenEntities = GetDistance(pos, otherPos);
+
+	//If the entities are too far to each others, Skip
+	if (distanceBetweenEntities > radiusBasedOndiagonalHB + radiusBasedOndiagonalOtherHB)
+	{
+		return false;
+	}
+
+	//If One of the entities has no hitbox, Skip
 	if (hb.isActive == false || otherHb.isActive == false)
 	{
 		return false;
@@ -108,9 +132,6 @@ bool Entity::IsColliding(Entity* other)
 
 			float overlapX = 0;
 			float overlapY = 0;
-
-			sf::Vector2f pos = GetPosition();
-			sf::Vector2f otherPos = other->GetPosition();
 
 			sf::Vector2f distBetweenCentersXY = { abs( pos.x + hb.offsetX - otherPos.x - otherHb.offsetX) , abs( pos.y + hb.offsetY - otherPos.y - otherHb.offsetY) }; 
 
@@ -241,6 +262,11 @@ void Entity::UpdateFrame(float dt)
 void Entity::ChangeColor(sf::Color newColor)
 {
 	mShape.setFillColor(newColor);
+}
+
+float Entity::GetDistance(sf::Vector2f e1, sf::Vector2f e2)
+{
+	return sqrt( pow(e2.x - e1.x, 2) + pow(e2.y - e1.y, 2) );
 }
 
 void Entity::Destroy()
