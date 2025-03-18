@@ -241,6 +241,11 @@ void Entity::UpdateFrame(float dt)
 	mShape.setTextureRect(*frame);
 }
 
+void Entity::ChangeColor(sf::Color newColor)
+{
+	mShape.setFillColor(newColor);
+}
+
 void Entity::Destroy()
 {
 	mToDestroy = true;
@@ -313,6 +318,11 @@ void Entity::SetDirection(float x, float y, float speed)
 
 	mDirection = sf::Vector2f(x, y);
 	mTarget.isSet = false;
+}
+
+sf::Vector2f Entity::GetSize() const
+{
+	return mShape.getSize();
 }
 
 void Entity::LoadAnimation()
