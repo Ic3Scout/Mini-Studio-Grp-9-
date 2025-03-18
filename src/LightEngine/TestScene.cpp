@@ -17,6 +17,8 @@
 
 void TestScene::OnInitialize()
 {
+	InitTransitions();
+
 	int height = GetWindowHeight();
 	int width = GetWindowWidth();
 
@@ -154,4 +156,23 @@ void TestScene::OnUpdate()
 void TestScene::UpdateCamera()
 {
 	GameManager::Get()->SetCamera(mCam);
+}
+
+bool TestScene::IsAllowedToCollide(int tag1, int tag2)
+{
+	return mTransitions[tag1][tag2];
+}
+
+void TestScene::InitTransitions()
+{
+	for (int i = 0; i < TAG_COUNT; i++)
+	{
+		for (int j = 0; j < TAG_COUNT; j++)
+		{
+			mTransitions[i][j] = false;
+		}
+	}
+
+	SetTransition(TPlayer, TPlatform, true);
+	SetTransition(TPlatform, TPlayer, true);
 }
