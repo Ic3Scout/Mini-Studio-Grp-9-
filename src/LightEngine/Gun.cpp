@@ -40,7 +40,7 @@ void Gun::OnUpdate()
 
 	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle)};
 
-	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // pos vertical du joystick droit
+	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::R); // pos vertical du joystick droit
 
 	if (mDirection.y >= -0.995)
 	{
