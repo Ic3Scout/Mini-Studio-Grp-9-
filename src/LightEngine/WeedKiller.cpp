@@ -25,6 +25,17 @@ void WeedKiller::OnUpdate()
 
 	ReloadManager();
 
+	if(mIsEquiped == true)
+		ShootManager(sf::Keyboard::Key::Right, 0, 7);
+}
+
+void WeedKiller::FixedUpdate(float dt)
+{
+	if (!pOwner)
+		return;
+
+	ReloadManager();
+
 	if (mIsEquiped == false)
 	{
 		ChangeColor(sf::Color(255, 255, 0, 0));
@@ -36,8 +47,6 @@ void WeedKiller::OnUpdate()
 	sf::Vector2f playerPos = pOwner->GetPosition();
 
 	SetPosition(playerPos.x + pOwner->GetSize().x * 0.5f * pOwner->GetSide(), playerPos.y);
-
-	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 }
 
 void WeedKiller::OnDestroy()
@@ -56,6 +65,7 @@ void WeedKiller::Shoot()
 	{
 		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Green);
 		a->SetOwner(this);
+		a->SetPosition(GetPosition().x, GetPosition().y);
 		a->SetPlayerSide(pOwner->GetSide());
 
 		mShootingDelay = 0.025f;

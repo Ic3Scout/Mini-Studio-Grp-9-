@@ -12,6 +12,7 @@ class Acid : public Entity
 public:
 
 	void OnUpdate() override;
+	void FixedUpdate(float dt) override;
 	void OnCollision(Entity* collidedWith) override;
 	void OnInitialize() override;
 	void OnDestroy() override;

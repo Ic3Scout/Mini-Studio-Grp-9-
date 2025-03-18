@@ -31,11 +31,11 @@ private:
 
 	PhysicalEntity* pEntitySelected;
 
-	int mTransitions[TAG_COUNT][TAG_COUNT];
+	int mInteractions[TAG_COUNT][TAG_COUNT];  
 private:
 	void TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y);
 	void InitTransitions();
-	void SetTransition(Tag from, Tag to, bool value) { mTransitions[(int)from][(int)to] = value; } 
+	void SetInteractionWith(Tag tag1, Tag tag2, bool value) { mInteractions[(int)tag1][(int)tag2] = value; mInteractions[(int)tag2][(int)tag1] = value; }
 
 public:
 	void OnInitialize() override;
@@ -43,7 +43,7 @@ public:
 	void OnUpdate() override;
 	void UpdateCamera();
 	Camera& GetCam() { return mCam; }
-
+	AssetManager* GetAssetManager() { return assetManager; }
 	bool IsAllowedToCollide(int tag1, int tag2);
 };
 

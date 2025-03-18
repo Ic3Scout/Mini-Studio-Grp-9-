@@ -10,6 +10,7 @@ class Gun : public Weapon
 public:
 	void OnInitialize() override;
 	void OnUpdate() override;
+	void FixedUpdate(float dt) override; 
 	void Shoot() override;
 
 };

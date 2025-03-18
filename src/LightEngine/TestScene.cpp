@@ -30,9 +30,6 @@ void TestScene::OnInitialize()
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->ToggleGravity(true);
 	pEntity1->SetKineticBody(true);
-	
-	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
-	pEntity1->GetShape()->setTexture(texture);
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -151,6 +148,13 @@ void TestScene::OnUpdate()
 	}
 
 	UpdateCamera();
+
+	int fpsCounter = (int) (1.f / GetDeltaTime());
+
+	sf::Vector2f camPos = mCam.GetView()->getCenter();
+	std::cout << "FPS : " << fpsCounter << std::endl;
+
+	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
 
 void TestScene::UpdateCamera()
@@ -160,7 +164,7 @@ void TestScene::UpdateCamera()
 
 bool TestScene::IsAllowedToCollide(int tag1, int tag2)
 {
-	return mTransitions[tag1][tag2];
+	return mInteractions[tag1][tag2];
 }
 
 void TestScene::InitTransitions()
@@ -169,10 +173,11 @@ void TestScene::InitTransitions()
 	{
 		for (int j = 0; j < TAG_COUNT; j++)
 		{
-			mTransitions[i][j] = false;
+			mInteractions[i][j] = false;
 		}
 	}
 
-	SetTransition(TPlayer, TPlatform, true);
-	SetTransition(TPlatform, TPlayer, true);
+	SetInteractionWith(TPlayer, TPlatform, true);
+
+	SetInteractionWith(TWater, TPlatform, true); 
 }
