@@ -258,7 +258,8 @@ void Player::OnCollision(Entity* other)
 
 	if (Enemy* enemy = dynamic_cast<Enemy*>(other))
 	{
-		
+		if (enemy->IsTagEnemy(Enemy::TFongusG))
+			return;
 	}
 
 	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))

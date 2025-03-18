@@ -1,19 +1,21 @@
 #pragma once
 #include "Enemy.h"
 
-#define THORN_HP 4
+#define THORN_HP 1
 
-class Thorn: public Enemy
+class Thorn : public Enemy
 {
-	float mDuration = 2.f;
-	float mProgress = 0.f;
+    float mProximityRadius = 0.f;
+    float mActionTimer = 0.f;
+    bool mActionTriggered = false;
+    float mCooldownTimer = 0.f;
 
-	bool isActive = false;
 public:
-	Thorn();
+    Thorn();
 
-	void OnInitialize() override;
-	void OnCollision(Entity* collidedWith) override;
-	void OnUpdate() override;
+    void OnInitialize() override;
+    void OnCollision(Entity* collidedWith) override;
+    void OnUpdate() override;
+
+    bool IsPlayerInProximity();
 };
-

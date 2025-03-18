@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "Player.h"
 #include "TestScene.h"
 
 Enemy::Enemy(int maxHP) : Character(maxHP)
@@ -10,4 +9,32 @@ Enemy::Enemy(int maxHP) : Character(maxHP)
 void Enemy::OnInitialize()
 {
 	SetTag(TestScene::TEnemy);
+}
+
+void Enemy::HandleDurationTimer()
+{
+    if (isActive == false)
+    {
+        mProgress -= GetDeltaTime();
+
+        if (mProgress < 0)
+        {
+            isActive = true;
+            mProgress = 0.f;
+        }
+    }
+}
+
+void Enemy::HandleDurationTimer1()
+{
+	if (isActive1 == false)
+	{
+		mProgress1 -= GetDeltaTime();
+
+		if (mProgress1 < 0)
+		{
+			isActive1 = true;
+			mProgress1 = 0.f;
+		}
+	}
 }
