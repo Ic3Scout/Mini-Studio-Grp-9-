@@ -322,6 +322,8 @@ void Entity::LoadAnimation()
 
 void Entity::FixedUpdate(float dt)
 {
+	UpdateFrame(dt);
+	OnUpdate();
 }
 
 void Entity::Update()
@@ -354,9 +356,6 @@ void Entity::Update()
 	}
 
 	UpdateHitBox();
-	UpdateFrame(dt);
-
-	OnUpdate();
 }
 
 Scene* Entity::GetScene() const
