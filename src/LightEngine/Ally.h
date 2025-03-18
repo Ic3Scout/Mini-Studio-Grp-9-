@@ -16,12 +16,10 @@ public:
 
 	int mTagAlly = -1;
 
-	bool IsTagAlly(int tagAlly) const { return mTagAlly == tagAlly; }
-
 	virtual void OnInitialize();
 
 	void SetTagAlly(int tagAlly) { mTagAlly = tagAlly; }
 
-	bool IsTagAlly(int tagAlly);
+	bool IsTagAlly(int tagAlly) const { return mTagAlly == tagAlly; }
 };
 
