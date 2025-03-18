@@ -42,13 +42,6 @@ void Gun::OnUpdate()
 
 	float y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::Z); // pos vertical du joystick droit
 
-	if (y > -25 || y < 25)
-	{
-		y = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::V);  
-	}
-
-	std::cout << y << std::endl;
-
 	if (mDirection.y >= -0.995)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || y < -25)
