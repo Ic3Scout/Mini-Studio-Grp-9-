@@ -26,7 +26,7 @@ void TestScene::OnInitialize()
 	mCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
-	pEntity1->SetPosition(width / 2.f, 500.f);
+	pEntity1->SetPosition(width / 2.f, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);

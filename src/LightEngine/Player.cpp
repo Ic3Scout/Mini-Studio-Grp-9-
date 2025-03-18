@@ -218,9 +218,9 @@ void Player::OnUpdate()
 		ui->UpdateUI();
 	}
 
-	if (GetPosition().y > 1000)
+	if (GetPosition().y > 1250)
 	{
-		SetPosition(640, 200);
+		SetPosition(640, 750);
 	}
 }
 
@@ -239,8 +239,11 @@ void Player::OnCollision(Entity* other)
 		break;
 
 	case CollideWith::Top:
-		mGravitySpeed = 0.f;
-		mOnGround = false; 
+		if (mState == Jumping)
+		{
+			mGravitySpeed = 1.f;
+			mOnGround = false;
+		}
 		break;
 
 	case CollideWith::Left:
