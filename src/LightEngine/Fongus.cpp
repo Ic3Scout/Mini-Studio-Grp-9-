@@ -2,8 +2,9 @@
 #include "Fongus.h"
 #include "TestScene.h"
 
-void Fongus::OnInitialise()
+void Fongus::OnInitialize()
 {
+	SetTag(TestScene::TFongus);
 	mMaxHP = 2;
 	mIsDead = false;
 }
@@ -12,7 +13,7 @@ void Fongus::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TAcid))
 	{
-		fg->AddRemoveHP(-1);
+		AddRemoveHP(-1);
 	}
 }
 

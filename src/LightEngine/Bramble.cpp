@@ -1,8 +1,9 @@
 #include "Bramble.h"
 #include"TestScene.h"
 
-void Bramble::OnInitialise()
+void Bramble::OnInitialize()
 {
+	SetTag(TestScene::TBramble);
 	mMaxHP = 1;
 	mIsDead = false;
 }
@@ -11,7 +12,7 @@ void Bramble::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TAcid))
 	{
-		br->AddRemoveHP(-1);
+		AddRemoveHP(-1);
 	}
 }
 

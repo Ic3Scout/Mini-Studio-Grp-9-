@@ -1,23 +1,23 @@
-#include " Bramble.h"
+#include"Bramble.h"
 #include "TestScene.h"
 
-void Fongus::OnInitialise()
+void Bramble::OnInitialize()
 {
 	mMaxHP = 1;
 	mIsDead = false;
 }
 
-void Fongus::OnCollision(Entity* collidedWith)
+void Bramble::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TAcid))
 	{
-		fg->AddRemoveHP(-1);
+		AddRemoveHP(-1);
 	}
 }
 
-void Fongus::OnUpdate()
+void Bramble::OnUpdate()
 {
-	if (IsDead)
+	if (mIsDead)
 	{
 		Destroy();
 	}

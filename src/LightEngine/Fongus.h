@@ -1,10 +1,9 @@
 #pragma once
-#include"Ennemy.h"
-class Fongus : public  Ennemy
+#include"Enemy.h"
+class Fongus : public  Enemy
 {
-	Fongus* fg;
 public:
-	void OnInitialise();
+	void OnInitialize();
 	void  OnCollision(Entity* collidedWith);
 	void OnUpdate();
 };

@@ -1,12 +1,10 @@
 #pragma once
-#include "Ennemy.h"
-class Thorn: public  Ennemy
+#include "Enemy.h"
+class Thorn: public Enemy
 {
-	Thorn* th;
 public:
-
-	void OnInitialise();
-	void  OnCollision(Entity* collidedWith);
-	void OnUpdate();
+	void OnInitialize() override;
+	void OnCollision(Entity* collidedWith) override;
+	void OnUpdate() override;
 };
 

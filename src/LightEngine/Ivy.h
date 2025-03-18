@@ -1,10 +1,7 @@
 #pragma once
-#include"Ennemy.h"
-class Ivy : public  Ennemy
+#include"Enemy.h"
+class ivy : public Enemy
 {
-	Ivy* iv;
 public:
-	void OnInitialise();
-	void  OnCollision(Entity* collidedWith);
-	void OnUpdate();
+
 };
