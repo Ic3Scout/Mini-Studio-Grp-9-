@@ -29,12 +29,15 @@ void PlayerAction_Moving::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Moving" << std::endl;
 
-	float* speed = &(pPlayer->mSpeed);
+	/*float* speed = &(pPlayer->mSpeed);
 	*speed += pPlayer->mParameters.mAcceleration * deltatime;
 	if (*speed > pPlayer->mParameters.mMaxSpeed)
 	{
 		*speed = pPlayer->mParameters.mMaxSpeed;
-	}
+	}*/
+
+	std::cout << "dir x : " << pPlayer->mDirection.x << " dir y : " << pPlayer->mDirection.y << std::endl;
+	std::cout << pPlayer->mSpeed << std::endl;
 
 	if (pPlayer->mIsMoving == false)
 		pPlayer->TransitionTo(Player::Idle);
@@ -55,7 +58,7 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 	pPlayer->mHitbox.face = Player::CollideWith::Nothing;
 	pPlayer->mIsGrounded = false;
 	pPlayer->ResetYForce();
-	pPlayer->AddForce(sf::Vector2f(0.f, -10.f), GRAVITY_ACCELERATION, PhysicalEntity::Force::Impulse);
+	pPlayer->AddForce(sf::Vector2f(0.f, 1.f), -981 * pPlayer->GetMass(), PhysicalEntity::Force::Impulse);
 }
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)

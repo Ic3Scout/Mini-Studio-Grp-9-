@@ -155,7 +155,6 @@ void Player::OnUpdate()
 
 	BasicControls();
 
-
 	if (mProgressDashReload <= 0)
 	{
 		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
@@ -209,7 +208,7 @@ void Player::OnCollision(Entity* other)
 	{
 	case CollideWith::Bottom:
 		mIsGrounded = true;
-		AddForce(sf::Vector2f(0.f, -1.f), GRAVITY_ACCELERATION, Force::Force);
+		AddForce(sf::Vector2f(0.f, 1.f), -981 * GetMass(), Force::Force);
 		break;
 
 	case CollideWith::Top:

@@ -1,11 +1,19 @@
 #include "PhysicalEntity.h"
-#include <iostream>
-
 #include "Utils.h"
 
 void PhysicalEntity::ToggleGravity(bool b)
 {
 	mGravity = b;
+}
+
+void PhysicalEntity::SetGravityIntensity(float f)
+{
+	mGravityIntensity = f;
+}
+
+void PhysicalEntity::SetMass(float f)
+{
+	mMass = f;
 }
 
 void PhysicalEntity::SetXDrag(float f)
@@ -18,6 +26,10 @@ void PhysicalEntity::SetYDrag(float f)
 	mYDrag = Utils::Clamp(f, 1.f, 0.f);
 }
 
+float PhysicalEntity::GetMass()
+{
+	return mMass;
+}
 
 void PhysicalEntity::ResetXForce()
 {
@@ -41,11 +53,6 @@ void PhysicalEntity::SetMaxVelocity(float x, float y)
 	mMaxYVelocity = y;
 }
 
-sf::Vector2f PhysicalEntity::GetVelocity()
-{
-	return mPrevVelocity;
-}
-
 void PhysicalEntity::AddForce(sf::Vector2f dir, float intensity, Force type)
 {
 	mForces.push_back({ dir * intensity, type });
@@ -57,7 +64,7 @@ void PhysicalEntity::FixedUpdate(float dt)
 
 	if (mGravity)
 	{
-		AddForce(sf::Vector2f(0.f, 10.f), GRAVITY_ACCELERATION, Force::Force);
+		AddForce(sf::Vector2f(0.f, 1.f), mGravityIntensity * mMass, Force::Force);
 	}
 
 	for (std::pair< sf::Vector2f, Force >& force : mForces)
@@ -71,7 +78,7 @@ void PhysicalEntity::FixedUpdate(float dt)
 		}
 		if (forceType == Force::Force)
 		{
-			sf::Vector2f acceleration = forceVelocity;
+			sf::Vector2f acceleration = forceVelocity / mMass;
 			velocity += acceleration * dt;
 		}
 	}
@@ -94,15 +101,15 @@ void PhysicalEntity::FixedUpdate(float dt)
 		velocity.y = 0.f;
 	}
 
-	mPrevVelocity = velocity;
+	mPrevVelocity = mDirection * mSpeed;
 
 	mForces.clear();
 	mSpeed = Utils::GetMagnitude(velocity);
-
-	if (mSpeed > 0.f)
-		Utils::Normalize(velocity);
-
+	Utils::Normalize(velocity);
 	mDirection = velocity;
 
 	Entity::FixedUpdate(dt);
 }
+
+
+
