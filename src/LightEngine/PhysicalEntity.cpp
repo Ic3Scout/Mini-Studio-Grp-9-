@@ -1,9 +1,13 @@
 #include "PhysicalEntity.h"
 #include <iostream>
 
+void PhysicalEntity::OnUpdate()
+{
+	Fall(GetDeltaTime());
+}
+
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	std::cout << "collision" << std::endl;
 	switch (mHitbox.face)
 	{
 	case CollideWith::Bottom:
@@ -25,7 +29,6 @@ void PhysicalEntity::OnCollision(Entity* collidedWith)
 		std::cout << "Bug\n";
 		break;
 	}
-
 }
 
 void PhysicalEntity::Fall(float dt)
@@ -33,17 +36,15 @@ void PhysicalEntity::Fall(float dt)
 	if (mGravity == false)
 	{
 		mGravitySpeed = 0.f;
-
+		mGravityAcceleration = 0;
 		return;
 	}
 
+	mGravityAcceleration = GRAVITY_ACCELERATION;
+
 	mGravitySpeed += mGravityAcceleration * dt;
-
-	/*mDirection.y = 1;
-
-	mSpeed = mGravitySpeed;*/
-
-	sf::Vector2f pos = GetPosition();
+	
+	sf::Vector2f pos = GetPosition(); 
 	float newPosY = pos.y + mGravitySpeed * dt;
 	SetPosition(pos.x, newPosY);
 }

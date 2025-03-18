@@ -5,14 +5,14 @@
 #include "AssetManager.h"
 
 class PhysicalEntity;
+class Player;
 
 class TestScene : public Scene
 {
-	Camera pCam;
+	Camera mCam;
 	AssetManager* assetManager = AssetManager::Get();
 
-	PhysicalEntity* pEntity1;
-	PhysicalEntity* pEntity2;
+	Player* pEntity1;
 
 	PhysicalEntity* pEntitySelected;
 
@@ -20,9 +20,20 @@ private:
 	void TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y);
 
 public:
+	enum Tag
+	{
+		TPlayer,
+		TPlatform,
+		TGun,
+		TWeedKiller,
+		TWater,
+		TAcid,
+	};
+
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
 	void UpdateCamera();
+	Camera& GetCam() { return mCam; }
 };
 

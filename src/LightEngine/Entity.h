@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -36,17 +37,15 @@ class Entity
     };
 
 protected:
-    sf::RectangleShape mShape;
+	sf::RectangleShape mShape;
     sf::Vector2f mDirection;
 	AABBCollider mHitbox;
 	Target mTarget;
 	Animation* mAnimations;
-	sf::Texture* mTexture;
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
 	bool mRigidBody = false;
-	bool mKineticBody = false;
 
 public:
 	enum CollideWith
@@ -61,15 +60,16 @@ public:
 	bool GoToDirection(int x, int y, float speed = -1.f);
     bool GoToPosition(int x, int y, float speed = -1.f);
     void SetPosition(float x, float y, float ratioX = 0.5f, float ratioY = 0.5f);
+	sf::Vector2f GetDirection() { return mDirection; }
 	void SetDirection(float x, float y, float speed = -1.f);
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
-	sf::Vector2f GetSize() const { return mShape.getSize(); }
+	sf::Vector2f GetSize() const;
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
-	sf::Shape* GetShape() { return &mShape; }
+	sf::RectangleShape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
     bool IsColliding(Entity* other);
@@ -81,14 +81,12 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
-	void SetTexture(const char* path);
 	void UpdateFrame(float dt);
+
+	void ChangeColor(sf::Color newColor);
+
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
-	void SetKineticBody(bool value) { mKineticBody = value; }
-	bool IsKineticBody() const { return mKineticBody; }
-
-	virtual void LoadAnimation();
 	
 	template<typename T>
 	T* GetScene() const;
@@ -97,7 +95,7 @@ public:
 	float GetDeltaTime() const;
 
     template<typename T>
-    T* CreateEntity(float radius, const sf::Color& color);
+    T* CreateEntity(sf::Vector2f size, const sf::Color& color);
 
 protected:
     Entity() = default;
@@ -107,11 +105,11 @@ protected:
     virtual void OnCollision(Entity* collidedWith) {};
 	virtual void OnInitialize() {};
 	virtual void OnDestroy() {};
-	virtual void FixedUpdate(float dt);
 
 private:
     void Update();
 	void Initialize(sf::Vector2f size, const sf::Color& color);
+	void Initialize(float radius, const sf::Color& color);
 	void Repulse(Entity* other);
 
     friend class GameManager;
