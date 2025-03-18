@@ -42,16 +42,6 @@ void WeedKiller::OnUpdate()
 	{
 		mProgressSound += GetDeltaTime();
 	}
-
-	if (mIsEquiped == true)
-	{
-		ShootManager(sf::Keyboard::Key::Right, 0, 7);
-	}
-	else
-	{
-		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop(); 
-	}
-
 }
 
 void WeedKiller::FixedUpdate(float dt)
@@ -61,8 +51,13 @@ void WeedKiller::FixedUpdate(float dt)
 
 	ReloadManager();
 
-	if (mIsEquiped == false)
+	if (mIsEquiped == true)
 	{
+		ShootManager(sf::Keyboard::Key::Right, 0, 7);
+	}
+	else
+	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop();
 		ChangeColor(sf::Color(255, 255, 0, 0));
 		return;
 	}
