@@ -26,7 +26,7 @@ void TestScene::OnInitialize()
 	mCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
-	pEntity1->SetPosition(width / 2.f, height / 2.f);
+	pEntity1->SetPosition(width / 2.f, 500.f);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
@@ -139,18 +139,12 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	if (mCam.GetFocus() == true)
-	{
-		mCam.FollowPlayer(); // Pour suivre l'entite 1   
-	}
-
+	
 	if (pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
-
-	UpdateCamera();
 
 	int fpsCounter = (int) (1.f / GetDeltaTime());
 

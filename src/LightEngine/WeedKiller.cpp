@@ -43,8 +43,6 @@ void WeedKiller::OnUpdate()
 		mProgressSound += GetDeltaTime();
 	}
 
-	std::cout << mProgressSound << " " << mSoundDelay << std::endl;
-
 	if (mIsEquiped == true)
 	{
 		ShootManager(sf::Keyboard::Key::Right, 0, 7);

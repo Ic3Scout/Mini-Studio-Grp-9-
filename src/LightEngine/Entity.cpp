@@ -104,12 +104,16 @@ bool Entity::IsColliding(Entity* other)
 	//If the entities are too far to each others, Skip
 	if (distanceBetweenEntities > radiusBasedOndiagonalHB + radiusBasedOndiagonalOtherHB)
 	{
+		hb.face = CollideWith::Nothing; 
+		otherHb.face = CollideWith::Nothing; 
 		return false;
 	}
 
 	//If One of the entities has no hitbox, Skip
 	if (hb.isActive == false || otherHb.isActive == false)
 	{
+		hb.face = CollideWith::Nothing;
+		otherHb.face = CollideWith::Nothing;
 		return false;
 	}
 
@@ -172,6 +176,8 @@ bool Entity::IsColliding(Entity* other)
 		}
 	}
 
+	hb.face = CollideWith::Nothing;
+	otherHb.face = CollideWith::Nothing;
 	return false;
 }
 

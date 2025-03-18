@@ -64,7 +64,7 @@ void Player::BasicControls()
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
 
-	if (mIsMoving == false)
+	if (mIsMoving == false && mState != Dashing) 
 		mSpeed = 0.f;
 
 }
@@ -162,11 +162,21 @@ void Player::OnUpdate()
 {
 	mAction[mState]->Update(this, GetDeltaTime());
 
+	if (mState != Jumping || mState != Falling)
+	{
+		if (mHitbox.face == CollideWith::Nothing)
+		{
+			mOnGround = false;
+		}
+	}
+
 	if (mIsDead)
 	{
 		TransitionTo(Player::Dying);
 		return;
 	}
+
+	PhysicalEntity::OnUpdate();
 
 	BasicControls();
 
@@ -208,12 +218,10 @@ void Player::OnUpdate()
 		ui->UpdateUI();
 	}
 
-	/*if (GetPosition().y > 800)
+	if (GetPosition().y > 1000)
 	{
-		AddRemoveHP(-1);
-		SetPosition(640, 380);
-	}*/
-	//std::cout << mGravitySpeed << std::endl;
+		SetPosition(640, 200);
+	}
 }
 
 void Player::OnCollision(Entity* other)
@@ -225,19 +233,22 @@ void Player::OnCollision(Entity* other)
 	{
 	case CollideWith::Bottom:
 		mGravitySpeed = 0.f;
+		mProgress = 0.f;
+		mOnGround = true;
+	
 		break;
 
 	case CollideWith::Top:
 		mGravitySpeed = 0.f;
+		mOnGround = false; 
 		break;
 
 	case CollideWith::Left:
+		mOnGround = false;
 		break;
 
 	case CollideWith::Right:
-		break;
-
-	case CollideWith::Nothing:
+		mOnGround = false;
 		break;
 
 	default:
@@ -271,6 +282,18 @@ void Player::FixedUpdate(float dt)
 {
 	Entity::FixedUpdate(dt);
 	PhysicalEntity::FixedUpdate(dt);
+
+	TestScene* pScene = GetScene<TestScene>();
+
+	Camera* pCam = &pScene->GetCam(); 
+
+	if (pCam->GetFocus() == true)
+	{
+		pCam->FollowPlayer(); // Pour suivre l'entite 1   
+	}
+
+	pScene->UpdateCamera();
+
 }
 
 void Player::SwapManager()

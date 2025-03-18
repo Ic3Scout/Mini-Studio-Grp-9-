@@ -3,32 +3,20 @@
 
 void PhysicalEntity::FixedUpdate(float dt)
 {
-	Fall(dt);
+	if(mOnGround == false)
+		Fall(dt);
+}
+
+void PhysicalEntity::OnUpdate()
+{
+	if (mProgress < mDelay)
+	{
+		mProgress += GetDeltaTime();
+	}
 }
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)
 {
-	switch (mHitbox.face)
-	{
-	case CollideWith::Bottom:
-		break;
-
-	case CollideWith::Top:
-		break;
-
-	case CollideWith::Left:
-		break;
-
-	case CollideWith::Right:
-		break;
-
-	case CollideWith::Nothing:
-		break;
-
-	default:
-		std::cout << "Bug\n";
-		break;
-	}
 }
 
 void PhysicalEntity::Fall(float dt)
