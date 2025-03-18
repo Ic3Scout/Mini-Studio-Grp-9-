@@ -21,13 +21,14 @@ class Animation
 	bool mStatic = false;
 
 public:
+	void SetLoop(bool value) { mLoop = value; }
+
 	void LoadJsonData(const char* path);
 	void LoadAnimationSingle(const char* name);
 	void LoadAnimationByRow(const char* name);
 	void LoadAnimationGrid(const char* name);
-	void Update(float dt);
 
-	void SetLoop(bool value) { mLoop = value; }
+	void Update(float dt);
 
 	sf::IntRect* GetCurrentFrame();
 

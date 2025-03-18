@@ -133,7 +133,6 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-
 	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("../../../res/Assets/248259.png");
 	GetShape()->setTexture(texture);
 
