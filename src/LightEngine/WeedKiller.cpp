@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Acid.h"
 #include "TestScene.h"
+#include "AssetManager.h"
 
 void WeedKiller::OnInitialize()
 {
@@ -25,8 +26,34 @@ void WeedKiller::OnUpdate()
 
 	ReloadManager();
 
-	if(mIsEquiped == true)
+	if (playSound)
+	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->play();
+		playSound = false;
+		mProgressSound = 0.f;
+	}
+
+	if (mProgressSound >= mSoundDelay)
+	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop();
+	}
+
+	if(mProgressSound < mSoundDelay)
+	{
+		mProgressSound += GetDeltaTime();
+	}
+
+	std::cout << mProgressSound << " " << mSoundDelay << std::endl;
+
+	if (mIsEquiped == true)
+	{
 		ShootManager(sf::Keyboard::Key::Right, 0, 7);
+	}
+	else
+	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop(); 
+	}
+
 }
 
 void WeedKiller::FixedUpdate(float dt)
@@ -71,5 +98,12 @@ void WeedKiller::Shoot()
 		mShootingDelay = 0.025f;
 
 		AddRemoveAmmo(-1);
+
+		if (playSound == false && mProgressSound >= mSoundDelay)
+		{
+			playSound = true;
+		}
+
+		mProgressSound = 0.f;
 	}
 }

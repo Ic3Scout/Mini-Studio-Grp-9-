@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Platform.h"
 #include "DummyEntity.h"
-
+#include "Animation.h"
 #include "Debug.h"
 #include <iostream>
 
@@ -17,6 +17,7 @@
 
 void TestScene::OnInitialize()
 {
+	InitAssets();
 	InitTransitions();
 
 	int height = GetWindowHeight();
@@ -55,24 +56,26 @@ void TestScene::OnInitialize()
 
 	inputFile.close();
 
-	const int BLOCK_SIZE = 100;
+	const int BLOCK_SIZE = 50;
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	for (size_t y = 0; y < map.size(); ++y) {
 		for (size_t x = 0; x < map[y].size(); ++x) {
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE, BLOCK_SIZE }, sf::Color::Red);
-				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE * 2, BLOCK_SIZE }, sf::Color::Red);
+				block->GetAnimations()->LoadAnimationGrid("Land2");
+				block->SetPosition(startX + x * BLOCK_SIZE * 2, startY + y * BLOCK_SIZE);
 				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				block->SetHitbox(BLOCK_SIZE * 2, BLOCK_SIZE);
 				platforms.push_back(block);
 			}
 		}
 	}
 
-
 	pEntitySelected = nullptr;
+
+	assetManager->GetMusic("MainMusic")->play();
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -152,7 +155,6 @@ void TestScene::OnUpdate()
 	int fpsCounter = (int) (1.f / GetDeltaTime());
 
 	sf::Vector2f camPos = mCam.GetView()->getCenter();
-	std::cout << "FPS : " << fpsCounter << std::endl;
 
 	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
@@ -165,6 +167,22 @@ void TestScene::UpdateCamera()
 bool TestScene::IsAllowedToCollide(int tag1, int tag2)
 {
 	return mInteractions[tag1][tag2];
+}
+
+void TestScene::InitAssets()
+{
+	assetManager->LoadTexture("Player", "../../../res/Assets/248259.png");
+	assetManager->LoadTexture("Terrain", "../../../res/Assets/SpriteSheet_Terrain.png");
+	assetManager->LoadMusic("MainMusic", "../../../res/Assets/music/mainmusic.wav")->setLoop(true);
+	assetManager->GetMusic("MainMusic")->setVolume(75);
+	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(50);
+	assetManager->LoadSound("WeedKiller", "../../../res/Assets/sfx/weedkiller.wav")->setVolume(100);
+	assetManager->GetSound("WeedKiller")->setLoop(true);
+	assetManager->LoadSound("Checkpoint", "../../../res/Assets/sfx/checkpoint.wav")->setVolume(75);
+	assetManager->LoadSound("ReloadWater", "../../../res/Assets/sfx/reloadwater.wav")->setVolume(15);
+	assetManager->LoadSound("PlayerJump", "../../../res/Assets/sfx/jump.wav")->setVolume(75);
+	assetManager->LoadSound("PlayerShooting", "../../../res/Assets/sfx/shooting.wav")->setVolume(100);
+	assetManager->LoadSound("PlayerDash", "../../../res/Assets/sfx/dash.wav")->setVolume(50);
 }
 
 void TestScene::InitTransitions()

@@ -72,9 +72,9 @@ void Animation::LoadAnimationGrid(const char* name)
 	mTextureRects.clear();
 
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
-	sf::Vector2i frameIndex = { data[name]["x"], data[name]["y"] };
+	sf::Vector2i frameIndex = { data["elements"][name]["x"], data["elements"][name]["y"]}; 
 
-	sf::Vector2i framePosition = { frameSize.x * frameIndex.x, frameSize.y * frameIndex.y };
+	sf::Vector2i framePosition = { frameSize.x * frameIndex.x + 1, frameSize.y * frameIndex.y + 1};
 	sf::IntRect frame = sf::IntRect(framePosition, frameSize);
 
 	mTextureRects.push_back(frame);
@@ -85,7 +85,7 @@ void Animation::LoadAnimationGrid(const char* name)
 	mLoop = false;
 	mStatic = true;
 
-	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
+	std::cout << "Animation chargee avec succes" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
 void Animation::Update(float dt)

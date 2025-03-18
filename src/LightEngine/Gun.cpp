@@ -85,4 +85,5 @@ void Gun::Shoot()
 	mShootingDelay = 0.5f;
 
 	AddRemoveAmmo(-1);
+	GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerShooting")->play(); 
 }

@@ -19,7 +19,7 @@ class AssetManager
 
 public:
 	static AssetManager* Get();
-	
+
 	//Il faut Load la texture avant de pouvoir la Get correctement
 	sf::Texture* LoadTexture(const char* alias, const char* path);
 	sf::Sound* LoadSound(const char* alias, const char* path);

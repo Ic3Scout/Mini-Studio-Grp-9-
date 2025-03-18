@@ -8,6 +8,7 @@
 #include "PlayerHealthBar.h"
 #include "PlayerUI.h"
 #include "PlayerAction.h"
+#include "Animation.h"
 
 #include <iostream>
 
@@ -144,8 +145,7 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-
-	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("../../../res/Assets/248259.png");
+	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");
 	GetShape()->setTexture(texture);
 
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
@@ -213,7 +213,7 @@ void Player::OnUpdate()
 		AddRemoveHP(-1);
 		SetPosition(640, 380);
 	}*/
-	std::cout << mGravitySpeed << std::endl;
+	//std::cout << mGravitySpeed << std::endl;
 }
 
 void Player::OnCollision(Entity* other)

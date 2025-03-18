@@ -1,6 +1,7 @@
 #include "Water.h"
 #include "Player.h"
 #include "TestScene.h"
+#include "AssetManager.h"
 
 void Water::OnUpdate()
 {
@@ -31,4 +32,5 @@ void Water::OnInitialize()
 
 void Water::OnDestroy()
 {
+	GetScene<TestScene>()->GetAssetManager()->GetSound("Waterdrop")->play();
 }

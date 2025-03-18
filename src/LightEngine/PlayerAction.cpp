@@ -1,6 +1,6 @@
 #include "PlayerAction.h"
+#include "TestScene.h"
 #include "Player.h"
-
 
 void PlayerAction_Idle::Start(Player* pPlayer)
 {
@@ -61,6 +61,8 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 	pPlayer->mHitbox.face = Player::CollideWith::Nothing;
 
 	pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
+
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerJump")->play();
 }
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
@@ -151,6 +153,8 @@ void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 void PlayerAction_Dashing::Start(Player* pPlayer)
 {
 	mDuration = 0.2f;
+
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerDash")->play(); 
 }
 
 void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
@@ -165,6 +169,8 @@ void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 	else
 	{
 		std::cout << "Dashing" << std::endl;
+
+		pPlayer->mSpeed = 200.f;
 	}
 
 	float* speedBoost = &(pPlayer->mSpeed);

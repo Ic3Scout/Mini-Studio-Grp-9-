@@ -1,5 +1,7 @@
 #include "Weapon.h"
 #include <iostream>
+#include "TestScene.h"
+#include "AssetManager.h"
 
 void Weapon::AddRemoveAmmo(int value)
 {
@@ -24,8 +26,13 @@ void Weapon::ReloadManager()
 	{
 		mProgressReload += GetDeltaTime();
 
-		if (mProgressReload >= mReloadTime)
+		if (mProgressReload >= mReloadTime && mAmmos < mMaxAmmos)
 		{
+			if (IsTag(TestScene::TGun))
+			{
+				GetScene<TestScene>()->GetAssetManager()->GetSound("ReloadWater")->play();
+			}
+
 			AddRemoveAmmo(1);
 			mProgressReload = 0.f;
 		}

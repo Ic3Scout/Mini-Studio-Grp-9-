@@ -45,5 +45,7 @@ public:
 	Camera& GetCam() { return mCam; }
 	AssetManager* GetAssetManager() { return assetManager; }
 	bool IsAllowedToCollide(int tag1, int tag2);
+
+	void InitAssets();
 };
 

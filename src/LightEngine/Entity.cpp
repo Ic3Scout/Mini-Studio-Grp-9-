@@ -210,7 +210,8 @@ void Entity::UpdateHitBox()
 	mHitbox.xMax = pos.x + width * 0.5f + mHitbox.offsetX;
 	mHitbox.yMax = pos.y + height * 0.5f + mHitbox.offsetY;
 
-	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
+	if(mHitbox.isDisplayed)
+		Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
 
 void Entity::SetHitbox(float width, float height)

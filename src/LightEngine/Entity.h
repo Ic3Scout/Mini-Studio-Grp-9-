@@ -17,6 +17,8 @@ class Entity
 {
 	struct AABBCollider
 	{
+		bool isDisplayed = false;
+
 		int face = 0;
 
 		bool isActive = true;
@@ -91,7 +93,7 @@ public:
 	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
 
 	virtual void LoadAnimation();
-
+	Animation* GetAnimations() { return mAnimations; }
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	
