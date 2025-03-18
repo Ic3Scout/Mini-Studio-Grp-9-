@@ -1,6 +1,5 @@
 #include "Nenuphloat.h"
 #include "TestScene.h"
-#include <chrono>
 
 void Nenuphloat::OnInitialize()
 {
@@ -12,7 +11,10 @@ void Nenuphloat::OnInitialize()
 
 void Nenuphloat::OnUpdate()
 {
-	if (grown && std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - growTime).count() >= 5)
+	if(grown && mProgress <= mDuration)
+		mProgress += GetDeltaTime();
+
+	if (grown && mProgress >= mDuration)
 	{
 		Retract();
 	}
@@ -34,7 +36,6 @@ void Nenuphloat::Grow()
 		grown = true;
 		SetHitbox(GetSize().x * 5, GetSize().y);
 	}
-	growTime = std::chrono::steady_clock::now();
 }
 
 void Nenuphloat::Retract()
@@ -44,4 +45,6 @@ void Nenuphloat::Retract()
 		return;
 	grown = false;
 	SetHitbox(GetSize().x, GetSize().y);
+
+	mProgress = 0.f;
 }

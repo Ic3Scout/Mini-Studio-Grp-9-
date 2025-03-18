@@ -231,7 +231,16 @@ void Player::OnCollision(Entity* other)
 		if (ally->IsTagAlly(Ally::TStation))
 		{
 			mParameters.respawnX = other->GetPosition().x;
-			mParameters.respawnY = other->GetPosition().y;
+			mParameters.respawnY = other->GetPosition().y - other->GetSize().y/2;
+
+			for (Weapon* weapon : mWeapons)
+			{
+				if (weapon->IsTag(TestScene::TWeedKiller))
+				{
+					weapon->SetCurrentAmmos(weapon->GetMaxAmmos());
+					break;
+				}
+			}
 		}
 		if (ally->IsTagAlly(Ally::TVineG))
 		{
@@ -249,38 +258,35 @@ void Player::OnCollision(Entity* other)
 	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))
 		return;
 
-	if (other->IsTag(TestScene::TPlatform))
+	switch (mHitbox.face)
 	{
-		switch (mHitbox.face)
-		{
-		case CollideWith::Bottom:
-			mGravitySpeed = 0.f;
-			SetGravity(false);
-			SetPosition(GetPosition().x, GetPosition().y - 0.5);
-			break;
+	case CollideWith::Bottom:
+		mGravitySpeed = 0.f;
+		SetGravity(false);
+		SetPosition(GetPosition().x, GetPosition().y - 0.5);
+		break;
 
-		case CollideWith::Top:
-			mGravitySpeed = 0.f;
-			SetPosition(GetPosition().x, GetPosition().y + 0.3);
-			break;
+	case CollideWith::Top:
+		mGravitySpeed = 0.f;
+		SetPosition(GetPosition().x, GetPosition().y + 0.3);
+		break;
 
-		case CollideWith::Left:
-			mSpeed = 0.f;
-			SetPosition(GetPosition().x + 1, GetPosition().y);
-			break;
+	case CollideWith::Left:
+		mSpeed = 0.f;
+		SetPosition(GetPosition().x + 1, GetPosition().y);
+		break;
 
-		case CollideWith::Right:
-			mSpeed = 0.f;
-			SetPosition(GetPosition().x - 1, GetPosition().y);
-			break;
+	case CollideWith::Right:
+		mSpeed = 0.f;
+		SetPosition(GetPosition().x - 1, GetPosition().y);
+		break;
 
-		case CollideWith::Nothing:
-			break;
+	case CollideWith::Nothing:
+		break;
 
-		default:
-			std::cout << "Bug\n";
-			break;
-		}
+	default:
+		std::cout << "Bug\n";
+		break;
 	}
 }
 

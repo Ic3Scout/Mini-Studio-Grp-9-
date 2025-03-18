@@ -1,9 +1,10 @@
 #pragma once
 #include "Ally.h"
-#include <chrono>
 
 class Nenuphloat : public Ally
 {
+    float mDuration = 5.f;
+    float mProgress = 0.f;
 public:
     void OnInitialize() override;
     void OnUpdate() override;
@@ -13,5 +14,4 @@ private:
     void Grow();
     void Retract();
     bool grown = false;
-    std::chrono::steady_clock::time_point growTime;
 };

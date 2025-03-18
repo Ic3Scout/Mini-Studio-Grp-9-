@@ -13,17 +13,14 @@ void WeedKiller::OnInitialize()
 
 	mMaxAmmos = 100;
 	mAmmos = mMaxAmmos;
-	mReloadTime = 0.025f;
-
-	mDelayBeforeReloading = 3.f;
+	mReloadTime = 0.f;
+	mDelayBeforeReloading = 0.f;
 }
 
 void WeedKiller::OnUpdate()
 {
 	if (!pOwner)
 		return;
-
-	ReloadManager();
 
 	if (mIsEquiped == false)
 	{
