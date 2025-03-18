@@ -12,7 +12,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "SFML/Graphics.hpp"
 #include <filesystem>
 
 void TestScene::OnInitialize()
@@ -22,6 +21,8 @@ void TestScene::OnInitialize()
 	int height = GetWindowHeight();
 	int width = GetWindowWidth();
 
+	assetManager->LoadTexture("platform", "../../../res/Assets/SpriteSheet_Terrain.png");
+
 	mCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
@@ -30,6 +31,7 @@ void TestScene::OnInitialize()
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->ToggleGravity(true);
 	pEntity1->SetKineticBody(true);
+	pEntity1->LoadAnimation();
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);

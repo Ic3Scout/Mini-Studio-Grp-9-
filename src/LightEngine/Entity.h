@@ -85,7 +85,7 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
-	void SetTexture(const char* path);
+	void SetTexture(const char* alias);
 	void UpdateFrame(float dt);
 	void ChangeColor(sf::Color newColor);
 	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
