@@ -8,6 +8,7 @@
 #include "Nenuphloat.h"
 #include "Thorn.h"
 #include "Fongus.h"
+#include "Ivy.h"
 
 #include "DummyEntity.h"
 
@@ -58,6 +59,7 @@ void TestScene::OnInitialize()
 	std::vector<Bulb*> bulbs;
 	std::vector<Thorn*> thorns;
 	std::vector<Fongus*> fonguss;
+	std::vector<Ivy*> ivys;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -79,6 +81,8 @@ void TestScene::OnInitialize()
 	S : Station
 	B : Bulb
 	T : Thorn
+	F : Fongus
+	I : Ivy
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y) {
@@ -119,6 +123,11 @@ void TestScene::OnInitialize()
 				Fongus* fongus = CreateEntity<Fongus>({ 24,24 }, sf::Color(0, 255, 0));
 				fongus->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				fonguss.push_back(fongus);
+			}
+			if (map[y][x] == 'I') {
+				Ivy* ivy = CreateEntity<Ivy>({ 24,24 }, sf::Color(254, 237, 92));
+				ivy->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				ivys.push_back(ivy);
 			}
 		}
 	}

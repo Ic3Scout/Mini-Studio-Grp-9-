@@ -92,6 +92,8 @@ public:
 
 	int GetSide() { return mSide; }
 
+	PlayerParameter* GetParameters() { return &mParameters; }
+
 	friend class PlayerAction;
 	friend class PlayerAction_Idle;
 	friend class PlayerAction_Moving;

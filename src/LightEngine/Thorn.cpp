@@ -8,8 +8,8 @@ void Thorn::OnInitialize()
     SetTagEnemy(TagEnemy::TThorn);
     mIsDead = false;
     mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
-	mDelay = 2.0f;
-	mDelay1 = 2.0f;
+	mDelay = 2.f;
+	mDelay1 = 2.f;
 }
 
 void Thorn::OnCollision(Entity* collidedWith)

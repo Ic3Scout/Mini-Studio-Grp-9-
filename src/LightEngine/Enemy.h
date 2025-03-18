@@ -17,14 +17,15 @@ public:
 	};
 
 	Player* player;
+	PlayerParameter* parameters;
 
 	int mTagEnemy = -1;
 
-	float mDelay;
+	float mDelay = 0.f;
 	float mProgress = 0.f;
 	bool isActive = false;
 
-	float mDelay1;
+	float mDelay1 = 0.f;
 	float mProgress1 = 0.f;
 	bool isActive1 = false;
 

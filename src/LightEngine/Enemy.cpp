@@ -4,6 +4,7 @@
 Enemy::Enemy(int maxHP) : Character(maxHP)
 {
 	player = GetScene<TestScene>()->GetPlayer();
+	parameters = player->GetParameters();
 }
 
 void Enemy::OnInitialize()

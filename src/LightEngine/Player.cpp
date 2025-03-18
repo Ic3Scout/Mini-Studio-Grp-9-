@@ -258,7 +258,7 @@ void Player::OnCollision(Entity* other)
 
 	if (Enemy* enemy = dynamic_cast<Enemy*>(other))
 	{
-		if (enemy->IsTagEnemy(Enemy::TFongusG))
+		if (enemy->IsTagEnemy(Enemy::TFongusG) || enemy->IsTagEnemy(Enemy::TIvy))
 			return;
 	}
 

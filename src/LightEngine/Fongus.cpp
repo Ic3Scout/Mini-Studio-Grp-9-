@@ -7,8 +7,8 @@ void Fongus::OnInitialize()
 {
 	SetTagEnemy(TagEnemy::TFongusR);
 	mIsDead = false;
-	mDelay = 1.0f;
-	mDelay1 = 2.0f;
+	mDelay = 1.f;
+	mDelay1 = 2.f;
 }
 
 void Fongus::OnCollision(Entity* collidedWith)
