@@ -11,6 +11,8 @@
 #include "Ivy.h"
 #include "Bramble.h"
 #include "Bridge.h"
+#include "Wall.h"
+#include "Root.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -65,6 +67,8 @@ void TestScene::OnInitialize()
 	std::vector<Ivy*> ivys;
 	std::vector<Bramble*> brambles;
 	std::vector<Bridge*> bridges;
+	std::vector<Wall*> walls;
+	std::vector<Root*> roots;
 
 	std::vector<std::string> map;
 
@@ -92,6 +96,8 @@ void TestScene::OnInitialize()
 	I : Ivy
 	R : Bramble
 	P : Bridge
+	w : Wall
+	O : Root
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -155,9 +161,19 @@ void TestScene::OnInitialize()
 				brambles.push_back(bramble);
 			}
 			if (map[y][x] == 'P') {
-				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
+				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(122, 112, 112));
 				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bridges.push_back(bridge);
+			}
+			if (map[y][x] == 'w') {
+				Wall* wall = CreateEntity<Wall>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 3 }, sf::Color(141, 49, 20));
+				wall->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - BLOCK_SIZE.y);
+				walls.push_back(wall);
+			}
+			if (map[y][x] == 'O') {
+				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x, BLOCK_SIZE.y}, sf::Color(120, 120, 10));
+				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				roots.push_back(root);
 			}
 		}
 	}
@@ -289,4 +305,5 @@ void TestScene::InitTransitions()
 	SetInteractionWith(TPlayer, TObstacle, true);
 	SetInteractionWith(TWater, TObstacle, true);
 	SetInteractionWith(TPlatform, TObstacle, true);
+	SetInteractionWith(TAcid, TObstacle, true);
 }

@@ -21,14 +21,6 @@ public:
 
 	int mTagEnemy = -1;
 
-	float mDelay = 0.f;
-	float mProgress = 0.f;
-	bool isActive = false;
-
-	float mDelay1 = 0.f;
-	float mProgress1 = 0.f;
-	bool isActive1 = false;
-
 	Enemy(int maxHP);
 	
 	virtual void OnInitialize() ;
@@ -36,10 +28,6 @@ public:
 	void SetTagEnemy(int tagEnemy) { mTagEnemy = tagEnemy; }
 
 	bool IsTagEnemy(int tagEnemy) const { return mTagEnemy == tagEnemy; }
-
-	void HandleDurationTimer();
-
-	void HandleDurationTimer1();
 };
 
 

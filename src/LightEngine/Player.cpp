@@ -291,7 +291,7 @@ void Player::OnCollision(Entity* other)
 
 	if (obstacle)
 	{
-		if (!obstacle->IsTagObstacle(Obstacle::TBridge))
+		if (!obstacle->IsTagObstacle(Obstacle::TBridge) && !obstacle->IsTagObstacle(Obstacle::TRootR))
 			return;
 	}
 

@@ -4,7 +4,7 @@
 
 void Nenuphloat::OnInitialize()
 {
-	mKineticBody = false;
+	SetKineticBody(false);
 	Ally::OnInitialize();
 	SetTagAlly(TNenuphloatR);
 	SetRigidBody(false);

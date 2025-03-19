@@ -5,7 +5,7 @@ Bramble::Bramble() : Enemy(BRAMBLE_HP) {}
 
 void Bramble::OnInitialize()
 {
-	mKineticBody = false;
+	SetKineticBody(false);
 	SetRigidBody(true);
 	Enemy::OnInitialize(); 
 	SetTagEnemy(Enemy::TBramble);
@@ -15,11 +15,15 @@ void Bramble::OnInitialize()
 
 void Bramble::OnCollision(Entity* collidedWith)
 {
+	if (collidedWith->IsTag(TestScene::TAcid))
+	{
+		Explose();
+	}
 }
 
 void Bramble::OnUpdate()
 {
-	bool isPlayerInProximity = IsPlayerInProximity();
+	isPlayerInProximity = IsPlayerInProximity();
 	if (isPlayerInProximity)
 	{
 		mExplosionActive = true;
@@ -32,17 +36,22 @@ void Bramble::OnUpdate()
 
 	if (mExplosionTimer >= mExplosionDelay)
 	{
-		SetHitbox(GetSize().x * 5, GetSize().y * 5);
-		if (isPlayerInProximity)
-			player->AddRemoveHP(-2);
-		AddRemoveHP(-1);
-		mExplosionTimer = 0.f;
+		Explose();
 	}
 
 	if (mIsDead)
 	{
 		Destroy();
 	}
+}
+
+void Bramble::Explose()
+{
+	SetHitbox(GetSize().x * 5, GetSize().y * 5);
+	if (isPlayerInProximity)
+		player->AddRemoveHP(-2);
+	AddRemoveHP(-1);
+	mExplosionTimer = 0.f;
 }
 
 bool Bramble::IsPlayerInProximity()

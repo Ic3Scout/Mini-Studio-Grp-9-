@@ -6,7 +6,7 @@ void Bridge::OnInitialize()
 {
 	SetRigidBody(true);
 	Obstacle::OnInitialize();
-	SetTagObstacle(TBridge);
+	SetTagObstacle(TagObstacle::TBridge);
 	SetHitbox(GetSize().x, GetSize().y);
 	mInitialSizeX = GetSize().x;
 	mSizeX = GetSize().x;

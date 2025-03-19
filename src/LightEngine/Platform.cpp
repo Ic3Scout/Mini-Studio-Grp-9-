@@ -5,7 +5,7 @@
 
 void Platform::OnInitialize()
 {
-	mKineticBody = false;
+	SetKineticBody(false);
 	SetTag((int)TestScene::TPlatform);
 
 	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Terrain");

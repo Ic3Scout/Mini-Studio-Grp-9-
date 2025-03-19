@@ -3,5 +3,6 @@
 
 void Obstacle::OnInitialize()
 {
+	player = GetScene<TestScene>()->GetPlayer();
 	SetTag(TestScene::TObstacle);
 }

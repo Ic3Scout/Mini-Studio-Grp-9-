@@ -1,5 +1,6 @@
 #pragma once
 #include "PhysicalEntity.h"
+#include "Player.h"
 
 class Obstacle : public PhysicalEntity
 {
@@ -7,10 +8,14 @@ public:
 	enum TagObstacle
 	{
 		TBridge,
-		TRoot,
+		TRootG,
+		TRootR,
 		TFog,
 		TWall,
 	};
+
+	Player* player;
+
 	int mTagObstacle = -1;
 
 	virtual void OnInitialize();
