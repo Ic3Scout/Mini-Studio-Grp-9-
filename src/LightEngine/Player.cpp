@@ -260,7 +260,7 @@ void Player::OnCollision(Entity* other)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 			{
-				mGravitySpeed = -std::sqrt(7 * mGravityAcceleration * GetSize().y);
+				mGravitySpeed = -std::sqrt(7 * 9.81 * 50.f * GetSize().y);
 			}
 		}
 		if (other->IsTag(TestScene::TAlly))

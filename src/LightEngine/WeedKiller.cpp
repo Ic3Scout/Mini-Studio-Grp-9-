@@ -49,8 +49,6 @@ void WeedKiller::FixedUpdate(float dt)
 	if (!pOwner)
 		return;
 
-	ReloadManager();
-
 	if (mIsEquiped == true)
 	{
 		ShootManager(sf::Keyboard::Key::Right, 0, 7);

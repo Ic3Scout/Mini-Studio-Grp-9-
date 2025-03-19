@@ -111,43 +111,43 @@ void TestScene::OnInitialize()
 				platforms.push_back(block);
 			}
 			if (map[y][x] == 'V') {
-				Vine* vine = CreateEntity<Vine>({ 24,24 }, sf::Color(172, 210, 128));
-				vine->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Vine* vine = CreateEntity<Vine>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(172, 210, 128));
+				vine->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				vines.push_back(vine);
 			}
 			if (map[y][x] == 'N') {
-				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ 24,24 }, sf::Color(65, 106, 36));
-				nenuphloat->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(65, 106, 36));
+				nenuphloat->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				nenuphloats.push_back(nenuphloat);
 			}
 			if (map[y][x] == 'S') {
-				Station* station = CreateEntity<Station>({ 24,24 }, sf::Color(158, 144, 193));
-				station->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
+				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				stations.push_back(station);
 			}
 			if (map[y][x] == 'B') {
-				Bulb* bulb = CreateEntity<Bulb>({ 24,24 }, sf::Color(213, 170, 63));
-				bulb->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Bulb* bulb = CreateEntity<Bulb>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(213, 170, 63));
+				bulb->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bulbs.push_back(bulb);
 			}
 			if (map[y][x] == 'T') {
-				Thorn* thorn = CreateEntity<Thorn>({ 24,24 }, sf::Color(133, 46, 46));
-				thorn->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Thorn* thorn = CreateEntity<Thorn>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(133, 46, 46));
+				thorn->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				thorns.push_back(thorn);
 			}
 			if (map[y][x] == 'F') {
-				Fongus* fongus = CreateEntity<Fongus>({ 24,24 }, sf::Color(0, 255, 0));
-				fongus->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Fongus* fongus = CreateEntity<Fongus>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(0, 255, 0));
+				fongus->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				fonguss.push_back(fongus);
 			}
 			if (map[y][x] == 'I') {
-				Ivy* ivy = CreateEntity<Ivy>({ 24,24 }, sf::Color(254, 237, 92));
-				ivy->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Ivy* ivy = CreateEntity<Ivy>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(254, 237, 92));
+				ivy->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				ivys.push_back(ivy);
 			}
 			if (map[y][x] == 'R') {
-				Bramble* bramble = CreateEntity<Bramble>({ 24,24 }, sf::Color(66, 44, 40));
-				bramble->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
+				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				brambles.push_back(bramble);
 			}
 		}
