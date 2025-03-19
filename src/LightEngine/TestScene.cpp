@@ -265,6 +265,7 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("Vine", "../../../res/Assets/Textures/SpriteSheet_Liane.png");
 	assetManager->LoadTexture("Station", "../../../res/Assets/Textures/SpriteSheet_Station.png");
 	assetManager->LoadTexture("Bulb", "../../../res/Assets/Textures/SpriteSheet_BulbeLumina.png");
+	assetManager->LoadTexture("Bramble", "../../../res/Assets/Textures/SpriteSheet_Bramble.png");
 }
 
 void TestScene::InitAssets()

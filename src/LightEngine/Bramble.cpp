@@ -1,5 +1,6 @@
 #include "Bramble.h"
 #include"TestScene.h"
+#include "Animation.h"
 
 Bramble::Bramble() : Enemy(BRAMBLE_HP) {}
 
@@ -11,6 +12,9 @@ void Bramble::OnInitialize()
 	SetTagEnemy(Enemy::TBramble);
 	mIsDead = false;
 	mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
+
+	mAnimations = new Animation();
+	LoadAnimation();
 }
 
 void Bramble::OnCollision(Entity* collidedWith)
@@ -20,6 +24,7 @@ void Bramble::OnCollision(Entity* collidedWith)
 void Bramble::OnUpdate()
 {
 	bool isPlayerInProximity = IsPlayerInProximity();
+
 	if (isPlayerInProximity)
 	{
 		mExplosionActive = true;
@@ -37,12 +42,21 @@ void Bramble::OnUpdate()
 			player->AddRemoveHP(-2);
 		AddRemoveHP(-1);
 		mExplosionTimer = 0.f;
+
+		ChangeAnimation("Death", "single");
 	}
 
 	if (mIsDead)
 	{
 		Destroy();
 	}
+}
+
+void Bramble::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Bramble.json");
+	SetTexture("Bramble");
+	mAnimations->LoadAnimationSingle("Idle");
 }
 
 bool Bramble::IsPlayerInProximity()
