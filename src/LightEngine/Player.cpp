@@ -56,7 +56,7 @@ void Player::BasicControls()
 		{
 			mIsMoving = false;
 			mSide = 1;
-			
+
 		}
 		else
 		{
@@ -66,7 +66,7 @@ void Player::BasicControls()
 		mDirection.x = mSide;
 	}
 
-	
+
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -153,19 +153,19 @@ void Player::OnInitialize()
 	PhysicalEntity::OnInitialize();
 	InitStates();
 
-SetTag((int)TestScene::TPlayer);
+	SetTag((int)TestScene::TPlayer);
 
-sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");
-GetShape()->setTexture(texture);
+	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");
+	GetShape()->setTexture(texture);
 
-Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
-gun->SetOwner(this);
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
+	gun->SetOwner(this);
 
-Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
-weedKiller->SetOwner(this);
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
+	weedKiller->SetOwner(this);
 
-mWeapons.push_back(gun);
-mWeapons.push_back(weedKiller);
+	mWeapons.push_back(gun);
+	mWeapons.push_back(weedKiller);
 }
 
 void Player::OnUpdate()
@@ -251,11 +251,11 @@ void Player::OnCollision(Entity* other)
 			mParameters.respawnX = other->GetPosition().x;
 			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
 
-			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");  
+			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
 
 			if (cpSfx->getStatus() == sf::Sound::Status::Stopped)
 			{
-				cpSfx->play(); 
+				cpSfx->play();
 			}
 
 			for (Weapon* weapon : mWeapons)
