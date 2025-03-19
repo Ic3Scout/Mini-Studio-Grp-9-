@@ -47,7 +47,9 @@ void Player::BasicControls()
 		{
 			mIsMoving = true;
 			mSide = 1;
+			
 		}
+		mDirection.x = mSide;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || mJoyX < -25)
 	{
@@ -55,15 +57,17 @@ void Player::BasicControls()
 		{
 			mIsMoving = false;
 			mSide = 1;
+			
 		}
 		else
 		{
 			mIsMoving = true;
 			mSide = -1;
 		}
+		mDirection.x = mSide;
 	}
 
-	mDirection.x = mSide;
+	
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
