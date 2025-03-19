@@ -19,16 +19,17 @@ void Animation::LoadJsonData(const char* path)
 
 void Animation::LoadAnimationSingle(const char* name)
 {
+	mCurrentAnimation = name;
 	mTextureRects.clear();
 
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
 
 	int frameCount = data["animations"][name]["frames"];
-	int frameIndex = FindIndexA(name);
+	int frameIndex = data["animations"][name]["index"];
 
 	for (int i = 0; i < frameCount; i++)
 	{
-		sf::Vector2i framePosition = { frameSize.x * i, frameSize.y * frameIndex};
+		sf::Vector2i framePosition = { frameSize.x * i + 3, (frameSize.y * frameIndex) + 1 * frameIndex };
 		sf::IntRect frame = sf::IntRect(framePosition, frameSize );
 
 		mTextureRects.push_back(frame);
@@ -38,12 +39,11 @@ void Animation::LoadAnimationSingle(const char* name)
 	mCurrentFrame = 0;
 	mElapsedTime = 0.f;
 	mLoop = data["animations"][name]["loop"];
-
-	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
 void Animation::LoadAnimationByRow(const char* eltName)
 {
+	mCurrentAnimation = eltName;
 	mTextureRects.clear();
 
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
@@ -63,12 +63,11 @@ void Animation::LoadAnimationByRow(const char* eltName)
 	mCurrentFrame = 0;
 	mElapsedTime = 0.f;
 	mLoop = false;
-
-	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
 void Animation::LoadAnimationGrid(const char* name)
 {
+	mCurrentAnimation = name;
 	mTextureRects.clear();
 
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
@@ -84,8 +83,6 @@ void Animation::LoadAnimationGrid(const char* name)
 	mElapsedTime = 0.f;
 	mLoop = false;
 	mStatic = true;
-
-	std::cout << "Animation chargee avec succes" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
 void Animation::Update(float dt)
@@ -108,6 +105,21 @@ void Animation::Update(float dt)
 	}
 }
 
+const char* Animation::GetCurrentAnimation()
+{
+	return mCurrentAnimation;
+}
+
+int Animation::GetMaxFrame()
+{
+	return mMaxFrame;
+}
+
+int Animation::GetCurrentFrameIndex()
+{
+	return mCurrentFrame;
+}
+
 sf::IntRect* Animation::GetCurrentFrame()
 {
 	if (mMaxFrame <= 0 && mStatic == false) 
@@ -122,6 +134,8 @@ int Animation::FindIndexA(const char* name)
 
 	for (auto it = data["animations"].begin(); it != data["animations"].end(); ++it, ++index) 
 	{
+
+
 		if (it.key() == name) 
 		{
 			std::cout << "Position de" << name << " : " << index << std::endl;

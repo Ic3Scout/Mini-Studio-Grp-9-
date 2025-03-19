@@ -75,6 +75,7 @@ public:
 	bool IsKineticBody() { return mKineticBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
+	sf::Vector2f GetHitboxPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
 	sf::RectangleShape* GetShape() { return &mShape; }
 
 	bool IsTag(int tag) const { return mTag == tag; }
@@ -84,7 +85,7 @@ public:
 	//Changes
 	AABBCollider* GetHitbox() { return &mHitbox; }
 	void UpdateHitBox();
-	void SetHitbox(float width, float height);
+	void SetHitbox(float width, float height, float ratioX = 0.5f, float ratioY = 0.5f);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
 	void SetTexture(const char* name);
@@ -95,6 +96,7 @@ public:
 	virtual void LoadAnimation();
 	virtual void ChangeAnimation(const char* name);
 	Animation* GetAnimations() { return mAnimations; }
+
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	

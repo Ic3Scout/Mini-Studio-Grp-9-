@@ -19,6 +19,7 @@ class Animation
 	float mElapsedTime = 0.f;
 	bool mLoop;
 	bool mStatic = false;
+	const char* mCurrentAnimation;
 
 public:
 	void LoadJsonData(const char* path);
@@ -29,6 +30,9 @@ public:
 
 	void SetLoop(bool value) { mLoop = value; }
 
+	const char* GetCurrentAnimation();
+	int GetMaxFrame();
+	int GetCurrentFrameIndex();
 	sf::IntRect* GetCurrentFrame();
 
 private:

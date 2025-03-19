@@ -9,6 +9,8 @@ class Nenuphloat : public Ally
     sf::Vector2f mDefaultSize = {0.f, 0.f};
     sf::Vector2f mGrownSize = { 0.f, 0.f };
 
+    sf::Vector2f mPosition;
+
 public:
     void OnInitialize() override;
     void OnUpdate() override;
@@ -18,6 +20,7 @@ public:
     void ChangeAnimation(const char* name) override;
 
 private:
+    bool CheckClosed();
     void Grow();
     void Retract();
     bool grown = false;

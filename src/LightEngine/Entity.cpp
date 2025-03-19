@@ -220,7 +220,7 @@ void Entity::UpdateHitBox()
 		Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
 
-void Entity::SetHitbox(float width, float height)
+void Entity::SetHitbox(float width, float height, float ratioX, float ratioY)
 {
 	if (width < 0 || height < 0)
 	{
@@ -230,10 +230,10 @@ void Entity::SetHitbox(float width, float height)
 
 	mHitbox.size = { width, height };
 
-	mHitbox.xMin = -width * 0.5f;
-	mHitbox.yMin = -height * 0.5f;
-	mHitbox.xMax = width * 0.5f;
-	mHitbox.yMax = height * 0.5f;
+	mHitbox.xMin = -width * ratioX;
+	mHitbox.yMin = -height * ratioX;
+	mHitbox.xMax = width * ratioY;
+	mHitbox.yMax = height * ratioY;
 }
 
 void Entity::SetHitboxOffset(float offsetX, float offsetY)
@@ -306,6 +306,17 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
 	sf::Vector2f size = mShape.getSize();
 	sf::Vector2f position = mShape.getPosition();
+
+	position.x += size.x * ratioX;
+	position.y += size.y * ratioY;
+
+	return position;
+}
+
+sf::Vector2f Entity::GetHitboxPosition(float ratioX, float ratioY) const
+{
+	sf::Vector2f size = mHitbox.size;
+	sf::Vector2f position = {mHitbox.xMin, mHitbox.xMin};
 
 	position.x += size.x * ratioX;
 	position.y += size.y * ratioY;
