@@ -227,7 +227,6 @@ void Player::OnUpdate()
 	{
 		ui->UpdateUI();
 	}
-
 	Respawn(mParameters.respawnX, mParameters.respawnY);
 }
 
