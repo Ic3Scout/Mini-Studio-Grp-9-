@@ -5,6 +5,7 @@ Ivy::Ivy() : Enemy(IVY_HP) {}
 
 void Ivy::OnInitialize()
 {
+	Enemy::OnInitialize(); 
 	SetTagEnemy(TagEnemy::TIvy);
 	mIsDead = false;
 }

@@ -1,4 +1,3 @@
-#include "Player.h"
 #include "Gun.h"
 #include "WeedKiller.h"
 #include "Weapon.h"
@@ -69,7 +68,7 @@ void Player::BasicControls()
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
 
-	if (mIsMoving == false && mState != Dashing) 
+	if (mIsMoving == false && mState != Dashing)
 		mSpeed = 0.f;
 
 }
@@ -240,12 +239,15 @@ void Player::Respawn(int x, int y)
 
 void Player::OnCollision(Entity* other)
 {
-	if (Ally* ally = dynamic_cast<Ally*>(other))
+	Ally* ally = dynamic_cast<Ally*>(other);
+	Enemy* enemy = dynamic_cast<Enemy*>(other);
+
+	if (ally)
 	{
 		if (ally->IsTagAlly(Ally::TStation))
 		{
 			mParameters.respawnX = other->GetPosition().x;
-			mParameters.respawnY = other->GetPosition().y - other->GetSize().y/2;
+			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
 
 			for (Weapon* weapon : mWeapons)
 			{
@@ -263,21 +265,23 @@ void Player::OnCollision(Entity* other)
 				mGravitySpeed = -std::sqrt(7 * 9.81 * 50.f * GetSize().y);
 			}
 		}
-		if (other->IsTag(TestScene::TAlly))
-		{
-			if (!ally->IsTagAlly(Ally::TNenuphloatG))
-				return;
-		}
+
 	}
 
-	if (Enemy* enemy = dynamic_cast<Enemy*>(other))
+	if (!other->IsTag(TestScene::TPlatform) && !ally && !enemy)
+		return;
+
+	if (ally)
 	{
-		if (enemy->IsTagEnemy(Enemy::TFongusG) || enemy->IsTagEnemy(Enemy::TIvy))
+		if (!ally->IsTagAlly(Ally::TNenuphloatG))
 			return;
 	}
 
-	if (other->IsTag(TestScene::TWater) || other->IsTag(TestScene::TAcid))
-		return;
+	if (enemy)
+	{
+		if (!enemy->IsTagEnemy(Enemy::TThorn) && !enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
+			return;
+	}
 
 	switch (mHitbox.face)
 	{
@@ -285,7 +289,7 @@ void Player::OnCollision(Entity* other)
 		mGravitySpeed = 0.f;
 		mProgress = 0.f;
 		mOnGround = true;
-	
+
 		break;
 
 	case CollideWith::Top:
@@ -340,7 +344,7 @@ void Player::FixedUpdate(float dt)
 
 	TestScene* pScene = GetScene<TestScene>();
 
-	Camera* pCam = &pScene->GetCam(); 
+	Camera* pCam = &pScene->GetCam();
 
 	if (pCam->GetFocus() == true)
 	{
@@ -351,7 +355,7 @@ void Player::FixedUpdate(float dt)
 
 	int fpsCounter = (int)(1.f / GetDeltaTime());
 
-	sf::Vector2f camPos = pCam->GetView()->getCenter(); 
+	sf::Vector2f camPos = pCam->GetView()->getCenter();
 
 	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }

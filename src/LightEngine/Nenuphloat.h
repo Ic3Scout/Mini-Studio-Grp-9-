@@ -8,6 +8,7 @@ class Nenuphloat : public Ally
 public:
     void OnInitialize() override;
     void OnUpdate() override;
+    void FixedUpdate(float dt) override;
     void OnCollision(Entity* collidedWith) override;
 
 private:

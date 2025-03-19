@@ -1,8 +1,10 @@
 #include "Nenuphloat.h"
 #include "TestScene.h"
+#include "Player.h"
 
 void Nenuphloat::OnInitialize()
 {
+	mKineticBody = false;
 	Ally::OnInitialize();
 	SetTagAlly(TNenuphloatR);
 	SetRigidBody(false);
@@ -20,6 +22,11 @@ void Nenuphloat::OnUpdate()
 	}
 }
 
+void Nenuphloat::FixedUpdate(float dt)
+{
+
+}
+
 void Nenuphloat::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TWater))
@@ -30,6 +37,7 @@ void Nenuphloat::OnCollision(Entity* collidedWith)
 
 void Nenuphloat::Grow()
 {
+	SetRigidBody(true);
 	SetTagAlly(TNenuphloatG);
 	if (!grown)
 	{
@@ -40,6 +48,7 @@ void Nenuphloat::Grow()
 
 void Nenuphloat::Retract()
 {
+	SetRigidBody(false);
 	SetTagAlly(TNenuphloatR);
 	if (!grown)
 		return;

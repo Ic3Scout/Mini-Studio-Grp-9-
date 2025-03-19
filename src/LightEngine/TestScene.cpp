@@ -269,6 +269,11 @@ void TestScene::InitTransitions()
 	}
 
 	SetInteractionWith(TPlayer, TPlatform, true);
-
 	SetInteractionWith(TWater, TPlatform, true); 
+
+	SetInteractionWith(TPlayer, TAlly, true);
+	SetInteractionWith(TPlayer, TEnemy, true);
+
+	SetInteractionWith(TWater, TAlly, true);
+	SetInteractionWith(TAcid, TEnemy, true);
 }

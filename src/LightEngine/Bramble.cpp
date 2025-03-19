@@ -5,6 +5,9 @@ Bramble::Bramble() : Enemy(BRAMBLE_HP) {}
 
 void Bramble::OnInitialize()
 {
+	mKineticBody = false;
+	SetRigidBody(true);
+	Enemy::OnInitialize(); 
 	SetTagEnemy(Enemy::TBramble);
 	mIsDead = false;
 	mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;

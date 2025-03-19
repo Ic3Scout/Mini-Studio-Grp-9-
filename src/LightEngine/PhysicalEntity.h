@@ -16,6 +16,7 @@ public:
 	virtual void OnUpdate();
 	void OnCollision(Entity* collidedWith) override;
 	void SetGravity(bool value) { mGravity = value; }
+	void SetOnGround(bool value) { mOnGround = value; }
 	void SwapGravity() { mGravity = !mGravity; }
 	void Fall(float dt);
 };

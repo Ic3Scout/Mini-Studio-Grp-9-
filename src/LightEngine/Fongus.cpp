@@ -5,7 +5,10 @@ Fongus::Fongus() : Enemy(FONGUS_HP) {}
 
 void Fongus::OnInitialize()
 {
+	mKineticBody = false;
+	Enemy::OnInitialize(); 
 	SetTagEnemy(TagEnemy::TFongusR);
+	SetRigidBody(true);
 	mIsDead = false;
 	mDelay = 1.f;
 	mDelay1 = 2.f;
@@ -28,7 +31,7 @@ void Fongus::OnCollision(Entity* collidedWith)
 		if (mProgress <= 0 && isActive == true && toxic == true)
 		{
 			isActive = false;
-			player->AddRemoveHP(-1);
+			player->TransitionTo(Player::TakingDamage);
 			mProgress = mDelay;
 		}
 	}
@@ -63,6 +66,7 @@ void Fongus::HandleActions()
 				SetHitbox(GetSize().x * 5, GetSize().y * 5);
 
 				SetTagEnemy(TagEnemy::TFongusG);
+				SetRigidBody(false);
 				toxic = true;
 
 				mActionTimer = 3.0f;
@@ -73,6 +77,7 @@ void Fongus::HandleActions()
 				SetHitbox(GetSize().x, GetSize().y);
 
 				SetTagEnemy(TagEnemy::TFongusR);
+				SetRigidBody(true);
 				toxic = false;
 
 				mCooldownTimer = 2.0f;//+ActionTimer

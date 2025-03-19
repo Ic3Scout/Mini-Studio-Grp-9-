@@ -147,10 +147,7 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 		pPlayer->TransitionTo(Player::Dying);
 	}
 
-	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
-	{
-		pPlayer->TransitionTo(Player::Falling);
-	}
+	pPlayer->TransitionTo(Player::Falling);
 }
 
 

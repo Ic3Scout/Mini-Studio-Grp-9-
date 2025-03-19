@@ -5,7 +5,10 @@ Thorn::Thorn() : Enemy(THORN_HP) {}
 
 void Thorn::OnInitialize()
 {
+    mKineticBody = false;
+    Enemy::OnInitialize();
     SetTagEnemy(TagEnemy::TThorn);
+    SetRigidBody(true);
     mIsDead = false;
     mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
 	mDelay = 2.f;
@@ -26,10 +29,12 @@ void Thorn::OnCollision(Entity* collidedWith)
 
     if (collidedWith->IsTag(TestScene::TPlayer))
     {
+        std::cout << "OOF\n";
+
         if (mProgress <= 0 && isActive == true)
         {
             isActive = false;
-            player->AddRemoveHP(-1);
+            player->TransitionTo(Player::TakingDamage);
             mProgress = mDelay;
         }
     }
