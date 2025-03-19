@@ -68,7 +68,7 @@ bool Vine::CheckClosed()
 {
 	if (mAnimations->GetCurrentAnimation() == "Closing")
 	{
-		if (mAnimations->GetCurrentFrameIndex() == mAnimations->GetMaxFrame())
+		if (mAnimations->IsFinished())
 		{
 			mShape.setSize(mDefaultSize);
 			SetHitbox(mDefaultSize.x, mDefaultSize.y);
