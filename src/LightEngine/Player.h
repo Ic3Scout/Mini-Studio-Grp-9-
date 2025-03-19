@@ -23,8 +23,8 @@ struct PlayerParameter
 	float mMaxSpeed = 250.f;
 	float mAcceleration = 670.f;
 
-	int respawnX = 640.f;
-	int respawnY = 380.f;
+	int respawnX = 700.f;
+	int respawnY = 760.f;
 	
 	float mDashReloadTime = 5.f;
 };
