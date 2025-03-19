@@ -73,7 +73,7 @@ void Root::OnUpdate()
 				SetRigidBody(false);
 				dangerous = false;
 
-				mCooldownTimer = 6.f;//+ActionTimer
+				mCooldownTimer = 2.f;//+ActionTimer
 				mActionTimer = 3.f;
 				mActionState = 0;
 				break;
