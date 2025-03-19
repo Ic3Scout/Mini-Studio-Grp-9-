@@ -5,6 +5,14 @@
 
 void Acid::OnUpdate()
 {
+	mProgress += GetDeltaTime();
+
+	if (mProgress >= mSurvivalTime)
+		Destroy();
+}
+
+void Acid::FixedUpdate(float dt)
+{
 	if (pOwner == nullptr)
 	{
 		return;
@@ -13,10 +21,6 @@ void Acid::OnUpdate()
 	sf::Vector2f wkPos = pOwner->GetPosition();
 
 	SetPosition(wkPos.x, wkPos.y);
-	mProgress += GetDeltaTime();
-
-	if (mProgress >= mSurvivalTime)
-		Destroy();
 }
 
 void Acid::OnCollision(Entity* collidedWith)
@@ -36,9 +40,6 @@ void Acid::SetOwner(WeedKiller* pWK)
 {
 	pOwner = pWK;
 
-	sf::Vector2f wkPos = pOwner->GetPosition();
-
-	SetPosition(wkPos.x, wkPos.y);
 	SetRigidBody(false);
 
 	if (pOwner != nullptr)

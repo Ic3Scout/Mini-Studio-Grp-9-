@@ -10,6 +10,8 @@
 #include "Ally.h"
 #include "Station.h"
 #include "Enemy.h"
+#include "PlayerAction.h"
+#include "Animation.h"
 
 #include <iostream>
 
@@ -31,10 +33,6 @@ Player::Player() : Character(PLAYER_HP)
 
 void Player::BasicControls()
 {
-	SetGravity(true);
-
-	float dt = GetDeltaTime();
-
 	mJoyX = sf::Joystick::getAxisPosition(0, sf::Joystick::Axis::X);
 
 	mIsMoving = false;
@@ -66,10 +64,12 @@ void Player::BasicControls()
 		}
 	}
 
+	mDirection.x = mSide;
+
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
 
-	if (mIsMoving == false)
+	if (mIsMoving == false && mState != Dashing) 
 		mSpeed = 0.f;
 
 }
@@ -112,7 +112,6 @@ void Player::InitStates()
 	SetTransition(Jumping, TakingDamage, true);
 	SetTransition(Jumping, Dying, true);
 
-	SetTransition(Dashing, Idle, true);
 	SetTransition(Dashing, Falling, true);
 
 	SetTransition(Falling, Idle, true);
@@ -120,6 +119,9 @@ void Player::InitStates()
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
+
+	SetTransition(TakingDamage, Falling, true);
+	SetTransition(TakingDamage, Dying, true);
 
 	mAction[Idle] = new PlayerAction_Idle();
 	mAction[Moving] = new PlayerAction_Moving();
@@ -150,6 +152,9 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
+	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");
+	GetShape()->setTexture(texture);
+
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 
@@ -163,6 +168,14 @@ void Player::OnInitialize()
 void Player::OnUpdate()
 {
 	mAction[mState]->Update(this, GetDeltaTime());
+
+	if (mState != Jumping || mState != Falling)
+	{
+		if (mHitbox.face == CollideWith::Nothing)
+		{
+			mOnGround = false;
+		}
+	}
 
 	if (mIsDead)
 	{
@@ -203,7 +216,7 @@ void Player::OnUpdate()
 			sf::Vector2f gunPos = w->GetPosition();
 			sf::Vector2f gunDir = w->GetDirection();
 
-			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 300, gunPos.y + gunDir.y * 300, sf::Color::Red);
+			Debug::DrawLine(gunPos.x, gunPos.y, gunPos.x + gunDir.x * 100, gunPos.y + gunDir.y * 100, sf::Color::Red);
 		}
 	}
 
@@ -219,8 +232,9 @@ void Player::Respawn(int x, int y)
 {
 	if (GetPosition().y > 800)
 	{
-		AddRemoveHP(-1);
 		SetPosition(x, y);
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
+		TransitionTo(Player::TakingDamage);
 	}
 }
 
@@ -269,26 +283,27 @@ void Player::OnCollision(Entity* other)
 	{
 	case CollideWith::Bottom:
 		mGravitySpeed = 0.f;
-		SetGravity(false);
-		SetPosition(GetPosition().x, GetPosition().y - 0.5);
+		mProgress = 0.f;
+		mOnGround = true;
+	
 		break;
 
 	case CollideWith::Top:
-		mGravitySpeed = 0.f;
-		SetPosition(GetPosition().x, GetPosition().y + 0.3);
+		if (mState == Jumping)
+		{
+			mGravitySpeed = 1.f;
+			mOnGround = false;
+
+			GetScene<TestScene>()->GetAssetManager()->GetSound("Bonk")->play();
+		}
 		break;
 
 	case CollideWith::Left:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x + 1, GetPosition().y);
+		mOnGround = false;
 		break;
 
 	case CollideWith::Right:
-		mSpeed = 0.f;
-		SetPosition(GetPosition().x - 1, GetPosition().y);
-		break;
-
-	case CollideWith::Nothing:
+		mOnGround = false;
 		break;
 
 	default:
@@ -316,6 +331,29 @@ void Player::OnDestroy()
 	}
 
 	mUI.clear();
+}
+
+void Player::FixedUpdate(float dt)
+{
+	Entity::FixedUpdate(dt);
+	PhysicalEntity::FixedUpdate(dt);
+
+	TestScene* pScene = GetScene<TestScene>();
+
+	Camera* pCam = &pScene->GetCam(); 
+
+	if (pCam->GetFocus() == true)
+	{
+		pCam->FollowPlayer(); // Pour suivre l'entite 1   
+	}
+
+	pScene->UpdateCamera();
+
+	int fpsCounter = (int)(1.f / GetDeltaTime());
+
+	sf::Vector2f camPos = pCam->GetView()->getCenter(); 
+
+	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
 
 void Player::SwapManager()

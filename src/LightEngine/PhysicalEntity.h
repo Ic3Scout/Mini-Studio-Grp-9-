@@ -6,10 +6,13 @@ class PhysicalEntity : public Entity
 {
 protected:
 	bool mGravity = false;
-	float mGravitySpeed = 0;
-	float mGravityAcceleration = GRAVITY_ACCELERATION;
+	float mGravitySpeed = 0.f;
+	bool mOnGround = false;
 
+	float mDelay = 0.1f;
+	float mProgress = 0.f;
 public:
+	void FixedUpdate(float dt) override;
 	virtual void OnUpdate();
 	void OnCollision(Entity* collidedWith) override;
 	void SetGravity(bool value) { mGravity = value; }

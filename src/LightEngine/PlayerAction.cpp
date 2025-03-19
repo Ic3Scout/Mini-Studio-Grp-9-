@@ -1,14 +1,6 @@
 #include "PlayerAction.h"
+#include "TestScene.h"
 #include "Player.h"
-
-bool PlayerAction::Move(Player* pPlayer)
-{
-	if (pPlayer->mIsMoving)
-		return true;
-
-	pPlayer->mIsMoving = 0.f;
-	return false;
-}
 
 void PlayerAction_Idle::Start(Player* pPlayer)
 {
@@ -18,14 +10,14 @@ void PlayerAction_Idle::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Idle" << std::endl;
 
-	if (pPlayer->mGravityAcceleration != 0 && pPlayer->mGravitySpeed > 50.f && pPlayer->mHitbox.face != Player::CollideWith::Bottom)
+	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
 	{
 		pPlayer->TransitionTo(Player::Falling);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1)) // bouton X
 	{
-		pPlayer->TransitionTo(Player::Jumping); 
+		pPlayer->TransitionTo(Player::Jumping);
 	}
 
 }
@@ -46,21 +38,19 @@ void PlayerAction_Moving::Update(Player* pPlayer, float deltatime)
 	{
 		*speed = pPlayer->mParameters.mMaxSpeed;
 	}
-	sf::Vector2f pos = pPlayer->GetPosition();
-	pPlayer->SetPosition(pos.x + *speed * deltatime * pPlayer->GetSide(), pos.y);
 
 	if (pPlayer->mIsMoving == false)
 		pPlayer->TransitionTo(Player::Idle);
 
 
-	if (pPlayer->mGravityAcceleration != 0 && pPlayer->mGravitySpeed > 50.f && pPlayer->mHitbox.face != Player::CollideWith::Bottom)
+	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay) 
 	{
 		pPlayer->TransitionTo(Player::Falling);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X 
 	{
-		pPlayer->TransitionTo(Player::Jumping);  
+		pPlayer->TransitionTo(Player::Jumping);
 	}
 }
 
@@ -68,18 +58,25 @@ void PlayerAction_Moving::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Jumping::Start(Player* pPlayer)
 {
-	pPlayer->mHitbox.face = Player::CollideWith::Nothing; 
+	pPlayer->mHitbox.face = Player::CollideWith::Nothing;
+	pPlayer->SetGravity(true);
 
-	pPlayer->mGravitySpeed = -std::sqrt(7 * pPlayer->mGravityAcceleration * pPlayer->GetSize().y);
+	pPlayer->mOnGround = false;
+
+	pPlayer->mProgress = 0.f;
+
+	pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerJump")->play();
 }
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Jumping" << std::endl;
 
-	pPlayer->SetGravity(true);
+	if(pPlayer->mGravitySpeed == 0)
+		pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
 
-	if (Move(pPlayer))
+	if (pPlayer->mIsMoving)
 	{
 		float* speed = &(pPlayer->mSpeed);
 		*speed += pPlayer->mParameters.mAcceleration * deltatime;
@@ -87,13 +84,11 @@ void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 		{
 			*speed = pPlayer->mParameters.mMaxSpeed;
 		}
-		sf::Vector2f pos = pPlayer->GetPosition();
-		pPlayer->SetPosition(pos.x + pPlayer->mSpeed * deltatime * pPlayer->GetSide(), pos.y);
 	}
 
-	if (pPlayer->mGravityAcceleration != 0 && pPlayer->mGravitySpeed >= 0)
+	if (pPlayer->mGravitySpeed >= 0 && pPlayer->mOnGround == false)
 	{
-		pPlayer->TransitionTo(Player::Falling); 
+		pPlayer->TransitionTo(Player::Falling);
 	}
 }
 
@@ -110,29 +105,28 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 
 	bool isMoving = false;
 
-	isMoving = Move(pPlayer);
+	isMoving = pPlayer->mIsMoving;
 
 	if (isMoving)
 	{
 		float* speed = &(pPlayer->mSpeed);
-		*speed += pPlayer->mParameters.mAcceleration * deltatime; 
-		if (*speed > pPlayer->mParameters.mMaxSpeed) 
+		*speed += pPlayer->mParameters.mAcceleration * deltatime;
+		if (*speed > pPlayer->mParameters.mMaxSpeed)
 		{
-			*speed = pPlayer->mParameters.mMaxSpeed; 
+			*speed = pPlayer->mParameters.mMaxSpeed;
 		}
 
 	}
 
-	sf::Vector2f pos = pPlayer->GetPosition();
-	pPlayer->SetPosition(pos.x + pPlayer->mSpeed * deltatime * pPlayer->GetSide(), pos.y);
-
-	if (pPlayer->mGravityAcceleration == 0 && pPlayer->mGravitySpeed < 50.f && isMoving == false) 
+	if (pPlayer->mOnGround == true && isMoving == false)
 	{
-		pPlayer->TransitionTo(Player::Idle); 
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Landing")->play();
+		pPlayer->TransitionTo(Player::Idle);
 	}
-	else if (pPlayer->mGravityAcceleration == 0 && pPlayer->mGravitySpeed < 50 && isMoving == true)
+	else if (pPlayer->mOnGround == true && isMoving == true)
 	{
-		pPlayer->TransitionTo(Player::Moving);  
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Landing")->play();
+		pPlayer->TransitionTo(Player::Moving);
 	}
 }
 
@@ -141,12 +135,22 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 void PlayerAction_TakingDamage::Start(Player* pPlayer)
 {
 	std::cout << "TakingDamage" << std::endl;
+	pPlayer->mOnGround = false;
 	pPlayer->AddRemoveHP(-1);
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
 }
 
 void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 {
+	if (pPlayer->GetRatioHP() <= 0)
+	{
+		pPlayer->TransitionTo(Player::Dying);
+	}
 
+	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
+	{
+		pPlayer->TransitionTo(Player::Falling);
+	}
 }
 
 
@@ -158,46 +162,68 @@ void PlayerAction_Dying::Start(Player* pPlayer)
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
-		std::cout << "Dying" << std::endl;
+	std::cout << "Dying" << std::endl;
+	
+	static float pitch = 0.1f;
+
+	if (mProgress >= mTimer)
+	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->setPitch(pitch);
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
+
+		mProgress = 0.f;
+
+		if (pitch <= 2)
+		{
+			pitch += 0.2f;
+		}
+		else
+		{
+			pitch = 0.1f;
+		}
+	}
+	else
+	{
+		mProgress += deltatime;
+	}
+
 }
 
 
 
 void PlayerAction_Dashing::Start(Player* pPlayer)
 {
-	mDuration = 0.2f;
-}
-
-void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
-{
-
 	if (pPlayer->mSpeed > 0)
 	{
 		std::cout << " Super Dashing" << std::endl;
-
-		pPlayer->mSpeed = 500.f;
+		mDuration = 0.2f;
 	}
 	else
 	{
 		std::cout << "Dashing" << std::endl;
+		mDuration = 0.1f;
 	}
+
+	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerDash")->play(); 
+}
+
+void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
+{
+	pPlayer->mSpeed = 500.f;
 
 	float* speedBoost = &(pPlayer->mSpeed);
 	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 50;
-	if (*speedBoost > pPlayer->mParameters.mMaxSpeed * 15)   
+	if (*speedBoost > pPlayer->mParameters.mMaxSpeed * 15)
 	{
-		*speedBoost = pPlayer->mParameters.mMaxSpeed;  
+		*speedBoost = pPlayer->mParameters.mMaxSpeed;
 	}
-	sf::Vector2f pos = pPlayer->GetPosition();
 
 	if (mDuration > 0)
 	{
 		if (pPlayer->mHitbox.face != Player::CollideWith::Left && pPlayer->mHitbox.face != Player::CollideWith::Right)
 		{
 			pPlayer->SetGravity(false);
-
-			pPlayer->SetPosition(pos.x + *speedBoost * deltatime * pPlayer->GetSide(), pos.y);
-		
+			pPlayer->mOnGround = false;
 		}
 		else
 			mDuration = 0.f;
@@ -208,10 +234,9 @@ void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 
 		*speedBoost = 0.f;
 
+		pPlayer->mOnGround = false;
 		pPlayer->TransitionTo(Player::Falling);
 	}
 
 	mDuration -= deltatime;
 }
-
-

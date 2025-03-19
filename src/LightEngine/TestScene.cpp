@@ -12,7 +12,7 @@
 #include "Bramble.h"
 
 #include "DummyEntity.h"
-
+#include "Animation.h"
 #include "Debug.h"
 #include <iostream>
 
@@ -25,19 +25,20 @@
 
 void TestScene::OnInitialize()
 {
+	InitAssets();
+	InitTransitions();
+
 	int height = GetWindowHeight();
 	int width = GetWindowWidth();
 
 	mCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
-	pEntity1->SetPosition(width / 2.f, height / 2.f);
+	pEntity1->SetPosition(width / 2.f, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
-	
-	sf::Texture* texture = assetManager->GetTexture("../../../res/Assets/248259.png");
-	pEntity1->GetShape()->setTexture(texture);
+	pEntity1->SetKineticBody(true);
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -71,13 +72,14 @@ void TestScene::OnInitialize()
 
 	inputFile.close();
 
-	const int BLOCK_SIZE = 24;
+	const sf::Vector2f BLOCK_SIZE = { 50, 50 };
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	/*
-	map légende :
-	X : platform
+	map lï¿½gende :
+	X : Land2
+	D : Dirt2
 	V : Vine
 	N : Nennuphloat
 	S : Station
@@ -88,13 +90,24 @@ void TestScene::OnInitialize()
 	R : Bramble
 	*/
 
-	for (size_t y = 0; y < map.size(); ++y) {
-		for (size_t x = 0; x < map[y].size(); ++x) {
+	for (size_t y = 0; y < map.size(); ++y)
+	{
+		for (size_t x = 0; x < map[y].size(); ++x) 
+		{
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>({ 24,24 }, sf::Color(1,75,63));
-				block->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
-				block->SetRigidBody(false);
-				block->SetHitbox(BLOCK_SIZE, BLOCK_SIZE);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::Red);
+				block->GetAnimations()->LoadAnimationGrid("Land2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'D') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("Dirt3");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
 				platforms.push_back(block);
 			}
 			if (map[y][x] == 'V') {
@@ -140,8 +153,9 @@ void TestScene::OnInitialize()
 		}
 	}
 
-
 	pEntitySelected = nullptr;
+
+	assetManager->GetMusic("MainMusic")->play();
 }
 
 void TestScene::OnEvent(const sf::Event& event)
@@ -205,21 +219,56 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	if (mCam.GetFocus() == true)
-	{
-		mCam.FollowPlayer(); // Pour suivre l'entite 1   
-	}
-
+	
 	if (pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
 
-	UpdateCamera();
 }
 
 void TestScene::UpdateCamera()
 {
 	GameManager::Get()->SetCamera(mCam);
+}
+
+bool TestScene::IsAllowedToCollide(int tag1, int tag2)
+{
+	return mInteractions[tag1][tag2];
+}
+
+void TestScene::InitAssets()
+{
+	assetManager->LoadTexture("Player", "../../../res/Assets/248259.png");
+	assetManager->LoadTexture("Terrain", "../../../res/Assets/SpriteSheet_Terrain.png");
+	assetManager->LoadMusic("MainMusic", "../../../res/Assets/music/mainmusic.wav")->setLoop(true);
+	assetManager->GetMusic("MainMusic")->setVolume(75);
+	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(50);
+	assetManager->LoadSound("WeedKiller", "../../../res/Assets/sfx/weedkiller.wav")->setVolume(100);
+	assetManager->GetSound("WeedKiller")->setLoop(true);
+	assetManager->LoadSound("Checkpoint", "../../../res/Assets/sfx/checkpoint.wav")->setVolume(75);
+	assetManager->LoadSound("ReloadWater", "../../../res/Assets/sfx/reloadwater.wav")->setVolume(15);
+	assetManager->LoadSound("PlayerJump", "../../../res/Assets/sfx/jump.wav")->setVolume(75);
+	assetManager->LoadSound("PlayerShooting", "../../../res/Assets/sfx/shooting.wav")->setVolume(100);
+	assetManager->LoadSound("PlayerDash", "../../../res/Assets/sfx/dash.wav")->setVolume(50);
+	assetManager->LoadSound("Landing", "../../../res/Assets/sfx/landing.wav")->setVolume(25);
+	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25);
+	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(100);
+	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(75);
+}
+
+void TestScene::InitTransitions()
+{
+	for (int i = 0; i < TAG_COUNT; i++)
+	{
+		for (int j = 0; j < TAG_COUNT; j++)
+		{
+			mInteractions[i][j] = false;
+		}
+	}
+
+	SetInteractionWith(TPlayer, TPlatform, true);
+
+	SetInteractionWith(TWater, TPlatform, true); 
 }

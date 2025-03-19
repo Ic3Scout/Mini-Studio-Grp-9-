@@ -1,17 +1,59 @@
 #include "Animation.h"
 #include <iostream>
+#include <fstream>
 
-void Animation::LoadAnimationSingle(const char* name, json data)
+void Animation::LoadJsonData(const char* path)
+{
+	// Lire le fichier JSON
+	std::ifstream inputFile(path);
+
+	if (!inputFile.is_open()) 
+	{
+		std::cerr << "Erreur lors de l'ouverture du fichier JSON." << std::endl;
+		return;
+	}
+
+	inputFile >> data;
+	inputFile.close();
+}
+
+void Animation::LoadAnimationSingle(const char* name)
 {
 	mTextureRects.clear();
 
 	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
 
 	int frameCount = data["animations"][name]["frames"];
+	int frameIndex = FindIndexA(name);
 
 	for (int i = 0; i < frameCount; i++)
 	{
-		sf::Vector2i framePosition = { frameSize.x * i, frameSize.y * i};
+		sf::Vector2i framePosition = { frameSize.x * i, (0 + frameSize.y * frameIndex) };
+		sf::IntRect frame = sf::IntRect(framePosition, frameSize );
+
+		mTextureRects.push_back(frame);
+	}
+
+	mMaxFrame = mTextureRects.size() - 1;
+	mCurrentFrame = 0;
+	mElapsedTime = 0.f;
+	mLoop = data["animations"][name]["loop"];
+
+	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
+}
+
+void Animation::LoadAnimationByRow(const char* eltName)
+{
+	mTextureRects.clear();
+
+	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
+
+	int frameCount = data["elements"][eltName]["frames"];
+	int frameIndex = FindIndexE(eltName);
+
+	for (int i = 0; i < frameCount; i++)
+	{
+		sf::Vector2i framePosition = { frameSize.x * i, frameSize.y * frameIndex };
 		sf::IntRect frame = sf::IntRect(framePosition, frameSize);
 
 		mTextureRects.push_back(frame);
@@ -20,22 +62,35 @@ void Animation::LoadAnimationSingle(const char* name, json data)
 	mMaxFrame = mTextureRects.size() - 1;
 	mCurrentFrame = 0;
 	mElapsedTime = 0.f;
-	mLoop = true;
+	mLoop = false;
 
-	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame << " frames)" << std::endl;
+	std::cout << "Animation chargée avec succès" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
-void Animation::LoadAnimationByRow(const char* name, json data)
+void Animation::LoadAnimationGrid(const char* name)
 {
-}
+	mTextureRects.clear();
 
-void Animation::LoadAnimationGrid(const char* name, json data)
-{
+	sf::Vector2i frameSize = { data["frame_size"]["width"], data["frame_size"]["height"] };
+	sf::Vector2i frameIndex = { data["elements"][name]["x"], data["elements"][name]["y"]}; 
+
+	sf::Vector2i framePosition = { (frameSize.x + 1) * frameIndex.x, (frameSize.y + 1) * frameIndex.y };
+	sf::IntRect frame = sf::IntRect(framePosition, frameSize);
+
+	mTextureRects.push_back(frame);
+
+	mMaxFrame = 0;
+	mCurrentFrame = 0;
+	mElapsedTime = 0.f;
+	mLoop = false;
+	mStatic = true;
+
+	std::cout << "Animation chargee avec succes" << " (" << mMaxFrame + 1 << " frames)" << std::endl;
 }
 
 void Animation::Update(float dt)
 {
-	if (mMaxFrame <= 0)
+	if (mMaxFrame <= 0 || mStatic == true)
 		return;
 
 	mElapsedTime += dt;
@@ -55,9 +110,42 @@ void Animation::Update(float dt)
 
 sf::IntRect* Animation::GetCurrentFrame()
 {
-	if (mMaxFrame <= 0) 
+	if (mMaxFrame <= 0 && mStatic == false) 
 		return nullptr;
 
 	return &mTextureRects[mCurrentFrame];
 }
+
+int Animation::FindIndexA(const char* name)
+{
+	int index = 0;
+
+	for (auto it = data["animations"].begin(); it != data["animations"].end(); ++it, ++index) 
+	{
+		if (it.key() == name) 
+		{
+			std::cout << "Position de" << name << " : " << index << std::endl;
+			return index;
+		}
+	}
+	std::cout << name << " n'existe pas dans le JSON." << std::endl;
+	return -1;
+}
+
+int Animation::FindIndexE(const char* name)
+{
+	int index = 0;
+
+	for (auto it = data["elements"].begin(); it != data["elements"].end(); ++it, ++index)
+	{
+		if (it.key() == name)
+		{
+			std::cout << "Position de" << name << " : " << index << std::endl;
+			return index;
+		}
+	}
+	std::cout << name << " n'existe pas dans le JSON." << std::endl;
+	return -1;
+}
+
 

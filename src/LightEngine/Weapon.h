@@ -24,7 +24,6 @@ protected:
 
 	void AddRemoveAmmo(int value);
 public:
-	virtual void OnUpdate() = 0;
 	virtual void SetOwner(Player* pOwner) { this->pOwner = pOwner; }
 	virtual void Shoot() = 0;
 	void OnDestroy() override;

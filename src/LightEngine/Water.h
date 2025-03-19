@@ -5,7 +5,7 @@ class Player;
 
 class Water : public Entity
 {
-	float mSurvivalTime = 5.f;
+	float mSurvivalTime = 3.f;
 	float mProgress = 0.f;
 public:
 	void OnUpdate() override;

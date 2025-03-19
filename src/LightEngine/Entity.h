@@ -17,6 +17,8 @@ class Entity
 {
 	struct AABBCollider
 	{
+		bool isDisplayed = false;
+
 		int face = 0;
 
 		bool isActive = true;
@@ -42,10 +44,12 @@ protected:
 	AABBCollider mHitbox;
 	Target mTarget;
 	Animation* mAnimations;
+	sf::Texture* mTexture;
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
 	bool mRigidBody = false;
+	bool mKineticBody;
 
 public:
 	enum CollideWith
@@ -67,6 +71,8 @@ public:
 	sf::Vector2f GetSize() const;
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
+	void SetKineticBody(bool value) { mKineticBody = value; }
+	bool IsKineticBody() { return mKineticBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
 	sf::RectangleShape* GetShape() { return &mShape; }
@@ -81,10 +87,13 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
+	void SetTexture(const char* path);
 	void UpdateFrame(float dt);
-
 	void ChangeColor(sf::Color newColor);
+	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
 
+	virtual void LoadAnimation();
+	Animation* GetAnimations() { return mAnimations; }
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	
@@ -105,11 +114,11 @@ protected:
     virtual void OnCollision(Entity* collidedWith) {};
 	virtual void OnInitialize() {};
 	virtual void OnDestroy() {};
+	virtual void FixedUpdate(float dt);
 
 private:
     void Update();
 	void Initialize(sf::Vector2f size, const sf::Color& color);
-	void Initialize(float radius, const sf::Color& color);
 	void Repulse(Entity* other);
 
     friend class GameManager;

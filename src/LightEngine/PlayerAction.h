@@ -5,8 +5,6 @@ class Player;
 
 class PlayerAction
 {
-protected:
-	bool Move(Player* pPlayer);
 public:
 	virtual void Start(Player* pPlayer) = 0;
 	virtual void Update(Player* pPlayer, float deltatime) = 0;
@@ -55,6 +53,8 @@ public:
 
 class PlayerAction_Dying : public PlayerAction
 {
+	float mTimer = 0.5f;
+	float mProgress = 0.f;
 public:
 	void Start(Player* pPlayer) override;
 	void Update(Player* pPlayer, float deltatime) override;

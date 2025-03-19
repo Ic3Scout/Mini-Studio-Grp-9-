@@ -3,23 +3,24 @@
 #include "GameManager.h"
 #include "Utils.h"
 #include "Debug.h"
-
+#include "TestScene.h"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <iostream>
 #include "Animation.h"
+#include "AssetManager.h"
 
-void Entity::Initialize(sf::Vector2f size, const sf::Color& color) 
+void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 {
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 
 	mShape.setOrigin(0.f, 0.f);
-	mShape.setFillColor(color); 
-	mShape.setSize(size); 
-	SetHitbox(size.x, size.y); 
-
-	mTarget.isSet = false;
+	mShape.setSize(size);
+	mShape.setFillColor(color);
+	SetHitbox(size.x, size.y);
 	
+	mTarget.isSet = false;
+
 	mAnimations = new Animation();
 
 	OnInitialize();
@@ -57,20 +58,58 @@ void Entity::Repulse(Entity* other)
 	if (overlap < 0.001f)
 		overlap = 0.f;
 
+	if (!mKineticBody)
+	{
+		overlap = 0.f;
+	}
+	else if (mKineticBody && !other->mKineticBody)
+	{
+		overlap *= 2.f;
+	}
+
 	sf::Vector2f translation = overlap * normal;
 
 	sf::Vector2f position1 = GetPosition(0.5f, 0.5f) - translation;
 	sf::Vector2f position2 = other->GetPosition(0.5f, 0.5f) + translation;
 
-	SetPosition(position1.x, position1.y, 0.5f, 0.5f);
-	other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
+	if (mKineticBody)
+		SetPosition(position1.x, position1.y, 0.5f, 0.5f);
+
+	if (other->mKineticBody)
+		other->SetPosition(position2.x, position2.y, 0.5f, 0.5f);
 }
 
 bool Entity::IsColliding(Entity* other)
 {
+	//If the collision between 2 entities isn't allowed, Skip
+	if (GetScene<TestScene>()->IsAllowedToCollide(this->mTag, other->mTag) == false)
+	{
+		return false;
+	}
+
 	AABBCollider& hb = mHitbox;
 	AABBCollider& otherHb = *(other->GetHitbox()); 
 
+	sf::Vector2f pos = GetPosition();
+	sf::Vector2f otherPos = other->GetPosition();
+
+	sf::Vector2f centerOfHB = { pos.x + hb.offsetX, pos.y + hb.offsetY }; 
+	sf::Vector2f centerOfOtherHB = { otherPos.x + otherHb.offsetX, otherPos.y + otherHb.offsetY }; 
+
+	float radiusBasedOndiagonalHB = GetDistance(centerOfHB, { hb.xMin, hb.yMin }); 
+	float radiusBasedOndiagonalOtherHB = GetDistance(centerOfOtherHB, { otherHb.xMin, otherHb.yMin });  
+
+	float distanceBetweenEntities = GetDistance(pos, otherPos);
+
+	//If the entities are too far to each others, Skip
+	if (distanceBetweenEntities > radiusBasedOndiagonalHB + radiusBasedOndiagonalOtherHB)
+	{
+		hb.face = CollideWith::Nothing; 
+		otherHb.face = CollideWith::Nothing; 
+		return false;
+	}
+
+	//If One of the entities has no hitbox, Skip
 	if (hb.isActive == false || otherHb.isActive == false)
 	{
 		hb.face = CollideWith::Nothing;
@@ -86,8 +125,6 @@ bool Entity::IsColliding(Entity* other)
 
 	if (hbWidth <= 0 || hbHeight <= 0 || otherHBWidth <= 0 || otherHBHeight <= 0)
 	{
-		hb.face = CollideWith::Nothing;
-		otherHb.face = CollideWith::Nothing;
 		return false; 
 	} 
 
@@ -99,9 +136,6 @@ bool Entity::IsColliding(Entity* other)
 
 			float overlapX = 0;
 			float overlapY = 0;
-
-			sf::Vector2f pos = GetPosition();
-			sf::Vector2f otherPos = other->GetPosition();
 
 			sf::Vector2f distBetweenCentersXY = { abs( pos.x + hb.offsetX - otherPos.x - otherHb.offsetX) , abs( pos.y + hb.offsetY - otherPos.y - otherHb.offsetY) }; 
 
@@ -142,9 +176,8 @@ bool Entity::IsColliding(Entity* other)
 		}
 	}
 
-	hb.face = CollideWith::Nothing;  
-	otherHb.face = CollideWith::Nothing; 
-
+	hb.face = CollideWith::Nothing;
+	otherHb.face = CollideWith::Nothing;
 	return false;
 }
 
@@ -155,7 +188,7 @@ bool Entity::IsInside(float x, float y) const
 	float dx = x - position.x;
 	float dy = y - position.y;
 
-	sf::Vector2f size = GetSize();
+	sf::Vector2f size = mShape.getSize();
 
 	return (dx * dx + dy * dy) < (size.x * size.y);
 }
@@ -169,23 +202,22 @@ void Entity::UpdateHitBox()
 
 	AABBCollider h = mHitbox;
 
-	float width = mHitbox.size.x; 
-	float height = mHitbox.size.y; 
+	float width = (h.xMax - h.xMin);
+	float height = (h.yMax - h.yMin);
 
-	if (width <= 0 || height <= 0) 
+	if (width <= 0 || height <= 0)
 	{
 		return;
 	}
 
-	sf::Vector2f hbOffset = { mHitbox.offsetX, mHitbox.offsetY };
+	mHitbox.xMin = pos.x - width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMin = pos.y - height * 0.5f + mHitbox.offsetY;
 
-	mHitbox.xMin = pos.x - width * 0.5f + hbOffset.x; 
-	mHitbox.yMin = pos.y - height * 0.5f + hbOffset.y;   
+	mHitbox.xMax = pos.x + width * 0.5f + mHitbox.offsetX;
+	mHitbox.yMax = pos.y + height * 0.5f + mHitbox.offsetY;
 
-	mHitbox.xMax = pos.x + width * 0.5f + hbOffset.x; 
-	mHitbox.yMax = pos.y + height * 0.5f + hbOffset.y; 
-
-	Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
+	if(mHitbox.isDisplayed)
+		Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
 
 void Entity::SetHitbox(float width, float height)
@@ -198,13 +230,10 @@ void Entity::SetHitbox(float width, float height)
 
 	mHitbox.size = { width, height };
 
-	float halfWidth = width * 0.5f;
-	float halfHeight = height * 0.5f;
-
-	mHitbox.xMin = -halfWidth;
-	mHitbox.yMin = -halfHeight;
-	mHitbox.xMax = halfWidth;
-	mHitbox.yMax = halfHeight;
+	mHitbox.xMin = -width * 0.5f;
+	mHitbox.yMin = -height * 0.5f;
+	mHitbox.xMax = width * 0.5f;
+	mHitbox.yMax = height * 0.5f;
 }
 
 void Entity::SetHitboxOffset(float offsetX, float offsetY)
@@ -213,15 +242,38 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 	mHitbox.offsetY = offsetY;
 }
 
-void Entity::ChangeColor(sf::Color newColor)
+void Entity::SetTexture(const char* path)
 {
-	mShape.setFillColor(newColor); 
+	AssetManager* assetManager = AssetManager::Get();
+	mTexture = assetManager->GetTexture(path);
 }
 
 void Entity::UpdateFrame(float dt)
 {
+	if (mTexture == nullptr)
+		return;
+
 	mAnimations->Update(dt);
 	sf::IntRect* frame = mAnimations->GetCurrentFrame();
+	
+	if (frame == nullptr)
+	{
+		std::cout << "pas de frame trouve" << std::endl;
+		return;
+	}
+
+	mShape.setTexture(mTexture);
+	mShape.setTextureRect(*frame);
+}
+
+void Entity::ChangeColor(sf::Color newColor)
+{
+	mShape.setFillColor(newColor);
+}
+
+float Entity::GetDistance(sf::Vector2f e1, sf::Vector2f e2)
+{
+	return sqrt( pow(e2.x - e1.x, 2) + pow(e2.y - e1.y, 2) );
 }
 
 void Entity::Destroy()
@@ -233,13 +285,14 @@ void Entity::Destroy()
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 {
-	sf::Vector2f size = GetSize();
+	sf::Vector2f size = mShape.getSize();
 
 	x -= size.x * ratioX;
 	y -= size.y * ratioY;
 
 	mShape.setPosition(x, y);
 
+	//#TODO Optimise
 	if (mTarget.isSet) 
 	{
 		sf::Vector2f position = GetPosition(0.5f, 0.5f);
@@ -251,7 +304,7 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
-	sf::Vector2f size = GetSize();
+	sf::Vector2f size = mShape.getSize();
 	sf::Vector2f position = mShape.getPosition();
 
 	position.x += size.x * ratioX;
@@ -302,15 +355,18 @@ sf::Vector2f Entity::GetSize() const
 	return mShape.getSize();
 }
 
-void Entity::Update()
+void Entity::LoadAnimation()
 {
-	float dt = GetDeltaTime();
+	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
+}
+
+void Entity::FixedUpdate(float dt)
+{
 	float distance = dt * mSpeed;
+	sf::Vector2f translation = distance * mDirection;
+	mShape.move(translation);
 
-	sf::Vector2f translation = distance * mDirection; 
-	mShape.move(translation); 
-
-	if (mTarget.isSet) 
+	if (mTarget.isSet)
 	{
 		float x1 = GetPosition(0.5f, 0.5f).x;
 		float y1 = GetPosition(0.5f, 0.5f).y;
@@ -331,9 +387,15 @@ void Entity::Update()
 			mTarget.isSet = false;
 		}
 	}
+}
 
-	OnUpdate();
+void Entity::Update()
+{
+	float dt = GetDeltaTime();
+
+	UpdateFrame(dt);
 	UpdateHitBox();
+	OnUpdate();
 }
 
 Scene* Entity::GetScene() const
