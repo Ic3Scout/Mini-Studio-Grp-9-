@@ -72,18 +72,34 @@ void TestScene::OnInitialize()
 
 	inputFile.close();
 
-	const sf::Vector2f BLOCK_SIZE = { 50, 50 };
+	const sf::Vector2f BLOCK_SIZE = { 60, 50 };
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	/*
-	map l�gende :
+	Map Légende :
+
+	Platefrom :
 	X : Land2
+	L : BorderLand1
+	l : CornerLand5
+	C : CornerLand3
+	c : CornerLand4
+	E : EdgeLand1
+	e : EdgeLand2
+	S ; SideLand1
+	s : SideLand2
+	b : BorderDirt1
+	B : BorderDirt2
+	W : DeepWater2
 	D : Dirt2
+	d : DeepDirt2 
+
+	Mob :
 	V : Vine
 	N : Nennuphloat
-	S : Station
-	B : Bulb
+	v : Station Vitale
+	U : Bulb
 	T : Thorn
 	F : Fongus
 	I : Ivy
@@ -110,6 +126,106 @@ void TestScene::OnInitialize()
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
 				platforms.push_back(block);
 			}
+			else if (map[y][x] == 'd') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("DeepDirt2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'L') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("BorderLand1");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'l') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("CornerLand5");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'C') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("CornerLand3");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'c') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("CornerLand4");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'E') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("EdgeLand1");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'e') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("EdgeLand2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'S') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("SideLand1");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 's') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("SideLand2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'b') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("BorderDirt1");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'B') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("BorderDirt2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+			else if (map[y][x] == 'W') {
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				block->GetAnimations()->LoadAnimationGrid("DeepWater2");
+				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				block->SetRigidBody(true);
+				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				platforms.push_back(block);
+			}
+
+
+
+
 			if (map[y][x] == 'V') {
 				Vine* vine = CreateEntity<Vine>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(172, 210, 128));
 				vine->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
@@ -120,12 +236,12 @@ void TestScene::OnInitialize()
 				nenuphloat->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				nenuphloats.push_back(nenuphloat);
 			}
-			if (map[y][x] == 'S') {
+			if (map[y][x] == 'v') {
 				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
 				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				stations.push_back(station);
 			}
-			if (map[y][x] == 'B') {
+			if (map[y][x] == 'U') {
 				Bulb* bulb = CreateEntity<Bulb>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(213, 170, 63));
 				bulb->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bulbs.push_back(bulb);
