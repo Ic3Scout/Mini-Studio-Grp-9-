@@ -87,12 +87,13 @@ public:
 	void SetHitbox(float width, float height);
 	void SetHitboxOffset(float offsetX, float offsetY);
 	void SetIsHitboxActive(bool result = true) { mHitbox.isActive = result; }
-	void SetTexture(const char* path);
+	void SetTexture(const char* name);
 	void UpdateFrame(float dt);
 	void ChangeColor(sf::Color newColor);
 	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
 
 	virtual void LoadAnimation();
+	virtual void ChangeAnimation(const char* name);
 	Animation* GetAnimations() { return mAnimations; }
     void Destroy();
 	bool ToDestroy() const { return mToDestroy; }

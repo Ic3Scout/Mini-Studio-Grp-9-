@@ -28,7 +28,7 @@ void Animation::LoadAnimationSingle(const char* name)
 
 	for (int i = 0; i < frameCount; i++)
 	{
-		sf::Vector2i framePosition = { frameSize.x * i, (0 + frameSize.y * frameIndex) };
+		sf::Vector2i framePosition = { frameSize.x * i, frameSize.y * frameIndex};
 		sf::IntRect frame = sf::IntRect(framePosition, frameSize );
 
 		mTextureRects.push_back(frame);

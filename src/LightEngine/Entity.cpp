@@ -242,10 +242,10 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 	mHitbox.offsetY = offsetY;
 }
 
-void Entity::SetTexture(const char* path)
+void Entity::SetTexture(const char* name)
 {
 	AssetManager* assetManager = AssetManager::Get();
-	mTexture = assetManager->GetTexture(path);
+	mTexture = assetManager->GetTexture(name);
 }
 
 void Entity::UpdateFrame(float dt)
@@ -358,6 +358,11 @@ sf::Vector2f Entity::GetSize() const
 void Entity::LoadAnimation()
 {
 	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
+}
+
+void Entity::ChangeAnimation(const char* name)
+{
+	//Faire un LoadAniamtion
 }
 
 void Entity::FixedUpdate(float dt)

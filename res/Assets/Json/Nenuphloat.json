@@ -1,0 +1,10 @@
+{
+  "frame_size": { "width": 96, "height": 16 },
+  "structure": "single",
+  "animations": {
+    "Opening": { "frames": 4, "loop": false },
+    "Closing": { "frames": 4, "loop": false},
+    "IldeBud": { "frames": 2, "loop": true },
+    "IdleStem": { "frames": 2, "loop": true }
+  }
+}

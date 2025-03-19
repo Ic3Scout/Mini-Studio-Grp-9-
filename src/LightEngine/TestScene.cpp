@@ -238,15 +238,12 @@ bool TestScene::IsAllowedToCollide(int tag1, int tag2)
 	return mInteractions[tag1][tag2];
 }
 
-void TestScene::InitAssets()
+void TestScene::InitSounds()
 {
-	assetManager->LoadTexture("Player", "../../../res/Assets/248259.png");
-	assetManager->LoadTexture("Terrain", "../../../res/Assets/SpriteSheet_Terrain.png");
 	assetManager->LoadMusic("MainMusic", "../../../res/Assets/music/mainmusic.wav")->setLoop(true);
-	assetManager->GetMusic("MainMusic")->setVolume(75);
+
 	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(50);
 	assetManager->LoadSound("WeedKiller", "../../../res/Assets/sfx/weedkiller.wav")->setVolume(100);
-	assetManager->GetSound("WeedKiller")->setLoop(true);
 	assetManager->LoadSound("Checkpoint", "../../../res/Assets/sfx/checkpoint.wav")->setVolume(75);
 	assetManager->LoadSound("ReloadWater", "../../../res/Assets/sfx/reloadwater.wav")->setVolume(15);
 	assetManager->LoadSound("PlayerJump", "../../../res/Assets/sfx/jump.wav")->setVolume(75);
@@ -256,6 +253,21 @@ void TestScene::InitAssets()
 	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25);
 	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(100);
 	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(75);
+
+	assetManager->GetMusic("MainMusic")->setVolume(75);
+	assetManager->GetSound("WeedKiller")->setLoop(true);
+}
+
+void TestScene::InitTextures()
+{
+	assetManager->LoadTexture("Terrain", "../../../res/Assets/Textures/SpriteSheet_Terrain.png");
+	assetManager->LoadTexture("Nenuphloat", "../../../res/Assets/Textures/SpriteSheet_Nenuphloat.png");
+}
+
+void TestScene::InitAssets()
+{
+	InitSounds();
+	InitTextures();
 }
 
 void TestScene::InitTransitions()
