@@ -154,36 +154,31 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dying::Start(Player* pPlayer)
 {
-
+	pPlayer->SetRigidBody(false);
+	pPlayer->SetIsHitboxActive(false);
+	pPlayer->SetGravity(false);
+	pPlayer->SetSpeed(0);
+	pPlayer->mShape.setSize({ 0, 0 });
 }
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
 	std::cout << "Dying" << std::endl;
-	
-	static float pitch = 0.1f;
+
+	if (mIsPlayed == true)
+		return;
 
 	if (mProgress >= mTimer)
 	{
-		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->setPitch(pitch);
-		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
-
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->play();
 		mProgress = 0.f;
-
-		if (pitch <= 2)
-		{
-			pitch += 0.2f;
-		}
-		else
-		{
-			pitch = 0.1f;
-		}
+		mIsPlayed = true;	
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->stop();
 	}
 	else
 	{
 		mProgress += deltatime;
 	}
-
 }
 
 

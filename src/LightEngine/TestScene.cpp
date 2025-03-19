@@ -256,6 +256,9 @@ void TestScene::InitAssets()
 	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25);
 	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(100);
 	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(75);
+
+	//A bouger au merge
+	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(50);
 }
 
 void TestScene::InitTransitions()

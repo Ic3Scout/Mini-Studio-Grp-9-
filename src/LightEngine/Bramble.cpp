@@ -19,6 +19,8 @@ void Bramble::OnCollision(Entity* collidedWith)
 
 void Bramble::OnUpdate()
 {
+	Enemy::OnUpdate();
+
 	bool isPlayerInProximity = IsPlayerInProximity();
 	if (isPlayerInProximity)
 	{
@@ -34,7 +36,11 @@ void Bramble::OnUpdate()
 	{
 		SetHitbox(GetSize().x * 5, GetSize().y * 5);
 		if (isPlayerInProximity)
-			player->AddRemoveHP(-2);
+		{
+			player->AddRemoveHP(-1);
+			player->TransitionTo(Player::TakingDamage);
+		}
+		
 		AddRemoveHP(-1);
 		mExplosionTimer = 0.f;
 	}
@@ -50,7 +56,7 @@ bool Bramble::IsPlayerInProximity()
 	sf::Vector2f playerPosition = player->GetPosition();
 	sf::Vector2f thornPosition = GetPosition();
 
-	float distance = std::sqrt(std::pow(playerPosition.x - thornPosition.x, 2) + std::pow(playerPosition.y - thornPosition.y, 2));
+	float distance = GetDistance(playerPosition, thornPosition);
 
 	return distance <= mProximityRadius;
 }

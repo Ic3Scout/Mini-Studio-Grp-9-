@@ -92,7 +92,7 @@ public:
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
-
+	int GetState() { return mState; }
 	PlayerParameter* GetParameters() { return &mParameters; }
 
 	friend class PlayerAction;

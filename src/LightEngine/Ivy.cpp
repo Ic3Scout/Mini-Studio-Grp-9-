@@ -5,8 +5,9 @@ Ivy::Ivy() : Enemy(IVY_HP) {}
 
 void Ivy::OnInitialize()
 {
-	Enemy::OnInitialize(); 
-	SetTagEnemy(TagEnemy::TIvy);
+	Enemy::OnInitialize();
+	SetIsHitboxActive(false);
+	SetTagEnemy(TagEnemy::TIvy); 
 	mIsDead = false;
 }
 
@@ -23,12 +24,14 @@ void Ivy::OnCollision(Entity* collidedWith)
 
 void Ivy::OnUpdate()
 {
+	Enemy::OnUpdate();
+
 	if (posInitial)
 	{
 		mInitialPosition = GetPosition().x;
 		posInitial = false;
 	}
-	if (mPlayerInContact == true)
+	if (mPlayerInContact == true && posInitial == false)
 	{
 		HandleAction();
 		mCounter += GetDeltaTime();
@@ -61,5 +64,6 @@ void Ivy::OnUpdate()
 
 void Ivy::HandleAction()
 {
-	player->SetSpeed(parameters->mMaxSpeed/2);
+	std::cout << "Oof\n";
+	player->SetSpeed(parameters->mMaxSpeed/2); 
 }

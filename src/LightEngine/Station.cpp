@@ -7,3 +7,8 @@ void Station::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 }
+
+void Station::OnUpdate()
+{
+	Ally::OnUpdate();
+}

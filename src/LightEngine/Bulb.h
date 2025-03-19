@@ -5,4 +5,5 @@ class Bulb : public Ally
 {
 public:
 	void OnInitialize() override;
+	void OnUpdate() override;
 };

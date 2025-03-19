@@ -47,7 +47,6 @@ void Player::BasicControls()
 		{
 			mIsMoving = true;
 			mSide = 1;
-			
 		}
 		mDirection.x = mSide;
 	}
@@ -151,6 +150,7 @@ bool Player::TransitionTo(State newState)
 
 void Player::OnInitialize()
 {
+	PhysicalEntity::OnInitialize();
 	InitStates();
 
 	SetTag((int)TestScene::TPlayer);
@@ -189,7 +189,6 @@ void Player::OnUpdate()
 	PhysicalEntity::OnUpdate();
 
 	BasicControls();
-
 
 	if (mProgressDashReload <= 0)
 	{
@@ -282,7 +281,7 @@ void Player::OnCollision(Entity* other)
 
 	if (enemy)
 	{
-		if (!enemy->IsTagEnemy(Enemy::TThorn) && !enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
+		if (!enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
 			return;
 	}
 
