@@ -56,7 +56,6 @@ void Ivy::OnUpdate()
 	{
 		Destroy();
 	}
-	std::cout << "Ivy pos : " << mInitialPosition << std::endl;
 }
 
 void Ivy::HandleAction()
