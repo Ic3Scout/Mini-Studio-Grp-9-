@@ -17,7 +17,6 @@ public:
     void FixedUpdate(float dt) override;
     void OnCollision(Entity* collidedWith) override;
     void LoadAnimation() override;
-    void ChangeAnimation(const char* name) override;
 
 private:
     bool CheckClosed();

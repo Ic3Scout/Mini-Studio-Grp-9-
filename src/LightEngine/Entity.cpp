@@ -371,9 +371,16 @@ void Entity::LoadAnimation()
 	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
 }
 
-void Entity::ChangeAnimation(const char* name)
+void Entity::ChangeAnimation(const char* name, const char* type)
 {
-	//Faire un LoadAniamtion
+	if (type == "single")
+	{
+		mAnimations->LoadAnimationSingle(name);
+	}
+	else if (type == "byRow")
+	{
+		mAnimations->LoadAnimationByRow(name);
+	}
 }
 
 void Entity::FixedUpdate(float dt)

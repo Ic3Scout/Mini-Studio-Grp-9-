@@ -122,7 +122,7 @@ void TestScene::OnInitialize()
 			}
 			if (map[y][x] == 'S') {
 				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
-				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - 50.f );
 				stations.push_back(station);
 			}
 			if (map[y][x] == 'B') {
@@ -262,6 +262,8 @@ void TestScene::InitTextures()
 {
 	assetManager->LoadTexture("Terrain", "../../../res/Assets/Textures/SpriteSheet_Terrain.png");
 	assetManager->LoadTexture("Nenuphloat", "../../../res/Assets/Textures/SpriteSheet_Nenuphloat.png");
+	assetManager->LoadTexture("Vine", "../../../res/Assets/Textures/SpriteSheet_Liane.png");
+	assetManager->LoadTexture("Station", "../../../res/Assets/Textures/SpriteSheet_Station.png");
 }
 
 void TestScene::InitAssets()

@@ -94,7 +94,7 @@ public:
 	float GetDistance(sf::Vector2f e1, sf::Vector2f e2);
 
 	virtual void LoadAnimation();
-	virtual void ChangeAnimation(const char* name);
+	void ChangeAnimation(const char* name, const char* type);
 	Animation* GetAnimations() { return mAnimations; }
 
     void Destroy();

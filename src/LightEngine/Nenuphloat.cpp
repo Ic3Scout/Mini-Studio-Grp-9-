@@ -31,6 +31,9 @@ void Nenuphloat::OnUpdate()
 
 void Nenuphloat::FixedUpdate(float dt)
 {
+	if (grown == true)
+		return;
+
 	CheckClosed();
 }
 
@@ -49,11 +52,6 @@ void Nenuphloat::LoadAnimation()
 	mAnimations->LoadAnimationSingle("IdleBud");
 }
 
-void Nenuphloat::ChangeAnimation(const char* name)
-{
-	mAnimations->LoadAnimationSingle(name);
-}
-
 bool Nenuphloat::CheckClosed()
 {
 	if (mAnimations->GetCurrentAnimation() == "Closing")
@@ -63,7 +61,7 @@ bool Nenuphloat::CheckClosed()
 			mShape.setSize(mDefaultSize);
 			SetHitbox(mDefaultSize.x, mDefaultSize.y);
 			SetPosition(mPosition.x, mPosition.y);
-			ChangeAnimation("IdleBud");
+			ChangeAnimation("IdleBud", "single");
 			return true;
 		}
 		return false;
@@ -83,7 +81,7 @@ void Nenuphloat::Grow()
 		mShape.setSize(mGrownSize);
 		SetHitbox(mGrownSize.x, mGrownSize.y);
 		SetPosition(mPosition.x, mPosition.y);
-		ChangeAnimation("Opening");
+		ChangeAnimation("Opening", "single");
 	}
 }
 
@@ -96,5 +94,5 @@ void Nenuphloat::Retract()
 
 	grown = false;
 	mProgress = 0.f;
-	ChangeAnimation("Closing");
+	ChangeAnimation("Closing", "single");
 }
