@@ -10,6 +10,7 @@
 #include "Fongus.h"
 #include "Ivy.h"
 #include "Bramble.h"
+#include "Bridge.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -63,6 +64,8 @@ void TestScene::OnInitialize()
 	std::vector<Fongus*> fonguss;
 	std::vector<Ivy*> ivys;
 	std::vector<Bramble*> brambles;
+	std::vector<Bridge*> bridges;
+
 	std::vector<std::string> map;
 
 	std::string line;
@@ -77,7 +80,7 @@ void TestScene::OnInitialize()
 	int startY = height / 2 - 200;
 
 	/*
-	map l�gende :
+	map légende :
 	X : Land2
 	D : Dirt2
 	V : Vine
@@ -88,6 +91,7 @@ void TestScene::OnInitialize()
 	F : Fongus
 	I : Ivy
 	R : Bramble
+	P : Bridge
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -149,6 +153,11 @@ void TestScene::OnInitialize()
 				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				brambles.push_back(bramble);
+			}
+			if (map[y][x] == 'P') {
+				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
+				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				bridges.push_back(bridge);
 			}
 		}
 	}
@@ -276,4 +285,8 @@ void TestScene::InitTransitions()
 
 	SetInteractionWith(TWater, TAlly, true);
 	SetInteractionWith(TAcid, TEnemy, true);
+
+	SetInteractionWith(TPlayer, TObstacle, true);
+	SetInteractionWith(TWater, TObstacle, true);
+	SetInteractionWith(TPlatform, TObstacle, true);
 }

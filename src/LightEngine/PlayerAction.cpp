@@ -65,7 +65,7 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 
 	pPlayer->mProgress = 0.f;
 
-	pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
+	pPlayer->mGravitySpeed = -std::sqrt(5 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
 	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerJump")->play();
 }
 
@@ -74,7 +74,7 @@ void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 	std::cout << "Jumping" << std::endl;
 
 	if(pPlayer->mGravitySpeed == 0)
-		pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
+		pPlayer->mGravitySpeed = -std::sqrt(5 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
 
 	if (pPlayer->mIsMoving)
 	{
