@@ -13,6 +13,7 @@
 #include "Bridge.h"
 #include "Wall.h"
 #include "Root.h"
+#include "Fog.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -69,6 +70,7 @@ void TestScene::OnInitialize()
 	std::vector<Bridge*> bridges;
 	std::vector<Wall*> walls;
 	std::vector<Root*> roots;
+	std::vector<Fog*> fogs;
 
 	std::vector<std::string> map;
 
@@ -98,6 +100,7 @@ void TestScene::OnInitialize()
 	P : Bridge
 	w : Wall
 	O : Root
+	G : Fog
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -174,6 +177,11 @@ void TestScene::OnInitialize()
 				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x, BLOCK_SIZE.y}, sf::Color(120, 120, 10));
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				roots.push_back(root);
+			}
+			if (map[y][x] == 'G') {
+				Fog* fog = CreateEntity<Fog>({ BLOCK_SIZE.x * 7, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
+				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				fogs.push_back(fog);
 			}
 		}
 	}
