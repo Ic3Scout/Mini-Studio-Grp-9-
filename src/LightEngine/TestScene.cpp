@@ -219,13 +219,13 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	
 	if (pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
 
+	SoundManager();
 }
 
 void TestScene::UpdateCamera()
@@ -243,22 +243,113 @@ void TestScene::InitAssets()
 	assetManager->LoadTexture("Player", "../../../res/Assets/248259.png");
 	assetManager->LoadTexture("Terrain", "../../../res/Assets/SpriteSheet_Terrain.png");
 	assetManager->LoadMusic("MainMusic", "../../../res/Assets/music/mainmusic.wav")->setLoop(true);
-	assetManager->GetMusic("MainMusic")->setVolume(75);
-	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(50);
-	assetManager->LoadSound("WeedKiller", "../../../res/Assets/sfx/weedkiller.wav")->setVolume(100);
+	assetManager->GetMusic("MainMusic")->setVolume(100 * mVolume);
+	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(100 * mVolume);
+	assetManager->LoadSound("WeedKiller", "../../../res/Assets/sfx/weedkiller.wav")->setVolume(75 * mVolume);
 	assetManager->GetSound("WeedKiller")->setLoop(true);
-	assetManager->LoadSound("Checkpoint", "../../../res/Assets/sfx/checkpoint.wav")->setVolume(75);
-	assetManager->LoadSound("ReloadWater", "../../../res/Assets/sfx/reloadwater.wav")->setVolume(15);
-	assetManager->LoadSound("PlayerJump", "../../../res/Assets/sfx/jump.wav")->setVolume(75);
-	assetManager->LoadSound("PlayerShooting", "../../../res/Assets/sfx/shooting.wav")->setVolume(100);
-	assetManager->LoadSound("PlayerDash", "../../../res/Assets/sfx/dash.wav")->setVolume(50);
-	assetManager->LoadSound("Landing", "../../../res/Assets/sfx/landing.wav")->setVolume(25);
-	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25);
-	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(100);
-	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(75);
+	assetManager->LoadSound("Checkpoint", "../../../res/Assets/sfx/checkpoint.wav")->setVolume(50 * mVolume);
+	assetManager->LoadSound("ReloadWater", "../../../res/Assets/sfx/reloadwater.wav")->setVolume(30 * mVolume);
+	assetManager->LoadSound("PlayerJump", "../../../res/Assets/sfx/jump.wav")->setVolume(50 * mVolume);
+	assetManager->LoadSound("PlayerShooting", "../../../res/Assets/sfx/shooting.wav")->setVolume(100 * mVolume);
+	assetManager->LoadSound("PlayerDash", "../../../res/Assets/sfx/dash.wav")->setVolume(50 * mVolume);
+	assetManager->LoadSound("Landing", "../../../res/Assets/sfx/landing.wav")->setVolume(25 * mVolume);
+	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25 * mVolume);
+	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(50 * mVolume);
+	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(50 * mVolume);
 
 	//A bouger au merge
-	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(50);
+	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(25 * mVolume);
+	assetManager->LoadSound("Button", "../../../res/Assets/sfx/button.wav")->setVolume(30 * mVolume);
+}
+
+void TestScene::SoundManager()
+{
+	if (mProgressToChangeVolume > mDelayToChangeVolume)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		{
+			AddRemoveVolume(-0.1f);
+
+			UpdateVolume();
+
+			mProgressToChangeVolume = 0.f;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		{
+			AddRemoveVolume(0.1f);
+
+			UpdateVolume();
+
+
+			mProgressToChangeVolume = 0.f;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+		{
+			if (isStopSound == false)
+			{
+				isStopSound = true; 
+				StopSound(); 
+			}
+			else
+			{
+				isStopSound = false; 
+				UpdateVolume(); 
+			}
+
+			mProgressToChangeVolume = 0.f;
+		}
+	}
+	else
+	{
+		mProgressToChangeVolume += GetDeltaTime();
+	}
+}
+
+void TestScene::UpdateVolume() 
+{
+	if (isStopSound)
+		return;
+
+	assetManager->GetMusic("MainMusic")->setVolume(100 * mVolume);
+	assetManager->GetSound("Waterdrop")->setVolume(100 * mVolume);
+	assetManager->GetSound("WeedKiller")->setVolume(75 * mVolume);
+	assetManager->GetSound("WeedKiller")->setLoop(true);
+	assetManager->GetSound("Checkpoint")->setVolume(50 * mVolume);
+	assetManager->GetSound("ReloadWater")->setVolume(30 * mVolume);
+	assetManager->GetSound("PlayerJump")->setVolume(75 * mVolume);
+	assetManager->GetSound("PlayerShooting")->setVolume(100 * mVolume);
+	assetManager->GetSound("PlayerDash")->setVolume(50 * mVolume);
+	assetManager->GetSound("Landing")->setVolume(25 * mVolume);
+	assetManager->GetSound("Bonk")->setVolume(25 * mVolume);
+	assetManager->GetSound("Falling")->setVolume(50 * mVolume);
+	assetManager->GetSound("Hurt")->setVolume(50 * mVolume);
+
+	//A bouger au merge
+	assetManager->GetSound("Dead")->setVolume(25 * mVolume);
+	assetManager->GetSound("Button")->setVolume(30 * mVolume);
+}
+
+void TestScene::StopSound()
+{
+	assetManager->GetMusic("MainMusic")->setVolume(0);
+	assetManager->GetSound("Waterdrop")->setVolume(0);
+	assetManager->GetSound("WeedKiller")->setVolume(0);
+	assetManager->GetSound("WeedKiller")->setLoop(true);
+	assetManager->GetSound("Checkpoint")->setVolume(0);
+	assetManager->GetSound("ReloadWater")->setVolume(0);
+	assetManager->GetSound("PlayerJump")->setVolume(0);
+	assetManager->GetSound("PlayerShooting")->setVolume(0);
+	assetManager->GetSound("PlayerDash")->setVolume(0);
+	assetManager->GetSound("Landing")->setVolume(0);
+	assetManager->GetSound("Bonk")->setVolume(0);
+	assetManager->GetSound("Falling")->setVolume(0);
+	assetManager->GetSound("Hurt")->setVolume(0);
+
+	//A bouger au merge
+	assetManager->GetSound("Dead")->setVolume(0);
+	assetManager->GetSound("Button")->setVolume(0);
 }
 
 void TestScene::InitTransitions()
@@ -279,4 +370,26 @@ void TestScene::InitTransitions()
 
 	SetInteractionWith(TWater, TAlly, true);
 	SetInteractionWith(TAcid, TEnemy, true);
+}
+
+void TestScene::AddRemoveVolume(float value)
+{
+	if (mProgressToChangeVolume <= mDelayToChangeVolume || isStopSound)
+		return;
+
+	mVolume += value;
+
+	if (mVolume > 1)
+	{
+		mVolume = 1;
+		return;
+	}
+
+	if (mVolume <= 0)
+	{
+		mVolume = 0;
+		return;
+	}
+
+	assetManager->GetSound("Button")->play();
 }

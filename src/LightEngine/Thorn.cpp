@@ -29,8 +29,6 @@ void Thorn::OnCollision(Entity* collidedWith)
 
     if (collidedWith->IsTag(TestScene::TPlayer))
     {
-        std::cout << "OOF\n";
-
         if (mProgress <= 0 && isActive == true)
         {
             isActive = false;
