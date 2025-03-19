@@ -9,6 +9,7 @@
 #include "Thorn.h"
 #include "Fongus.h"
 #include "Ivy.h"
+#include "Bramble.h"
 
 #include "DummyEntity.h"
 
@@ -60,6 +61,7 @@ void TestScene::OnInitialize()
 	std::vector<Thorn*> thorns;
 	std::vector<Fongus*> fonguss;
 	std::vector<Ivy*> ivys;
+	std::vector<Bramble*> brambles;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -83,6 +85,7 @@ void TestScene::OnInitialize()
 	T : Thorn
 	F : Fongus
 	I : Ivy
+	R : Bramble
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y) {
@@ -128,6 +131,11 @@ void TestScene::OnInitialize()
 				Ivy* ivy = CreateEntity<Ivy>({ 24,24 }, sf::Color(254, 237, 92));
 				ivy->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
 				ivys.push_back(ivy);
+			}
+			if (map[y][x] == 'R') {
+				Bramble* bramble = CreateEntity<Bramble>({ 24,24 }, sf::Color(66, 44, 40));
+				bramble->SetPosition(startX + x * BLOCK_SIZE, startY + y * BLOCK_SIZE);
+				brambles.push_back(bramble);
 			}
 		}
 	}
