@@ -39,7 +39,7 @@ void TestScene::OnInitialize()
 	mCam.Resize(width, height);
 
 	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White, 2);
-	pEntity1->SetPosition(width / 2.f, 750);
+	pEntity1->SetPosition(1000, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
@@ -48,7 +48,7 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	std::string filepath = "../../../res/mapDebug.txt";
+	std::string filepath = "../../../res/map.txt";
 	std::ifstream inputFile(filepath);
 
 	if (!std::filesystem::exists(filepath)) {
@@ -68,7 +68,7 @@ void TestScene::OnInitialize()
 
 	inputFile.close();
 	const sf::Vector2f MOB_SIZE = { 50,50 };
-	const sf::Vector2f BLOCK_SIZE = { 90, 50 };
+	const sf::Vector2f BLOCK_SIZE = { 100, 50 };
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
@@ -107,7 +107,6 @@ void TestScene::OnInitialize()
 	P : Bridge			1
 	w : Wall			1
 	O : Root			3
-	G : Fog				5
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -249,7 +248,7 @@ void TestScene::OnInitialize()
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 			else if (map[y][x] == 'P') {
-				Bridge* bridge = CreateEntity<Bridge>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(122, 112, 112), 1);
+				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(122, 112, 112), 1);
 				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 			else if (map[y][x] == 'w') {
@@ -299,7 +298,7 @@ void TestScene::UpdateCamera()
 	sf::Vector2f pPos = GetPlayer()->GetPosition();
 	sf::Vector2f posLimite = sf::Vector2f(100000, 875);
 
-	float minX = 50 + camSize.x / 2;
+	float minX = 500 + camSize.x / 2;
 	float maxX = posLimite.x - camSize.x / 2;
 	float minY = camSize.y / 2;
 	float maxY = posLimite.y - camSize.y / 2;

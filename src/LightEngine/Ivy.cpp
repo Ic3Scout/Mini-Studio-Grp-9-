@@ -27,6 +27,7 @@ void Ivy::OnCollision(Entity* collidedWith)
 
 void Ivy::OnUpdate()
 {
+
 	Enemy::OnUpdate();
 
 	if (posInitial)
@@ -36,10 +37,16 @@ void Ivy::OnUpdate()
 	}
 	if (mPlayerInContact == true && posInitial == false)
 	{
+		if (mAnimations->GetCurrentAnimation() == "Idle")
+		{
+			ChangeAnimation("Emerge", "single");
+			
+		}
 		HandleAction();
 		mCounter += GetDeltaTime();
 		if (mCounter >= mTimer)
 		{
+			ChangeAnimation("Idle", "single");
 			mCounter = 0.f;
 			mPlayerInContact = false;
 			ChangeAnimation("Emerge", "single");
