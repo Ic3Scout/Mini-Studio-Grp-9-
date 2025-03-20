@@ -21,6 +21,7 @@ struct PlayerParameter
 	float mDeceleration = 125.f;
 
 	float mMaxSpeed = 250.f;
+	float mDefaultMaxSpeed = 250.f;
 	float mAcceleration = 670.f;
 
 	int respawnX = 700.f;

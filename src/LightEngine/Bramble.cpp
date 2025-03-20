@@ -49,7 +49,10 @@ void Bramble::Explose()
 {
 	SetHitbox(GetSize().x * 5, GetSize().y * 5);
 	if (isPlayerInProximity)
-		player->AddRemoveHP(-2);
+	{
+		player->AddRemoveHP(-1);
+		player->TransitionTo(Player::TakingDamage);
+	}
 	AddRemoveHP(-1);
 	mExplosionTimer = 0.f;
 }

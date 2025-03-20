@@ -77,7 +77,8 @@ void Fongus::OnUpdate()
 			switch (mActionState)
 			{
 			case 0:
-				SetHitbox(GetSize().x * 5, GetSize().y * 5);
+				SetHitbox(GetSize().x * 5, GetSize().y * 3);
+				SetHitboxOffset(0, -GetSize().y);
 
 				SetTagEnemy(TagEnemy::TFongusG);
 				SetRigidBody(false);
@@ -89,6 +90,7 @@ void Fongus::OnUpdate()
 
 			case 1:
 				SetHitbox(GetSize().x, GetSize().y);
+				SetHitboxOffset(0, 0);
 
 				SetTagEnemy(TagEnemy::TFongusR);
 				SetRigidBody(true);

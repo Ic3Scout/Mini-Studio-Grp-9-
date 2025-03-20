@@ -274,7 +274,7 @@ void Player::OnCollision(Entity* other)
 
 	}
 
-	if (!other->IsTag(TestScene::TPlatform) && !ally && !enemy)
+	if (!other->IsTag(TestScene::TPlatform) && !ally && !enemy && !obstacle)
 		return;
 
 	if (ally)
@@ -291,7 +291,7 @@ void Player::OnCollision(Entity* other)
 
 	if (obstacle)
 	{
-		if (!obstacle->IsTagObstacle(Obstacle::TBridge) && !obstacle->IsTagObstacle(Obstacle::TRootR))
+		if (!obstacle->IsTagObstacle(Obstacle::TBridge) && !obstacle->IsTagObstacle(Obstacle::TRootG) && !obstacle->IsTagObstacle(Obstacle::TWall))
 			return;
 	}
 

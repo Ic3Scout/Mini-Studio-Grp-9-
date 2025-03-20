@@ -36,6 +36,7 @@ void Ivy::OnUpdate()
 		{
 			mCounter = 0.f;
 			mPlayerInContact = false;
+			parameters->mMaxSpeed = parameters->mDefaultMaxSpeed;
 		}
 	}
 	float currentPosition = GetPosition().x;
@@ -61,5 +62,5 @@ void Ivy::OnUpdate()
 
 void Ivy::HandleAction()
 {
-	player->SetSpeed(parameters->mMaxSpeed/2);
+	parameters->mMaxSpeed = parameters->mDefaultMaxSpeed / 2;
 }

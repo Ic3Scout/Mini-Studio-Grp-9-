@@ -206,7 +206,10 @@ void PlayerAction_Dashing::Start(Player* pPlayer)
 
 void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 {
-	pPlayer->mSpeed = 500.f;
+	if (pPlayer->mParameters.mMaxSpeed >= pPlayer->mParameters.mDefaultMaxSpeed)
+		pPlayer->mSpeed = 500.f;
+	else
+		pPlayer->mSpeed = 0.f;
 
 	float* speedBoost = &(pPlayer->mSpeed);
 	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 50;
