@@ -108,7 +108,6 @@ void TestScene::OnInitialize()
 	P : Bridge			1
 	w : Wall			1
 	O : Root			3
-	G : Fog				5
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -260,10 +259,6 @@ void TestScene::OnInitialize()
 			else if (map[y][x] == 'O') {
 				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x * 5, MOB_SIZE.y}, sf::Color(120, 120, 10), 3);
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y + BLOCK_SIZE.y / 2);
-			}
-			else if (map[y][x] == 'G') {
-				Fog* fog = CreateEntity<Fog>({ MOB_SIZE.x * 7, MOB_SIZE.y * 5 }, sf::Color(0, 0, 0, 100), 5);
-				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 
 			else if (map[y][x] == 'H') {
