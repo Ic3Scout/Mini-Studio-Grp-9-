@@ -11,7 +11,6 @@ class Root : public Obstacle
 	float mCooldownTimer = 0.f;
 	int mActionState = 0;
 	bool dangerous = false;
-	float mInitialSizeY = 0.f;
 
 public:
 	void OnInitialize() override;

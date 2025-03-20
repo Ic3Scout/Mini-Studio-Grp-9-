@@ -22,7 +22,7 @@ protected:
 
 public:
 	template<typename T>
-	T* CreateEntity(sf::Vector2f size, const sf::Color& color);
+	T* CreateEntity(sf::Vector2f size, const sf::Color& color, int mDrawPriority);
 
 	float GetDeltaTime() const;
 

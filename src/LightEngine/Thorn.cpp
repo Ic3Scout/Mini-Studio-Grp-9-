@@ -82,6 +82,16 @@ void Thorn::OnUpdate()
 
     else if (IsPlayerInProximity())
     {
+		if (player->GetPosition().x < GetPosition().x)
+		{
+			mPlayerLeft = true;
+			mPlayerRight = false;
+		}
+		else if (player->GetPosition().x > GetPosition().x)
+		{
+			mPlayerLeft = false;
+			mPlayerRight = true;
+		}
         if (!mActionTriggered)
         {
             ChangeAnimation("Attack_left", "single");

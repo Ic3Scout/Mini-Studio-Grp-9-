@@ -158,10 +158,13 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
+	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
+	/*GetShape()->setTexture(texture);*/
+
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White, 2);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow, 2);
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);

@@ -80,7 +80,7 @@ void WeedKiller::Shoot()
 
 	if (pOwner != nullptr)
 	{
-		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Green);
+		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Green, 2);
 		a->SetOwner(this);
 		a->SetPosition(GetPosition().x, GetPosition().y);
 		a->SetPlayerSide(pOwner->GetSide());

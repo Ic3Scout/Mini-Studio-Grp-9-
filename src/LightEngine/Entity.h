@@ -51,6 +51,8 @@ protected:
 	bool mRigidBody = false;
 	bool mKineticBody;
 
+	int drawPriority = 0;
+
 public:
 	enum CollideWith
 	{
@@ -109,7 +111,7 @@ public:
 	float GetDeltaTime() const;
 
     template<typename T>
-    T* CreateEntity(sf::Vector2f size, const sf::Color& color);
+	T* CreateEntity(sf::Vector2f size, const sf::Color& color, int mDrawPriority);
 
 protected:
     Entity() = default;
@@ -123,7 +125,7 @@ protected:
 
 private:
     void Update();
-	void Initialize(sf::Vector2f size, const sf::Color& color);
+	void Initialize(sf::Vector2f size, const sf::Color& color, int mDrawPriority);
 	void Repulse(Entity* other);
 
     friend class GameManager;

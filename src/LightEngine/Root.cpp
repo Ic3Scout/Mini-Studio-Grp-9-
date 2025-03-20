@@ -8,7 +8,6 @@ void Root::OnInitialize()
 	SetTagObstacle(TagObstacle::TRootR);
 	SetHitbox(GetSize().x, GetSize().y);
 	SetRigidBody(false);
-	mInitialSizeY = GetSize().y;
 }
 
 void Root::OnCollision(Entity* collidedWith)
@@ -52,12 +51,9 @@ void Root::OnUpdate()
 			switch (mActionState)
 			{
 			case 0:
-				mShape.setSize({ GetSize().x, GetSize().y * 3 });
-				SetPosition(GetPosition().x, GetPosition().y - mInitialSizeY * 2);
-				SetHitbox(GetSize().x, GetSize().y);
+				SetPosition(GetPosition().x, GetPosition().y - GetSize().y / 2);
 
 				SetTagObstacle(TagObstacle::TRootG);
-				SetRigidBody(true);
 				dangerous = true;
 
 				mActionTimer = 3.f;
@@ -65,15 +61,12 @@ void Root::OnUpdate()
 				break;
 
 			case 1:
-				mShape.setSize({ GetSize().x, mInitialSizeY });
-				SetPosition(GetPosition().x, GetPosition().y + mInitialSizeY * 2);
-				SetHitbox(GetSize().x, GetSize().y);
+				SetPosition(GetPosition().x, GetPosition().y + GetSize().y / 2);
 
 				SetTagObstacle(TagObstacle::TRootR);
-				SetRigidBody(false);
 				dangerous = false;
 
-				mCooldownTimer = 2.f;//+ActionTimer
+				mCooldownTimer = 1.f;//+ActionTimer
 				mActionTimer = 3.f;
 				mActionState = 0;
 				break;
