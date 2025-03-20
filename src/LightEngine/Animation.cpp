@@ -31,7 +31,7 @@ void Animation::LoadAnimationSingle(const char* name)
 
 	for (int i = 0; i < frameCount; i++)
 	{
-		sf::Vector2i framePosition = { frameSize.x * i + spaceIBT, (frameSize.y * frameIndex) + 1 * frameIndex };
+		sf::Vector2i framePosition = { frameSize.x * i + spaceIBT * i, (frameSize.y * frameIndex) + 1 * frameIndex };
 		sf::IntRect frame = sf::IntRect(framePosition, frameSize );
 
 		mTextureRects.push_back(frame);
@@ -53,10 +53,11 @@ void Animation::LoadAnimationByRow(const char* eltName)
 
 	int frameCount = data["elements"][eltName]["frames"];
 	int frameIndex = data["elements"][eltName]["index"];
+	int spaceIBT = data["frame_size"]["space"];
 
 	for (int i = 0; i < frameCount; i++)
 	{
-		sf::Vector2i framePosition = { frameSize.x * i, frameSize.y * frameIndex };
+		sf::Vector2i framePosition = { frameSize.x * i + spaceIBT * i, frameSize.y * frameIndex };
 		sf::IntRect frame = sf::IntRect(framePosition, frameSize);
 
 		mTextureRects.push_back(frame);

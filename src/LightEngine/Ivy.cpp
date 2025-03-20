@@ -11,7 +11,6 @@ void Ivy::OnInitialize()
 	SetTagEnemy(TagEnemy::TIvy); 
 	mIsDead = false;
 
-	mAnimations = new Animation();
 	LoadAnimation();
 }
 

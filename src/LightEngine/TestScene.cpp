@@ -48,7 +48,7 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	std::string filepath = "../../../res/map.txt";
+	std::string filepath = "../../../res/mapDebug.txt";
 	std::ifstream inputFile(filepath);
 
 	if (!std::filesystem::exists(filepath)) {
@@ -279,6 +279,15 @@ void TestScene::OnEvent(const sf::Event& event)
 
 void TestScene::OnUpdate()
 {
+	float dt = GetDeltaTime();
+
+	if (mCam.GetFocus() == true)
+	{
+		mCam.FollowPlayer();
+	}
+
+	UpdateCamera();
+
 	SoundManager();
 }
 
@@ -427,6 +436,11 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("Bulb", "../../../res/Assets/Textures/SpriteSheet_BulbeLumina.png");
 	assetManager->LoadTexture("Bramble", "../../../res/Assets/Textures/SpriteSheet_Bramble.png");
 	assetManager->LoadTexture("Ivy", "../../../res/Assets/Textures/SpriteSheet_Ivy.png");
+	assetManager->LoadTexture("Thorn", "../../../res/Assets/Textures/SpriteSheet_Thorn.png");
+	assetManager->LoadTexture("Fongus", "../../../res/Assets/Textures/SpriteSheet_Fongus.png");
+	assetManager->LoadTexture("FongusCloud", "../../../res/Assets/Textures/SpriteSheet_FongusCloud.png");
+	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
+	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
 }
 
 void TestScene::InitAssets()

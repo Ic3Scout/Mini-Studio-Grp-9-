@@ -58,6 +58,7 @@ public:
 	void InitSounds();
 	void InitTextures();
 	void InitAssets();
+
 	void SoundManager();
 	void UpdateVolume();
 	void StopSound(); 

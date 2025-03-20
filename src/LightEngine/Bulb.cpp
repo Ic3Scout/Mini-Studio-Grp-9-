@@ -1,6 +1,7 @@
 #include "Bulb.h"
 #include "Animation.h"
 #include "TestScene.h"
+#include "Mist.h"
 
 void Bulb::OnInitialize()
 {
@@ -9,7 +10,8 @@ void Bulb::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 
-	mAnimations = new Animation();
+	mMist = CreateEntity<Mist>({ GetSize().x * 8.f, GetSize().y * 3.f }, sf::Color::Red);
+
 	LoadAnimation();
 }
 
@@ -18,6 +20,7 @@ void Bulb::OnCollision(Entity* collidedWith)
 	if (collidedWith->IsTag(TestScene::TWater))
 	{
 		ChangeAnimation("Release", "single");
+		mMist->ChangeAnimation("Dissipate", "single");
 	}
 }
 
@@ -27,6 +30,11 @@ void Bulb::FixedUpdate(float dt)
 	{
 		ChangeAnimation("Idle", "single");
 	}
+
+	if (mMist->GetAnimations()->GetCurrentAnimation() == "Dissipate")
+		return;	
+
+	mMist->SetPosition(GetPosition().x, GetPosition().y - GetSize().y);
 }
 
 void Bulb::LoadAnimation()

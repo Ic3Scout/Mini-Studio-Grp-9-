@@ -245,6 +245,12 @@ void Player::Respawn(int x, int y)
 
 		if(GetRatioHP() > 0)
 			SetPosition(x, y);
+	
+
+		if (mRespawnStation == nullptr)
+			return;
+
+		mRespawnStation->ChangeAnimation("Used", "single");
 	}
 }
 
@@ -258,8 +264,9 @@ void Player::OnCollision(Entity* other)
 	{
 		if (ally->IsTagAlly(Ally::TStation))
 		{
-			mParameters.mRespawnX = other->GetPosition().x;
-			mParameters.mRespawnY = other->GetPosition().y - other->GetSize().y / 2;
+			mParameters.respawnX = other->GetPosition().x;
+			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
+			mRespawnStation = dynamic_cast<Station*>(ally);
 
 			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
 

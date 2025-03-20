@@ -3,6 +3,8 @@
 
 #define FONGUS_HP 2
 
+class FongusCloud;
+
 class Fongus : public  Enemy
 {
 	float mDelay = 1.f;
@@ -20,10 +22,15 @@ class Fongus : public  Enemy
 	int mActionState = 0;
 	bool toxic = false;
 
+	FongusCloud* mCloud;
+
 public:
 	Fongus();
 
 	void OnInitialize() override;
 	void OnCollision(Entity* collidedWith) override;
 	void OnUpdate() override;
+
+	void LoadAnimation() override;
+	void HandleActions();
 };

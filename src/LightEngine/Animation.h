@@ -15,7 +15,7 @@ class Animation
 
 	int mMaxFrame = 0;
 	int mCurrentFrame = 0;
-	float mDuration = 0.5f;
+	float mDuration = 0.25f;
 	float mElapsedTime = 0.f;
 	bool mLoop;
 	bool mFinished = false;

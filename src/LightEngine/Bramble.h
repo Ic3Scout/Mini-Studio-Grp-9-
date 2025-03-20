@@ -3,6 +3,8 @@
 
 #define BRAMBLE_HP 1
 
+class BrambleExplosion;
+
 class Bramble : public  Enemy
 {
 	float mExplosionDelay = 1.f;
@@ -10,6 +12,9 @@ class Bramble : public  Enemy
 	bool mExplosionActive = false;
 	float mProximityRadius = 0.f;
 	bool isPlayerInProximity = false;
+
+	BrambleExplosion* mExplosion;
+
 public:
 	Bramble();
 

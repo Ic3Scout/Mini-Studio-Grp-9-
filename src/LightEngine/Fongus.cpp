@@ -1,5 +1,7 @@
 #include "Fongus.h"
 #include "TestScene.h"
+#include "Animation.h"
+#include "FongusCloud.h"
 
 Fongus::Fongus() : Enemy(FONGUS_HP) {}
 
@@ -10,6 +12,10 @@ void Fongus::OnInitialize()
 	SetTagEnemy(TagEnemy::TFongusR);
 	SetRigidBody(true);
 	mIsDead = false;
+
+	mCloud = CreateEntity<FongusCloud>({ GetSize().x * 5, GetSize().y * 5 }, sf::Color::Red);
+
+	LoadAnimation();
 }
 
 void Fongus::OnCollision(Entity* collidedWith)
@@ -49,6 +55,27 @@ void Fongus::OnUpdate()
 		}
 	}
 
+	if (mIsDead)
+	{
+		Destroy();
+		return;
+	}
+
+	if (mAnimations->IsFinished())
+	{
+		ChangeAnimation("Idle", "single");
+	}
+
+	HandleActions();
+}
+
+void Fongus::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Fongus.json");
+	SetTexture("Fongus");
+	mAnimations->LoadAnimationSingle("Idle");
+}
+
 	if (isActive)
 	{
 		mProgress += GetDeltaTime();
@@ -82,6 +109,9 @@ void Fongus::OnUpdate()
 			case 0:
 				SetHitbox(GetSize().x * 5, GetSize().y * 3);
 				SetHitboxOffset(0, -GetSize().y);
+				ChangeAnimation("Attack", "single");
+				mCloud->ChangeAnimation("FongusCloud", "byRow");
+				mCloud->SetPosition(GetPosition().x, GetPosition().y - GetSize().y);
 
 				SetTagEnemy(TagEnemy::TFongusG);
 				SetRigidBody(false);
@@ -92,6 +122,8 @@ void Fongus::OnUpdate()
 				break;
 
 			case 1:
+				mCloud->SetPosition(-1000.f, -1000.f);
+
 				SetHitbox(GetSize().x, GetSize().y);
 				SetHitboxOffset(0, 0);
 
