@@ -71,11 +71,9 @@ void End::OnUpdate()
 			sf::Vector2f playerPos = pOwner->GetPosition();
 			sf::Vector2f pos = GetPosition();
 
-			std::cout << playerPos.x << "/" << pos.x << std::endl;
-			
-			bool isPlayerArrived = playerPos.x >= pos.x;
+			bool isPlayerArrived = playerPos.x >= pos.x - 1 && playerPos.x <= pos.x + 1;
 
-			if (isPlayerArrived)//|| mProgressDelay >= mDelayBeforeAnimation)
+			if (isPlayerArrived || mProgressDelay >= mDelayBeforeAnimation)//|| mProgressDelay >= mDelayBeforeAnimation)
 			{
 				pOwner->SetDirection(0, GetDirection().y);
 				pOwner->SetSpeed(0);
@@ -96,9 +94,20 @@ void End::OnUpdate()
 
 			if (pOwner != nullptr && isPlayerArrived == false)
 			{
+				sf::Vector2f playerPos = pOwner->GetPosition();
+				sf::Vector2f pos = GetPosition();
+
+				int direction = 0;
+
+				if (playerPos.x < pos.x)
+					direction = 1;
+				else
+					direction = -1;
+				
 				pOwner->TransitionTo(Player::AFK);
 				pOwner->SetGravity(true);
-				pOwner->SetDirection(1, GetDirection().y);
+				pOwner->SetSide(direction);
+				pOwner->SetDirection(direction, GetDirection().y);
 				pOwner->SetSpeed(75);
 			}
 		}
