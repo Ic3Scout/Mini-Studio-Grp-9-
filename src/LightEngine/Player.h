@@ -87,6 +87,8 @@ public:
 	void OnDestroy() override;
 	void FixedUpdate(float dt) override;
 
+	void LoadAnimation() override;
+
 	void SwapManager();
 	void SwapWeapon();
 

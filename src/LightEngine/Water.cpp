@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "TestScene.h"
 #include "AssetManager.h"
+#include "Animation.h"
 
 void Water::OnUpdate()
 {
@@ -28,9 +29,18 @@ void Water::OnInitialize()
 	SetSpeed(750);
 
 	SetHitbox(GetSize().x, GetSize().y);
+
+	LoadAnimation();
 }
 
 void Water::OnDestroy()
 {
 	GetScene<TestScene>()->GetAssetManager()->GetSound("Waterdrop")->play();
+}
+
+void Water::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Water.json");
+	SetTexture("Water");
+	mAnimations->LoadAnimationByRow("Water");
 }

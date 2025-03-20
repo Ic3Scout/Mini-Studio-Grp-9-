@@ -1,6 +1,7 @@
 #include "PlayerAction.h"
 #include "TestScene.h"
 #include "Player.h"
+#include "Animation.h"
 
 void PlayerAction_Idle::Start(Player* pPlayer)
 {
@@ -8,7 +9,6 @@ void PlayerAction_Idle::Start(Player* pPlayer)
 
 void PlayerAction_Idle::Update(Player* pPlayer, float deltatime)
 {
-	//std::cout << "Idle" << std::endl;
 
 	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
 	{
@@ -30,7 +30,6 @@ void PlayerAction_Moving::Start(Player* pPlayer)
 
 void PlayerAction_Moving::Update(Player* pPlayer, float deltatime)
 {
-	//std::cout << "Moving" << std::endl;
 
 	float* speed = &(pPlayer->mSpeed);
 	*speed += pPlayer->mParameters.mAcceleration * deltatime;
@@ -71,7 +70,6 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 {
-	//std::cout << "Jumping" << std::endl;
 
 	if(pPlayer->mGravitySpeed == 0)
 		pPlayer->mGravitySpeed = -std::sqrt(5 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
@@ -101,7 +99,6 @@ void PlayerAction_Falling::Start(Player* pPlayer)
 
 void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 {
-	//std::cout << "Falling" << std::endl;
 
 	bool isMoving = false;
 
@@ -134,7 +131,7 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_TakingDamage::Start(Player* pPlayer)
 {
-	//std::cout << "TakingDamage" << std::endl;
+
 	pPlayer->mOnGround = false;
 	pPlayer->AddRemoveHP(-1);
 	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
@@ -163,7 +160,6 @@ void PlayerAction_Dying::Start(Player* pPlayer)
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
-	//std::cout << "Dying" << std::endl;
 
 	if (mIsPlayed == true)
 		return;
@@ -187,12 +183,10 @@ void PlayerAction_Dashing::Start(Player* pPlayer)
 {
 	if (pPlayer->mSpeed > 0)
 	{
-		//std::cout << " Super Dashing" << std::endl;
 		mDuration = 0.2f;
 	}
 	else
 	{
-		//std::cout << "Dashing" << std::endl;
 		mDuration = 0.1f;
 	}
 

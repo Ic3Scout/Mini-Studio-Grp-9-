@@ -1,0 +1,15 @@
+{
+  "frame_size": {
+    "width": 8,
+    "height": 8,
+    "space": 1
+  },
+  "structure": "byRow",
+  "elements": {
+    "Water": {
+      "frames": 4,
+      "loop": true,
+      "index": 0
+    }
+  }
+}

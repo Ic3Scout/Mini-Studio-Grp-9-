@@ -33,12 +33,13 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White);
+	pEntity1 = CreateEntity<Player>({ 75.f, 75.f }, sf::Color::White);
 	pEntity1->SetPosition(width / 2.f, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
 	pEntity1->SetKineticBody(true);
+	/*pEntity1->GetShape()->setSize({ pEntity1->GetSize() * 1.3f });*/
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -484,6 +485,7 @@ void TestScene::StopSound()
 void TestScene::InitTextures()
 {
 	assetManager->LoadTexture("Terrain", "../../../res/Assets/Textures/SpriteSheet_Terrain.png");
+	assetManager->LoadTexture("Hydro", "../../../res/Assets/Textures/SpriteSheet_Hydro.png");
 	assetManager->LoadTexture("Nenuphloat", "../../../res/Assets/Textures/SpriteSheet_Nenuphloat.png");
 	assetManager->LoadTexture("Vine", "../../../res/Assets/Textures/SpriteSheet_Liane.png");
 	assetManager->LoadTexture("Station", "../../../res/Assets/Textures/SpriteSheet_Station.png");
@@ -495,6 +497,7 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("FongusCloud", "../../../res/Assets/Textures/SpriteSheet_FongusCloud.png");
 	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
 	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
+	assetManager->LoadTexture("Water", "../../../res/Assets/Textures/SpriteSheet_Water.png");
 }
 
 void TestScene::InitAssets()

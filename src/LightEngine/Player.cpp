@@ -66,7 +66,29 @@ void Player::BasicControls()
 		mDirection.x = mSide;
 	}
 
-
+	const char* currentAnim = mAnimations->GetCurrentAnimation();
+	if (mIsMoving)
+	{
+		if (mSide == 1 && currentAnim != "WalkRight")
+		{
+			ChangeAnimation("WalkRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "WalkLeft")
+		{
+			ChangeAnimation("WalkLeft", "single");
+		}
+	}
+	else
+	{
+		if (mSide == 1 && currentAnim != "IdleRight")
+		{
+			ChangeAnimation("IdleRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "IdleLeft")
+		{
+			ChangeAnimation("IdleLeft", "single");
+		}
+	}
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -155,17 +177,16 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
-	/*GetShape()->setTexture(texture);*/
-
-	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::Transparent);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow);;
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Transparent);
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);
 	mWeapons.push_back(weedKiller);
+
+	LoadAnimation();
 }
 
 void Player::OnUpdate()
@@ -192,7 +213,7 @@ void Player::OnUpdate()
 
 	if (mProgressDashReload <= 0)
 	{
-		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
+		/*Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::isButtonPressed(0, 5))
 		{
@@ -367,6 +388,13 @@ void Player::FixedUpdate(float dt)
 	sf::Vector2f camPos = pCam->GetView()->getCenter();
 
 	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
+}
+
+void Player::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Hydro.json");
+	SetTexture("Hydro");
+	mAnimations->LoadAnimationSingle("IdleRight");
 }
 
 void Player::SwapManager()

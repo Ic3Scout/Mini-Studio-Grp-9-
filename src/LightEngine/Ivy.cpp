@@ -25,12 +25,18 @@ void Ivy::OnCollision(Entity* collidedWith)
 	}
 }
 
-void Ivy::FixedUpadat(float dt)
+void Ivy::FixedUpdate(float dt)
 {
 }
 
 void Ivy::OnUpdate()
 {
+	if (mIsDead)
+	{
+		Destroy();
+		return;
+	}
+
 	Enemy::OnUpdate();
 
 	if (posInitial)
@@ -40,10 +46,16 @@ void Ivy::OnUpdate()
 	}
 	if (mPlayerInContact == true && posInitial == false)
 	{
+		if (mAnimations->GetCurrentAnimation() == "Idle")
+		{
+			ChangeAnimation("Emerge", "single");
+		}
+
 		HandleAction();
 		mCounter += GetDeltaTime();
 		if (mCounter >= mTimer)
 		{
+			ChangeAnimation("Idle", "single");
 			mCounter = 0.f;
 			mPlayerInContact = false;
 		}
@@ -63,11 +75,6 @@ void Ivy::OnUpdate()
 	}
 
 	SetPosition(currentPosition + mDirection * mSpeed * GetDeltaTime(), GetPosition().y);
-
-	if (mIsDead)
-	{
-		Destroy();
-	}
 }
 
 void Ivy::LoadAnimation()
