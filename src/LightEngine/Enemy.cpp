@@ -9,7 +9,13 @@ Enemy::Enemy(int maxHP) : Character(maxHP)
 
 void Enemy::OnInitialize()
 {
+	PhysicalEntity::OnInitialize();
 	SetTag(TestScene::TEnemy);
+}
+
+void Enemy::OnUpdate()
+{
+	PhysicalEntity::OnUpdate();
 }
 
 void Enemy::HandleDurationTimer()

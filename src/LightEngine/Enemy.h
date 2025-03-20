@@ -31,7 +31,8 @@ public:
 
 	Enemy(int maxHP);
 	
-	virtual void OnInitialize() ;
+	virtual void OnInitialize();
+	virtual void OnUpdate(); 
 
 	void SetTagEnemy(int tagEnemy) { mTagEnemy = tagEnemy; }
 

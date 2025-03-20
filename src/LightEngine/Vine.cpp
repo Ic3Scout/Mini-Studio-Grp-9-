@@ -3,14 +3,15 @@
 
 void Vine::OnInitialize()
 {
-	Ally::OnInitialize();
-	SetTagAlly(TVineR);
+	Ally::OnInitialize(); 
+	SetTagAlly(TVineR); 
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 }
 
 void Vine::OnUpdate()
 {
+	Ally::OnUpdate();
 }
 
 void Vine::OnCollision(Entity* collidedWith)

@@ -49,16 +49,15 @@ void WeedKiller::FixedUpdate(float dt)
 	if (!pOwner)
 		return;
 
-	if (mIsEquiped == true)
-	{
-		ShootManager(sf::Keyboard::Key::Right, 0, 7);
-	}
-	else
+	if (mIsEquiped == false || pOwner->GetState() == Player::Dying)
 	{
 		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop();
 		ChangeColor(sf::Color(255, 255, 0, 0));
 		return;
+		
 	}
+
+	ShootManager(sf::Keyboard::Key::Right, 0, 7);
 
 	ChangeColor(sf::Color(255, 255, 0, 255));
 

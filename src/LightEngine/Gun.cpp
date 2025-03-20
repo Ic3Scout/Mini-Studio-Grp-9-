@@ -36,7 +36,7 @@ void Gun::FixedUpdate(float dt)
 	if (!pOwner)
 		return;
 
-	if (mIsEquiped == false)
+	if (mIsEquiped == false || pOwner->GetState() == Player::Dying)
 	{
 		ChangeColor(sf::Color(255, 255, 255, 0));
 		return;

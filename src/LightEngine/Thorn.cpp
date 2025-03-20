@@ -8,7 +8,7 @@ void Thorn::OnInitialize()
     mKineticBody = false;
     Enemy::OnInitialize();
     SetTagEnemy(TagEnemy::TThorn);
-    SetRigidBody(true);
+    SetRigidBody(false);
     mIsDead = false;
     mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
 	mDelay = 2.f;
@@ -29,8 +29,6 @@ void Thorn::OnCollision(Entity* collidedWith)
 
     if (collidedWith->IsTag(TestScene::TPlayer))
     {
-        std::cout << "OOF\n";
-
         if (mProgress <= 0 && isActive == true)
         {
             isActive = false;
@@ -42,6 +40,8 @@ void Thorn::OnCollision(Entity* collidedWith)
 
 void Thorn::OnUpdate()
 {
+    Enemy::OnUpdate();
+
     HandleDurationTimer();
     HandleDurationTimer1();
 
@@ -84,7 +84,7 @@ bool Thorn::IsPlayerInProximity()
     sf::Vector2f playerPosition = player->GetPosition();
     sf::Vector2f thornPosition = GetPosition();
 
-    float distance = std::sqrt(std::pow(playerPosition.x - thornPosition.x, 2) + std::pow(playerPosition.y - thornPosition.y, 2));
+    float distance = GetDistance(playerPosition, thornPosition);
 
     return distance <= mProximityRadius;
 }

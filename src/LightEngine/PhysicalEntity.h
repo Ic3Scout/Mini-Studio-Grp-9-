@@ -11,9 +11,12 @@ protected:
 
 	float mDelay = 0.1f;
 	float mProgress = 0.f;
+
+	bool mIsReady = false;
 public:
 	void FixedUpdate(float dt) override;
 	virtual void OnUpdate();
+	void OnInitialize() override;
 	void OnCollision(Entity* collidedWith) override;
 	void SetGravity(bool value) { mGravity = value; }
 	void SetOnGround(bool value) { mOnGround = value; }

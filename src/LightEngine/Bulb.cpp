@@ -7,3 +7,8 @@ void Bulb::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 }
+
+void Bulb::OnUpdate()
+{
+	Ally::OnUpdate();
+}
