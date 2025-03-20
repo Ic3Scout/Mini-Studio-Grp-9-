@@ -17,7 +17,17 @@ void Water::OnCollision(Entity* collidedWith)
 	if (collidedWith->IsTag(TestScene::TPlayer)) 
 		return;
 
-	Destroy();
+	if (mAnimations->GetCurrentAnimation() != "Pop")
+	{
+		ChangeAnimation("Pop", "byRow");
+		SetSpeed(0);
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Waterdrop")->play();
+	}
+
+	if (mAnimations->IsFinished())
+	{
+		Destroy();
+	}
 }
 
 void Water::OnInitialize()
@@ -35,7 +45,6 @@ void Water::OnInitialize()
 
 void Water::OnDestroy()
 {
-	GetScene<TestScene>()->GetAssetManager()->GetSound("Waterdrop")->play();
 }
 
 void Water::LoadAnimation()
