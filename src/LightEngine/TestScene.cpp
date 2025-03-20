@@ -355,7 +355,7 @@ void TestScene::UpdateCamera()
 {
 	sf::Vector2f camSize = mCam.GetSize();
 	sf::Vector2f pPos = GetPlayer()->GetPosition();
-	sf::Vector2f posLimite = sf::Vector2f(2000, 825);
+	sf::Vector2f posLimite = sf::Vector2f(10000, 825);
 
 	float minX = camSize.x / 2;
 	float maxX = posLimite.x - camSize.x / 2;

@@ -35,8 +35,8 @@ void Entity::Repulse(Entity* other)
 	float overlap = 0.f;
 	sf::Vector2f normal(0.f, 0.f);
 
-	sf::Vector2f halfSize1 = GetSize() * 0.5f;
-	sf::Vector2f halfSize2 = other->GetSize() * 0.5f;
+	sf::Vector2f halfSize1 = GetAABBSize() * 0.5f;
+	sf::Vector2f halfSize2 = other->GetAABBSize() * 0.5f;
 
 	sf::Vector2f absDistance = { std::abs(distance.x), std::abs(distance.y) };
 	sf::Vector2f totalSize = halfSize1 + halfSize2;
@@ -302,6 +302,16 @@ void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
 	}
 }
 
+void Entity::SetHitboxPosition(sf::Vector2f)
+{
+	sf::Vector2f pos = GetHitboxPosition();
+
+	mHitbox.xMin = pos.x - mHitbox.size.x * 0.5f;
+	mHitbox.yMin = pos.y - mHitbox.size.y * 0.5;
+	mHitbox.xMax = pos.x - mHitbox.size.x * 0.5f;
+	mHitbox.yMax = pos.y - mHitbox.size.y * 0.5f;
+}
+
 sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 {
 	sf::Vector2f size = mShape.getSize();
@@ -316,7 +326,7 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 sf::Vector2f Entity::GetHitboxPosition(float ratioX, float ratioY) const
 {
 	sf::Vector2f size = mHitbox.size;
-	sf::Vector2f position = {mHitbox.xMin, mHitbox.xMin};
+	sf::Vector2f position = GetPosition();
 
 	position.x += size.x * ratioX;
 	position.y += size.y * ratioY;
@@ -364,6 +374,11 @@ void Entity::SetDirection(float x, float y, float speed)
 sf::Vector2f Entity::GetSize() const
 {
 	return mShape.getSize();
+}
+
+sf::Vector2f Entity::GetAABBSize() const
+{
+	return mHitbox.size;
 }
 
 void Entity::LoadAnimation()

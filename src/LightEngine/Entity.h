@@ -17,7 +17,7 @@ class Entity
 {
 	struct AABBCollider
 	{
-		bool isDisplayed = false;
+		bool isDisplayed = true;
 
 		int face = 0;
 
@@ -69,11 +69,13 @@ public:
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
 	sf::Vector2f GetSize() const;
+	sf::Vector2f GetAABBSize() const;
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
 	bool IsRigidBody() const { return mRigidBody; }
 	void SetKineticBody(bool value) { mKineticBody = value; }
 	bool IsKineticBody() { return mKineticBody; }
 
+	void SetHitboxPosition(sf::Vector2f);
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
 	sf::Vector2f GetHitboxPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
 	sf::RectangleShape* GetShape() { return &mShape; }
