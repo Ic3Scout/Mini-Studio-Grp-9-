@@ -35,6 +35,13 @@ void Thorn::FixedUpdate(float dt)
 
 void Thorn::OnUpdate()
 {
+    if (mIsDead)
+    {
+        GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
+        Destroy();
+		return;
+    }
+
     Enemy::OnUpdate();
 
 	if (isActive1)
@@ -113,12 +120,6 @@ void Thorn::OnUpdate()
             mActionTriggered = false;
             mCooldownTimer = 3.0f;
         }
-    }
-
-    if (mIsDead)
-    {
-        GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
-        Destroy();
     }
 }
 
