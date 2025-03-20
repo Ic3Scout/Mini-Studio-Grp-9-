@@ -16,7 +16,10 @@ void Bridge::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TWater))
 	{
-		mGrowing = true;
+		if (mGrown == false)
+		{
+			mGrowing = true;
+		}
 	}
 }
 
@@ -36,7 +39,29 @@ void Bridge::OnUpdate()
 	if (mGrowProgress >= mGrowDistance)
 	{
 		mGrowing = false;
-		mGrowDistance = 0;
+		mGrown = true;
+	}
+
+	if (GetSize().x <= mInitialSizeX)
+	{
+		mGrown = false;
+		mCooldownProgress = 0.f;
+	}
+
+	if (mGrown)
+	{
+		if (mCooldownProgress <= mCooldown)
+			mCooldownProgress += GetDeltaTime();
+		if (mCooldownProgress >= mCooldown)
+		{
+			if (mRetractProgress <= mRetractDuration)
+				mRetractProgress += GetDeltaTime();
+			if (mRetractProgress >= mRetractDuration)
+			{
+				Retract();
+				mRetractProgress = 0.f;
+			}
+		}
 	}
 }
 
@@ -45,7 +70,15 @@ void Bridge::Grow()
 	mSizeX += mInitialSizeX;
 	mShape.setSize({ mSizeX, GetSize().y });
 	SetPosition(GetPosition().x - mInitialSizeX, GetPosition().y);
-
 	SetHitbox(GetSize().x, GetSize().y);
 	mGrowProgress++;
+}
+
+void Bridge::Retract()
+{
+	mSizeX -= mInitialSizeX;
+	mShape.setSize({ mSizeX, GetSize().y });
+	SetPosition(GetPosition().x + mInitialSizeX, GetPosition().y);
+	SetHitbox(GetSize().x, GetSize().y);
+	mGrowProgress--;
 }
