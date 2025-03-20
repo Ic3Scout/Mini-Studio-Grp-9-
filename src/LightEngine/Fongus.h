@@ -32,5 +32,4 @@ public:
 	void OnUpdate() override;
 
 	void LoadAnimation() override;
-	void HandleActions();
 };

@@ -55,27 +55,6 @@ void Fongus::OnUpdate()
 		}
 	}
 
-	if (mIsDead)
-	{
-		Destroy();
-		return;
-	}
-
-	if (mAnimations->IsFinished())
-	{
-		ChangeAnimation("Idle", "single");
-	}
-
-	HandleActions();
-}
-
-void Fongus::LoadAnimation()
-{
-	mAnimations->LoadJsonData("../../../res/Assets/Json/Fongus.json");
-	SetTexture("Fongus");
-	mAnimations->LoadAnimationSingle("Idle");
-}
-
 	if (isActive)
 	{
 		mProgress += GetDeltaTime();
@@ -144,4 +123,16 @@ void Fongus::LoadAnimation()
 		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
 		Destroy();
 	}
+
+	if (mAnimations->IsFinished())
+	{
+		ChangeAnimation("Idle", "single");
+	}
+}
+
+void Fongus::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Fongus.json");
+	SetTexture("Fongus");
+	mAnimations->LoadAnimationSingle("Idle");
 }

@@ -264,8 +264,8 @@ void Player::OnCollision(Entity* other)
 	{
 		if (ally->IsTagAlly(Ally::TStation))
 		{
-			mParameters.respawnX = other->GetPosition().x;
-			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
+			mParameters.mRespawnX = other->GetPosition().x;
+			mParameters.mRespawnY = other->GetPosition().y - other->GetSize().y / 2;
 			mRespawnStation = dynamic_cast<Station*>(ally);
 
 			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
