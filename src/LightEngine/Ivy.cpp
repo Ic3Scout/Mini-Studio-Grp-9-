@@ -25,10 +25,6 @@ void Ivy::OnCollision(Entity* collidedWith)
 	}
 }
 
-void Ivy::FixedUpadat(float dt)
-{
-}
-
 void Ivy::OnUpdate()
 {
 	Enemy::OnUpdate();
@@ -65,11 +61,6 @@ void Ivy::OnUpdate()
 	}
 
 	SetPosition(currentPosition + mDirection * mSpeed * GetDeltaTime(), GetPosition().y);
-
-	if (mIsDead)
-	{
-		Destroy();
-	}
 }
 
 void Ivy::LoadAnimation()

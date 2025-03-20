@@ -21,7 +21,6 @@ public:
 	void OnInitialize() override;
 	void OnCollision(Entity* collidedWith) override;
 
-	void FixedUpadat(float dt);
 	void OnUpdate() override;
 
 	void LoadAnimation() override;
