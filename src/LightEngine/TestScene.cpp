@@ -231,7 +231,6 @@ void TestScene::OnUpdate()
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
-
 }
 
 void TestScene::UpdateCamera()

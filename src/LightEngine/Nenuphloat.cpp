@@ -79,7 +79,7 @@ void Nenuphloat::Grow()
 	{
 		grown = true;
 		mShape.setSize(mGrownSize);
-		SetHitbox(mGrownSize.x, mGrownSize.y);
+		SetHitbox(mGrownSize.x, mGrownSize.y / 2.f);
 		SetPosition(mPosition.x, mPosition.y);
 		ChangeAnimation("Opening", "single");
 	}
