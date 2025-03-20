@@ -219,6 +219,12 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
+	if (mCam.GetFocus() == true)
+	{
+		mCam.FollowPlayer();
+	}
+
+	UpdateCamera();
 	
 	if (pEntitySelected != nullptr)
 	{
@@ -230,6 +236,20 @@ void TestScene::OnUpdate()
 
 void TestScene::UpdateCamera()
 {
+	sf::Vector2f camSize = mCam.GetSize();
+	sf::Vector2f pPos = GetPlayer()->GetPosition();
+	sf::Vector2f posLimite = sf::Vector2f(2000, 825);
+
+	float minX = camSize.x / 2;
+	float maxX = posLimite.x - camSize.x / 2;
+	float minY = camSize.y / 2;
+	float maxY = posLimite.y - camSize.y / 2;
+
+	float newCamX = std::clamp(pPos.x, minX, maxX);
+	float newCamY = std::clamp(pPos.y, minY, maxY);
+
+	mCam.SetPosition({ newCamX, newCamY });
+
 	GameManager::Get()->SetCamera(mCam);
 }
 

@@ -349,12 +349,6 @@ void Player::FixedUpdate(float dt)
 
 	Camera* pCam = &pScene->GetCam();
 
-	if (pCam->GetFocus() == true)
-	{
-		pCam->FollowPlayer(); // Pour suivre l'entite 1   
-	}
-
-	pScene->UpdateCamera();
 
 	int fpsCounter = (int)(1.f / GetDeltaTime());
 
