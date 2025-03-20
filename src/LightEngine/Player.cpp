@@ -9,6 +9,7 @@
 #include "Ally.h"
 #include "Station.h"
 #include "Enemy.h"
+#include "Obstacle.h"
 #include "PlayerAction.h"
 #include "Animation.h"
 
@@ -243,6 +244,8 @@ void Player::OnCollision(Entity* other)
 {
 	Ally* ally = dynamic_cast<Ally*>(other);
 	Enemy* enemy = dynamic_cast<Enemy*>(other);
+	Obstacle* obstacle = dynamic_cast<Obstacle*>(other);
+
 
 	if (ally)
 	{
@@ -277,7 +280,7 @@ void Player::OnCollision(Entity* other)
 
 	}
 
-	if (!other->IsTag(TestScene::TPlatform) && !ally && !enemy)
+	if (!other->IsTag(TestScene::TPlatform) && !ally && !enemy && !obstacle)
 		return;
 
 	if (ally)
@@ -289,6 +292,12 @@ void Player::OnCollision(Entity* other)
 	if (enemy)
 	{
 		if (!enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
+			return;
+	}
+
+	if (obstacle)
+	{
+		if (!obstacle->IsTagObstacle(Obstacle::TBridge) && !obstacle->IsTagObstacle(Obstacle::TRootG) && !obstacle->IsTagObstacle(Obstacle::TWall))
 			return;
 	}
 
@@ -306,7 +315,7 @@ void Player::OnCollision(Entity* other)
 		{
 			mGravitySpeed = 1.f;
 			mOnGround = false;
-
+			TransitionTo(Falling);
 			GetScene<TestScene>()->GetAssetManager()->GetSound("Bonk")->play();
 		}
 		break;

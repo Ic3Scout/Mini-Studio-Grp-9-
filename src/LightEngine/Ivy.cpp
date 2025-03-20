@@ -48,6 +48,7 @@ void Ivy::OnUpdate()
 			mCounter = 0.f;
 			mPlayerInContact = false;
 			ChangeAnimation("Emerge", "single");
+			parameters->mMaxSpeed = parameters->mDefaultMaxSpeed;
 		}
 	}
 
@@ -81,6 +82,5 @@ void Ivy::LoadAnimation()
 
 void Ivy::HandleAction()
 {
-	std::cout << "Oof\n";
-	player->SetSpeed(parameters->mMaxSpeed/2); 
+	parameters->mMaxSpeed = parameters->mDefaultMaxSpeed / 2;
 }

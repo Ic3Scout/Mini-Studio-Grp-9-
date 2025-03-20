@@ -9,6 +9,7 @@ class Bramble : public  Enemy
 	float mExplosionTimer = 0.f;
 	bool mExplosionActive = false;
 	float mProximityRadius = 0.f;
+	bool isPlayerInProximity = false;
 public:
 	Bramble();
 
@@ -20,4 +21,5 @@ public:
 	void LoadAnimation() override;
 
 	bool IsPlayerInProximity();
+	void Explose();
 };

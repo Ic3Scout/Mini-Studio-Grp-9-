@@ -10,6 +10,10 @@
 #include "Fongus.h"
 #include "Ivy.h"
 #include "Bramble.h"
+#include "Bridge.h"
+#include "Wall.h"
+#include "Root.h"
+#include "Fog.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -63,6 +67,11 @@ void TestScene::OnInitialize()
 	std::vector<Fongus*> fonguss;
 	std::vector<Ivy*> ivys;
 	std::vector<Bramble*> brambles;
+	std::vector<Bridge*> bridges;
+	std::vector<Wall*> walls;
+	std::vector<Root*> roots;
+	std::vector<Fog*> fogs;
+
 	std::vector<std::string> map;
 
 	std::string line;
@@ -104,6 +113,10 @@ void TestScene::OnInitialize()
 	F : Fongus
 	I : Ivy
 	R : Bramble
+	P : Bridge
+	w : Wall
+	O : Root
+	G : Fog
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -265,6 +278,26 @@ void TestScene::OnInitialize()
 				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				brambles.push_back(bramble);
+			}
+			if (map[y][x] == 'P') {
+				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(122, 112, 112));
+				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				bridges.push_back(bridge);
+			}
+			if (map[y][x] == 'w') {
+				Wall* wall = CreateEntity<Wall>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 3 }, sf::Color(141, 49, 20));
+				wall->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - BLOCK_SIZE.y);
+				walls.push_back(wall);
+			}
+			if (map[y][x] == 'O') {
+				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x, BLOCK_SIZE.y}, sf::Color(120, 120, 10));
+				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				roots.push_back(root);
+			}
+			if (map[y][x] == 'G') {
+				Fog* fog = CreateEntity<Fog>({ BLOCK_SIZE.x * 7, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
+				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				fogs.push_back(fog);
 			}
 		}
 	}
@@ -522,6 +555,11 @@ void TestScene::InitTransitions()
 
 	SetInteractionWith(TWater, TAlly, true);
 	SetInteractionWith(TAcid, TEnemy, true);
+
+	SetInteractionWith(TPlayer, TObstacle, true);
+	SetInteractionWith(TWater, TObstacle, true);
+	SetInteractionWith(TPlatform, TObstacle, true);
+	SetInteractionWith(TAcid, TObstacle, true);
 }
 
 void TestScene::AddRemoveVolume(float value)

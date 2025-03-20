@@ -20,6 +20,7 @@ public:
 		TAcid,
 		TAlly,
 		TEnemy,
+		TObstacle,
 
 		Count
 	};

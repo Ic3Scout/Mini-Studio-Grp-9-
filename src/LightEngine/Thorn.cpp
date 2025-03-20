@@ -6,14 +6,12 @@ Thorn::Thorn() : Enemy(THORN_HP) {}
 
 void Thorn::OnInitialize()
 {
-    mKineticBody = false;
+    SetKineticBody(false);
     Enemy::OnInitialize();
     SetTagEnemy(TagEnemy::TThorn);
     SetRigidBody(false);
     mIsDead = false;
     mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
-	mDelay = 2.f;
-	mDelay1 = 2.f;
 
     mAnimations = new Animation();
     LoadAnimation();
@@ -23,22 +21,12 @@ void Thorn::OnCollision(Entity* collidedWith)
 {
     if (collidedWith->IsTag(TestScene::TAcid))
     {
-        if (mProgress1 <= 0 && isActive1 == true)
-        {
-            isActive1 = false;
-            AddRemoveHP(-1);
-            mProgress1 = mDelay1;
-        }
+        isActive1 = true;
     }
 
     if (collidedWith->IsTag(TestScene::TPlayer))
     {
-        if (mProgress <= 0 && isActive == true)
-        {
-            isActive = false;
-            player->TransitionTo(Player::TakingDamage);
-            mProgress = mDelay;
-        }
+        isActive = true;
     }
 }
 
@@ -50,8 +38,43 @@ void Thorn::OnUpdate()
 {
     Enemy::OnUpdate();
 
-    HandleDurationTimer();
-    HandleDurationTimer1();
+	if (isActive1)
+	{
+		mProgress1 += GetDeltaTime();
+		if (canTakeDamage)
+		{
+			AddRemoveHP(-1);
+			canTakeDamage = false;
+		}
+		else
+		{
+			if (mProgress1 >= mDelay1)
+			{
+				isActive1 = false;
+				canTakeDamage = true;
+				mProgress1 = 0.f;
+			}
+		}
+	}
+
+	if (isActive)
+	{
+		mProgress += GetDeltaTime();
+		if (canDealDamage)
+		{
+            player->TransitionTo(Player::TakingDamage);
+            canDealDamage = false;
+		}
+		else
+		{
+			if (mProgress >= mDelay)
+			{
+                isActive = false;
+				canDealDamage = true;
+				mProgress = 0.f;
+			}
+		}
+	}
 
     if (mCooldownTimer > 0.0f)
     {
