@@ -36,6 +36,7 @@ void Thorn::FixedUpdate(float dt)
 
 void Thorn::OnUpdate()
 {
+	std::cout << mPlayerLeft << mPlayerRight << std::endl;
     Enemy::OnUpdate();
 
 	if (isActive1)
@@ -83,6 +84,16 @@ void Thorn::OnUpdate()
 
     else if (IsPlayerInProximity())
     {
+		if (player->GetPosition().x < GetPosition().x)
+		{
+			mPlayerLeft = true;
+			mPlayerRight = false;
+		}
+		else if (player->GetPosition().x > GetPosition().x)
+		{
+			mPlayerLeft = false;
+			mPlayerRight = true;
+		}
         if (!mActionTriggered)
         {
             SetHitbox(GetSize().x * 3, GetSize().y);

@@ -21,6 +21,9 @@ class Thorn : public Enemy
     bool mActionTriggered = false;
     float mCooldownTimer = 0.f;
 
+	bool mPlayerLeft = false;
+	bool mPlayerRight = false;
+
 public:
     Thorn();
 
