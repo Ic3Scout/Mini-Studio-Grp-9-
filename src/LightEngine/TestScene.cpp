@@ -80,8 +80,8 @@ void TestScene::OnInitialize()
 	}
 
 	inputFile.close();
-
-	const sf::Vector2f BLOCK_SIZE = { 60, 50 };
+	const sf::Vector2f MOB_SIZE = { 50,50 };
+	const sf::Vector2f BLOCK_SIZE = { 90, 50 };
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
@@ -240,12 +240,12 @@ void TestScene::OnInitialize()
 
 
 			if (map[y][x] == 'V') {
-				Vine* vine = CreateEntity<Vine>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(172, 210, 128));
+				Vine* vine = CreateEntity<Vine>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(172, 210, 128));
 				vine->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				vines.push_back(vine);
 			}
 			if (map[y][x] == 'N') {
-				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(65, 106, 36));
+				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(65, 106, 36));
 				nenuphloat->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				nenuphloats.push_back(nenuphloat);
 			}
@@ -255,47 +255,47 @@ void TestScene::OnInitialize()
 				stations.push_back(station);
 			}
 			if (map[y][x] == 'U') {
-				Bulb* bulb = CreateEntity<Bulb>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(213, 170, 63));
+				Bulb* bulb = CreateEntity<Bulb>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(213, 170, 63));
 				bulb->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bulbs.push_back(bulb);
 			}
 			if (map[y][x] == 'T') {
-				Thorn* thorn = CreateEntity<Thorn>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(133, 46, 46));
+				Thorn* thorn = CreateEntity<Thorn>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(133, 46, 46));
 				thorn->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				thorns.push_back(thorn);
 			}
 			if (map[y][x] == 'F') {
-				Fongus* fongus = CreateEntity<Fongus>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(0, 255, 0));
+				Fongus* fongus = CreateEntity<Fongus>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(0, 255, 0));
 				fongus->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				fonguss.push_back(fongus);
 			}
 			if (map[y][x] == 'I') {
-				Ivy* ivy = CreateEntity<Ivy>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(254, 237, 92));
+				Ivy* ivy = CreateEntity<Ivy>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(254, 237, 92));
 				ivy->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				ivys.push_back(ivy);
 			}
 			if (map[y][x] == 'R') {
-				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
+				Bramble* bramble = CreateEntity<Bramble>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(66, 44, 40));
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				brambles.push_back(bramble);
 			}
 			if (map[y][x] == 'P') {
-				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(122, 112, 112));
+				Bridge* bridge = CreateEntity<Bridge>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(122, 112, 112));
 				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bridges.push_back(bridge);
 			}
 			if (map[y][x] == 'w') {
-				Wall* wall = CreateEntity<Wall>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 3 }, sf::Color(141, 49, 20));
+				Wall* wall = CreateEntity<Wall>({ MOB_SIZE.x, MOB_SIZE.y * 3 }, sf::Color(141, 49, 20));
 				wall->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - BLOCK_SIZE.y);
 				walls.push_back(wall);
 			}
 			if (map[y][x] == 'O') {
-				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x, BLOCK_SIZE.y}, sf::Color(120, 120, 10));
+				Root* root = CreateEntity<Root>({ MOB_SIZE.x, MOB_SIZE.y}, sf::Color(120, 120, 10));
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				roots.push_back(root);
 			}
 			if (map[y][x] == 'G') {
-				Fog* fog = CreateEntity<Fog>({ BLOCK_SIZE.x * 7, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
+				Fog* fog = CreateEntity<Fog>({ MOB_SIZE.x * 7, MOB_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
 				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				fogs.push_back(fog);
 			}
