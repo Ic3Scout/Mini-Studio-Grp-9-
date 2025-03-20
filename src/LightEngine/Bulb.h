@@ -1,8 +1,12 @@
 #pragma once
 #include "Ally.h"
 
+class Mist;
+
 class Bulb : public Ally
 {
+	Mist* mMist;
+
 public:
 	void OnInitialize() override;
 	void OnUpdate() override;

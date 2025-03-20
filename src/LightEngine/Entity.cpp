@@ -18,7 +18,7 @@ void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 	mShape.setSize(size);
 	mShape.setFillColor(color);
 	SetHitbox(size.x, size.y);
-	
+
 	mTarget.isSet = false;
 
 	mAnimations = new Animation();

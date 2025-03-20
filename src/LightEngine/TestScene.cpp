@@ -43,7 +43,7 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	std::string filepath = "../../../res/map.txt";
+	std::string filepath = "../../../res/mapDebug.txt";
 	std::ifstream inputFile(filepath);
 
 	if (!std::filesystem::exists(filepath)) {
@@ -494,6 +494,7 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("Fongus", "../../../res/Assets/Textures/SpriteSheet_Fongus.png");
 	assetManager->LoadTexture("FongusCloud", "../../../res/Assets/Textures/SpriteSheet_FongusCloud.png");
 	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
+	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
 }
 
 void TestScene::InitAssets()
