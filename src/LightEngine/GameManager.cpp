@@ -171,10 +171,14 @@ void GameManager::FixedUpdate()
 void GameManager::Draw()
 {
 	mpWindow->clear(mClearColor);
-	
-	for (Entity* entity : mEntities)
+
+	for (int i = 1; i <= 6; i++)
 	{
-		mpWindow->draw(*entity->GetShape());
+		for (Entity* entity : mEntities)
+		{
+			if (entity->drawPriority == i)
+				mpWindow->draw(*entity->GetShape());
+		}
 	}
 	
 	Debug::Get()->Draw(mpWindow);

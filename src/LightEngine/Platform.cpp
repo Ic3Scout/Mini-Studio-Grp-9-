@@ -10,20 +10,17 @@ void Platform::OnInitialize()
 	SetTag((int)TestScene::TPlatform);
 
 	SetTexture("Terrain");
-	ChangeColor(sf::Color::White);
-
 	LoadAnimation();
 }
 
 void Platform::OnUpdate()
 {
-	PhysicalEntity::OnUpdate();
+	if(mHitbox.hasHitbox)
+		PhysicalEntity::OnUpdate();
 }
 
 void Platform::OnCollision(Entity* other)
 {
-	if (other->IsTag(TestScene::TPlatform))
-		return;
 }
 
 void Platform::LoadAnimation()

@@ -7,15 +7,13 @@ Fongus::Fongus() : Enemy(FONGUS_HP) {}
 
 void Fongus::OnInitialize()
 {
-	mKineticBody = false;
+	SetKineticBody(false);
 	Enemy::OnInitialize(); 
 	SetTagEnemy(TagEnemy::TFongusR);
 	SetRigidBody(true);
 	mIsDead = false;
-	mDelay = 1.f;
-	mDelay1 = 2.f;
 
-	mCloud = CreateEntity<FongusCloud>({ GetSize().x * 5, GetSize().y * 5 }, sf::Color::Red);
+	mCloud = CreateEntity<FongusCloud>({ GetSize().x * 5, GetSize().y * 5 }, sf::Color::Red, 3);
 
 	LoadAnimation();
 }
@@ -24,77 +22,81 @@ void Fongus::OnCollision(Entity* collidedWith)
 {
 	if (collidedWith->IsTag(TestScene::TAcid))
 	{
-		if (mProgress1 <= 0 && isActive1 == true)
-		{
-			isActive1 = false;
-			AddRemoveHP(-1);
-			mProgress1 = mDelay1;
-		}
+		isActive1 = true;
 	}
 
-	if (collidedWith->IsTag(TestScene::TPlayer))
+	if (collidedWith->IsTag(TestScene::TPlayer) && toxic)
 	{
-		if (mProgress <= 0 && isActive == true && toxic == true)
-		{
-			isActive = false;
-			player->TransitionTo(Player::TakingDamage);
-			mProgress = mDelay;
-		}
+		isActive = true;
 	}
 }
 
 void Fongus::OnUpdate()
 {
+
 	Enemy::OnUpdate();
-
-	if (mIsDead)
+	
+	if (isActive1)
 	{
-		Destroy();
-		return;
+		mProgress1 += GetDeltaTime();
+		if (canTakeDamage)
+		{
+			AddRemoveHP(-1);
+			canTakeDamage = false;
+		}
+		else
+		{
+			if (mProgress1 >= mDelay1)
+			{
+				isActive1 = false;
+				canTakeDamage = true;
+				mProgress1 = 0.f;
+			}
+		}
 	}
 
-	if (mAnimations->IsFinished())
+	if (isActive)
 	{
-		ChangeAnimation("Idle", "single");
+		mProgress += GetDeltaTime();
+		if (canDealDamage)
+		{
+			player->TransitionTo(Player::TakingDamage);
+			canDealDamage = false;
+		}
+		else
+		{
+			if (mProgress >= mDelay)
+			{
+				isActive = false;
+				canDealDamage = true;
+				mProgress = 0.f;
+			}
+		}
 	}
 
-	HandleDurationTimer();
-	HandleDurationTimer1();
-	HandleActions();
-}
-
-void Fongus::LoadAnimation()
-{
-	mAnimations->LoadJsonData("../../../res/Assets/Json/Fongus.json");
-	SetTexture("Fongus");
-	mAnimations->LoadAnimationSingle("Idle");
-}
-
-void Fongus::HandleActions()
-{
-	if (mCooldownTimer > 0.0f)
+	if (mCooldownTimer > 0.f)
 	{
 		mCooldownTimer -= GetDeltaTime();
 	}
 	else
 	{
 		mActionTimer -= GetDeltaTime();
-		if (mActionTimer <= 0.0f)
+		if (mActionTimer <= 0.f)
 		{
 			switch (mActionState)
 			{
 			case 0:
+				SetHitbox(GetSize().x * 5, GetSize().y * 3);
+				SetHitboxOffset(0, -GetSize().y);
 				ChangeAnimation("Attack", "single");
 				mCloud->ChangeAnimation("FongusCloud", "byRow");
 				mCloud->SetPosition(GetPosition().x, GetPosition().y - GetSize().y);
-
-				SetHitbox(GetSize().x * 5, GetSize().y * 5);
 
 				SetTagEnemy(TagEnemy::TFongusG);
 				SetRigidBody(false);
 				toxic = true;
 
-				mActionTimer = 3.0f;
+				mActionTimer = 3.f;
 				mActionState = 1;
 				break;
 
@@ -102,16 +104,35 @@ void Fongus::HandleActions()
 				mCloud->SetPosition(-1000.f, -1000.f);
 
 				SetHitbox(GetSize().x, GetSize().y);
+				SetHitboxOffset(0, 0);
 
 				SetTagEnemy(TagEnemy::TFongusR);
 				SetRigidBody(true);
 				toxic = false;
 
-				mCooldownTimer = 2.0f;//+ActionTimer
-				mActionTimer = 3.0f;
+				mCooldownTimer = 2.f;//+ActionTimer
+				mActionTimer = 3.f;
 				mActionState = 0;
 				break;
 			}
 		}
 	}
+
+	if (mIsDead)
+	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
+		Destroy();
+	}
+
+	if (mAnimations->IsFinished())
+	{
+		ChangeAnimation("Idle", "single");
+	}
+}
+
+void Fongus::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Fongus.json");
+	SetTexture("Fongus");
+	mAnimations->LoadAnimationSingle("Idle");
 }

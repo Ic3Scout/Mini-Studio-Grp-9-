@@ -10,6 +10,11 @@
 #include "Fongus.h"
 #include "Ivy.h"
 #include "Bramble.h"
+#include "Bridge.h"
+#include "Wall.h"
+#include "Root.h"
+#include "Fog.h"
+#include "End.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -33,7 +38,7 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 75.f, 75.f }, sf::Color::White);
+	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White, 2);
 	pEntity1->SetPosition(width / 2.f, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
@@ -55,15 +60,6 @@ void TestScene::OnInitialize()
 		std::cerr << "Erreur : Impossible d'ouvrir " << filepath << std::endl;
 	}
 
-	std::vector<Platform*> platforms;
-	std::vector<Vine*> vines;
-	std::vector<Nenuphloat*> nenuphloats;
-	std::vector<Station*> stations;
-	std::vector<Bulb*> bulbs;
-	std::vector<Thorn*> thorns;
-	std::vector<Fongus*> fonguss;
-	std::vector<Ivy*> ivys;
-	std::vector<Bramble*> brambles;
 	std::vector<std::string> map;
 
 	std::string line;
@@ -72,39 +68,47 @@ void TestScene::OnInitialize()
 	}
 
 	inputFile.close();
-
-	const sf::Vector2f BLOCK_SIZE = { 60, 50 };
+	const sf::Vector2f MOB_SIZE = { 50,50 };
+	const sf::Vector2f BLOCK_SIZE = { 90, 50 };
 	int startX = width / 2 - 250; 
 	int startY = height / 2 - 200;
 
 	/*
 	Map Légende :
 
+	Special :
+	H : End Level
+	Player :			2
+
 	Platefrom :
-	X : Land2
-	L : BorderLand1
-	l : CornerLand5
-	C : CornerLand3
-	c : CornerLand4
-	E : EdgeLand1
-	e : EdgeLand2
-	S ; SideLand1
-	s : SideLand2
-	b : BorderDirt1
-	B : BorderDirt2
-	W : DeepWater2
-	D : Dirt2
-	d : DeepDirt2 
+	X : Land2			4
+	L : BorderLand1		4
+	l : CornerLand5		4
+	C : CornerLand3		4
+	c : CornerLand4		4
+	E : EdgeLand1		4
+	e : EdgeLand2		4
+	S ; SideLand1		4
+	s : SideLand2		4
+	b : BorderDirt1		4
+	B : BorderDirt2		4
+	W : DeepWater2		4
+	D : Dirt2			4
+	d : DeepDirt2		4
 
 	Mob :
-	V : Vine
-	N : Nennuphloat
-	v : Station Vitale
-	U : Bulb
-	T : Thorn
-	F : Fongus
-	I : Ivy
-	R : Bramble
+	V : Vine			1
+	N : Nennuphloat		1
+	v : Station Vitale	1
+	U : Bulb			6
+	T : Thorn			1
+	F : Fongus			3
+	I : Ivy				3
+	R : Bramble			1
+	P : Bridge			1
+	w : Wall			1
+	O : Root			3
+	G : Fog				5
 	*/
 
 	for (size_t y = 0; y < map.size(); ++y)
@@ -112,224 +116,168 @@ void TestScene::OnInitialize()
 		for (size_t x = 0; x < map[y].size(); ++x) 
 		{
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::Red);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("Land2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'D') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("Dirt3");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false; 
 			}
 			else if (map[y][x] == 'd') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("DeepDirt2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false;
 			}
 			else if (map[y][x] == 'L') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("BorderLand1");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'l') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("CornerLand5");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'C') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("CornerLand3");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'c') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("CornerLand4");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'E') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("EdgeLand1");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'e') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("EdgeLand2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'S') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("SideLand1");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 's') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("SideLand2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'b') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("BorderDirt1");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'B') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("BorderDirt2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
 				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'W') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("DeepWater2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
-				platforms.push_back(block);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false; 
 			}
 
 
 
 
-			if (map[y][x] == 'V') {
-				Vine* vine = CreateEntity<Vine>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(172, 210, 128));
+			else if (map[y][x] == 'V') {
+				Vine* vine = CreateEntity<Vine>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(172, 210, 128), 1);
 				vine->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				vines.push_back(vine);
 			}
-			if (map[y][x] == 'N') {
-				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(65, 106, 36));
+			else if (map[y][x] == 'N') {
+				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(65, 106, 36), 1);
 				nenuphloat->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				nenuphloats.push_back(nenuphloat);
 			}
-			if (map[y][x] == 'v') {
-				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
+			else if (map[y][x] == 'v') {
+				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193), 1);
 				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - 50.f );
-				stations.push_back(station);
 			}
-			if (map[y][x] == 'U') {
-				Bulb* bulb = CreateEntity<Bulb>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(213, 170, 63));
+			else if (map[y][x] == 'U') {
+				Bulb* bulb = CreateEntity<Bulb>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(213, 170, 63), 6);
 				bulb->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				bulbs.push_back(bulb);
 			}
-			if (map[y][x] == 'T') {
-				Thorn* thorn = CreateEntity<Thorn>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(133, 46, 46));
+			else if (map[y][x] == 'T') {
+				Thorn* thorn = CreateEntity<Thorn>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(133, 46, 46), 1);
 				thorn->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				thorns.push_back(thorn);
 			}
-			if (map[y][x] == 'F') {
-				Fongus* fongus = CreateEntity<Fongus>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(0, 255, 0));
+			else if (map[y][x] == 'F') {
+				Fongus* fongus = CreateEntity<Fongus>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(0, 255, 0), 3);
 				fongus->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				fonguss.push_back(fongus);
 			}
-			if (map[y][x] == 'I') {
-				Ivy* ivy = CreateEntity<Ivy>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(254, 237, 92));
+			else if (map[y][x] == 'I') {
+				Ivy* ivy = CreateEntity<Ivy>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(254, 237, 92), 3);
 				ivy->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				ivys.push_back(ivy);
 			}
-			if (map[y][x] == 'R') {
-				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
+			else if (map[y][x] == 'R') {
+				Bramble* bramble = CreateEntity<Bramble>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(66, 44, 40), 1);
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				brambles.push_back(bramble);
+			}
+			else if (map[y][x] == 'P') {
+				Bridge* bridge = CreateEntity<Bridge>({ MOB_SIZE.x, MOB_SIZE.y }, sf::Color(122, 112, 112), 1);
+				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+			}
+			else if (map[y][x] == 'w') {
+				Wall* wall = CreateEntity<Wall>({ MOB_SIZE.x, MOB_SIZE.y * 3 }, sf::Color(141, 49, 20), 1);
+				wall->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - BLOCK_SIZE.y);
+			}
+			else if (map[y][x] == 'O') {
+				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x * 5, MOB_SIZE.y}, sf::Color(120, 120, 10), 3);
+				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y + BLOCK_SIZE.y / 2);
+			}
+			else if (map[y][x] == 'G') {
+				Fog* fog = CreateEntity<Fog>({ MOB_SIZE.x * 7, MOB_SIZE.y * 5 }, sf::Color(0, 0, 0, 100), 5);
+				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+			}
+
+			else if (map[y][x] == 'H') {
+				End* end = CreateEntity<End>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 255), 1);
+				end->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 		}
 	}
-
-	pEntitySelected = nullptr;
 
 	assetManager->GetMusic("MainMusic")->play();
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed && event.type != sf::Event::EventType::KeyPressed)
-		return;
-
-	sf::RenderWindow* win = GameManager::Get()->GetWindow();
-	sf::Vector2f mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
-
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
-	{
-		TrySetSelectedEntity(pEntity1, mousePos.x, mousePos.y);
-	}
-
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
-	{
-		if (pEntitySelected != nullptr)
-		{
-			pEntitySelected->GoToPosition(mousePos.x, mousePos.y, 200.f);
-		}
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-	{
-		if (mCam.GetFocus())
-		{
-			mCam.SetFocus(false);
-		}
-		else
-		{
-			if (pEntity1 != nullptr)
-			{
-				if (pEntity1->ToDestroy() == false)
-					mCam.SetFocus(true);
-			}
-		}
-	}
-
-	if (pEntitySelected != nullptr)
-	{
-		if (event.key.code == sf::Keyboard::H)
-		{
-			if (pEntitySelected->GetHitbox()->isActive)
-				pEntitySelected->SetIsHitboxActive(false);
-			else
-				pEntitySelected->SetIsHitboxActive();
-		}
-	}
-}
-
-void TestScene::TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y)
-{
-	if (pEntity->IsInside(x, y) == false)
-		return;
-
-	pEntitySelected = pEntity;
 }
 
 void TestScene::OnUpdate()
@@ -350,9 +298,9 @@ void TestScene::UpdateCamera()
 {
 	sf::Vector2f camSize = mCam.GetSize();
 	sf::Vector2f pPos = GetPlayer()->GetPosition();
-	sf::Vector2f posLimite = sf::Vector2f(10000, 825);
+	sf::Vector2f posLimite = sf::Vector2f(100000, 875);
 
-	float minX = camSize.x / 2;
+	float minX = 50 + camSize.x / 2;
 	float maxX = posLimite.x - camSize.x / 2;
 	float minY = camSize.y / 2;
 	float maxY = posLimite.y - camSize.y / 2;
@@ -360,8 +308,11 @@ void TestScene::UpdateCamera()
 	float newCamX = std::clamp(pPos.x, minX, maxX);
 	float newCamY = std::clamp(pPos.y, minY, maxY);
 
-	mCam.SetPosition({ newCamX, newCamY });
-
+	if (mCam.GetFocus() == true)
+	{
+		mCam.SetPosition({ newCamX, newCamY });
+	}
+	
 	GameManager::Get()->SetCamera(mCam);
 }
 
@@ -386,10 +337,9 @@ void TestScene::InitSounds()
 	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(50 * mVolume);
 	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(50 * mVolume);
-
-	//A bouger au merge
 	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Button", "../../../res/Assets/sfx/button.wav")->setVolume(30 * mVolume);
+	assetManager->LoadSound("DeadMonster", "../../../res/Assets/sfx/deadmonster.wav")->setVolume(75 * mVolume);
 }
 
 void TestScene::SoundManager()
@@ -455,10 +405,9 @@ void TestScene::UpdateVolume()
 	assetManager->GetSound("Bonk")->setVolume(25 * mVolume);
 	assetManager->GetSound("Falling")->setVolume(50 * mVolume);
 	assetManager->GetSound("Hurt")->setVolume(50 * mVolume);
-
-	//A bouger au merge
 	assetManager->GetSound("Dead")->setVolume(25 * mVolume);
 	assetManager->GetSound("Button")->setVolume(30 * mVolume);
+	assetManager->GetSound("DeadMonster")->setVolume(75 * mVolume);
 }
 
 void TestScene::StopSound()
@@ -476,10 +425,9 @@ void TestScene::StopSound()
 	assetManager->GetSound("Bonk")->setVolume(0);
 	assetManager->GetSound("Falling")->setVolume(0);
 	assetManager->GetSound("Hurt")->setVolume(0);
-
-	//A bouger au merge
 	assetManager->GetSound("Dead")->setVolume(0);
 	assetManager->GetSound("Button")->setVolume(0);
+	assetManager->GetSound("DeadMonster")->setVolume(0);
 }
 
 void TestScene::InitTextures()
@@ -524,6 +472,13 @@ void TestScene::InitTransitions()
 
 	SetInteractionWith(TWater, TAlly, true);
 	SetInteractionWith(TAcid, TEnemy, true);
+
+	SetInteractionWith(TPlayer, TObstacle, true);
+	SetInteractionWith(TWater, TObstacle, true);
+	SetInteractionWith(TPlatform, TObstacle, true);
+	SetInteractionWith(TAcid, TObstacle, true);
+
+	SetInteractionWith(TPlayer, TEnd, true);
 }
 
 void TestScene::AddRemoveVolume(float value)

@@ -21,11 +21,13 @@ struct PlayerParameter
 	float mDeceleration = 125.f;
 
 	float mMaxSpeed = 250.f;
+	float mDefaultMaxSpeed = 250.f;
 	float mAcceleration = 670.f;
 
-	int respawnX = 700.f;
-	int respawnY = 760.f;
-	
+	int mRespawnX = 700.f;
+	int mRespawnY = 760.f;
+	int mDefaultRespawnX = 700.f;
+	int mDefaultRespawnY = 760.f;
 	float mDashReloadTime = 5.f;
 };
 
@@ -96,6 +98,7 @@ public:
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
+	void SetSide(int value) { mSide = value; }
 	int GetState() { return mState; }
 	PlayerParameter* GetParameters() { return &mParameters; }
 

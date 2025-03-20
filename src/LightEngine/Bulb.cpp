@@ -10,7 +10,7 @@ void Bulb::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 
-	mMist = CreateEntity<Mist>({ GetSize().x * 8.f, GetSize().y * 3.f }, sf::Color::Red);
+	mMist = CreateEntity<Mist>({ GetSize().x * 8.f, GetSize().y * 3.f }, sf::Color::Red, 5);
 
 	LoadAnimation();
 }

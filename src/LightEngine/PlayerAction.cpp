@@ -1,7 +1,7 @@
 #include "PlayerAction.h"
 #include "TestScene.h"
 #include "Player.h"
-#include "Animation.h"
+#include "Weapon.h"
 
 void PlayerAction_Idle::Start(Player* pPlayer)
 {
@@ -64,7 +64,7 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 
 	pPlayer->mProgress = 0.f;
 
-	pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
+	pPlayer->mGravitySpeed = -std::sqrt(5 * GRAVITY_ACCELERATION * pPlayer->GetSize().y);
 	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("PlayerJump")->play();
 }
 
@@ -151,6 +151,9 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dying::Start(Player* pPlayer)
 {
+	mTimer = 1.f;
+	mProgress = 0.f;
+	mIsPlayed = false;
 	pPlayer->SetRigidBody(false);
 	pPlayer->SetIsHitboxActive(false);
 	pPlayer->SetGravity(false);
@@ -161,10 +164,31 @@ void PlayerAction_Dying::Start(Player* pPlayer)
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
 
-	if (mIsPlayed == true)
-		return;
+	if (pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->getStatus() == sf::Sound::Status::Stopped() && mIsPlayed == true)
+	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->play();
+		PlayerParameter* pParam = &pPlayer->mParameters;
 
-	if (mProgress >= mTimer)
+		pParam->mRespawnX = pPlayer->mParameters.mDefaultRespawnX; 
+		pParam->mRespawnY = pPlayer->mParameters.mDefaultRespawnY;
+		pPlayer->SetPosition(pParam->mRespawnX, pParam->mRespawnY);
+
+		for (Weapon* w : pPlayer->GetAllWeapons())
+		{
+			w->SetCurrentAmmos(w->GetMaxAmmos());
+		}
+
+		pPlayer->TransitionTo(Player::Falling);
+
+		pPlayer->SetRigidBody(true);
+		pPlayer->SetIsHitboxActive(true);
+		pPlayer->SetGravity(true);
+		pPlayer->mIsDead = false;
+		pPlayer->mShape.setSize({ 50, 50 });
+		pPlayer->mCurrentHP = pPlayer->mMaxHP;
+	}
+
+	if (mProgress >= mTimer && mIsPlayed == false)
 	{
 		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->play();
 		mProgress = 0.f;
@@ -195,7 +219,10 @@ void PlayerAction_Dashing::Start(Player* pPlayer)
 
 void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 {
-	pPlayer->mSpeed = 500.f;
+	if (pPlayer->mParameters.mMaxSpeed >= pPlayer->mParameters.mDefaultMaxSpeed)
+		pPlayer->mSpeed = 500.f;
+	else
+		pPlayer->mSpeed = 0.f;
 
 	float* speedBoost = &(pPlayer->mSpeed);
 	*speedBoost += pPlayer->mParameters.mAcceleration * deltatime * 50;

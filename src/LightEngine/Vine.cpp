@@ -18,6 +18,12 @@ void Vine::OnInitialize()
 void Vine::OnUpdate()
 {
 	Ally::OnUpdate();
+
+	if (mIsReady == false)
+	{
+		mDefaultPos = GetPosition();
+		mIsReady = true;
+	}
 }
 
 void Vine::FixedUpdate(float dt)
@@ -51,7 +57,7 @@ void Vine::Grow()
 	mClosed = false;
 	mShape.setSize(mGrownSize);
 	SetHitbox(mGrownSize.x, mGrownSize.y);
-	SetPosition(mPosition.x, mPosition.y - (mDefaultSize.y * 4));
+	SetPosition(mDefaultPos.x, mDefaultPos.y - (mDefaultSize.y * 4));
 	ChangeAnimation("Opening", "single");
 }
 
@@ -60,6 +66,7 @@ void Vine::Retract()
 	SetTagAlly(TVineR);
 	if (!grown)
 		return;
+
 	grown = false;
 	ChangeAnimation("Closing", "single");
 }
@@ -72,7 +79,7 @@ bool Vine::CheckClosed()
 		{
 			mShape.setSize(mDefaultSize);
 			SetHitbox(mDefaultSize.x, mDefaultSize.y);
-			SetPosition(mPosition.x, mPosition.y);
+			SetPosition(mDefaultPos.x, mDefaultPos.y); 
 			return true;
 		}
 		return false;

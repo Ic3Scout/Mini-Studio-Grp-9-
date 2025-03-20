@@ -90,7 +90,8 @@ void WeedKiller::Shoot()
 			pOwner->ChangeAnimation("AttackLeft", "single");
 		}
 
-		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Transparent);
+		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Transparent, 2);
+
 		a->SetOwner(this);
 		a->SetPosition(GetPosition().x, GetPosition().y);
 		a->SetPlayerSide(pOwner->GetSide());
