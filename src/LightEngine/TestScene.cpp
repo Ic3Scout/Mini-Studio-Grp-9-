@@ -290,8 +290,8 @@ void TestScene::OnInitialize()
 				walls.push_back(wall);
 			}
 			if (map[y][x] == 'O') {
-				Root* root = CreateEntity<Root>({ MOB_SIZE.x, MOB_SIZE.y}, sf::Color(120, 120, 10));
-				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x * 5, MOB_SIZE.y}, sf::Color(120, 120, 10));
+				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y + BLOCK_SIZE.y / 2);
 				roots.push_back(root);
 			}
 			if (map[y][x] == 'G') {

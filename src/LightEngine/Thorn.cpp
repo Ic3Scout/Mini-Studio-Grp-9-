@@ -36,7 +36,6 @@ void Thorn::FixedUpdate(float dt)
 
 void Thorn::OnUpdate()
 {
-	std::cout << mPlayerLeft << mPlayerRight << std::endl;
     Enemy::OnUpdate();
 
 	if (isActive1)
