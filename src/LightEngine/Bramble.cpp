@@ -14,7 +14,7 @@ void Bramble::OnInitialize()
 	mIsDead = false;
 	mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
 
-	mExplosion = CreateEntity<BrambleExplosion>({ GetSize().x * 5, GetSize().y }, sf::Color::Red);
+	mExplosion = CreateEntity<BrambleExplosion>({ GetSize().x * 5, GetSize().y }, sf::Color::Red, 3);
 
 	LoadAnimation();
 }

@@ -115,7 +115,7 @@ void TestScene::OnInitialize()
 		for (size_t x = 0; x < map[y].size(); ++x) 
 		{
 			if (map[y][x] == 'X') {
-				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::Red, 4);
+				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White, 4);
 				block->GetAnimations()->LoadAnimationGrid("Land2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				block->SetRigidBody(true);
@@ -259,7 +259,6 @@ void TestScene::OnInitialize()
 			else if (map[y][x] == 'O') {
 				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x * 5, MOB_SIZE.y}, sf::Color(120, 120, 10), 3);
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y + BLOCK_SIZE.y / 2);
-				roots.push_back(root);
 			}
 			else if (map[y][x] == 'G') {
 				Fog* fog = CreateEntity<Fog>({ MOB_SIZE.x * 7, MOB_SIZE.y * 5 }, sf::Color(0, 0, 0, 100), 5);
@@ -267,7 +266,7 @@ void TestScene::OnInitialize()
 			}
 
 			else if (map[y][x] == 'H') {
-				End* end = CreateEntity<End>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 255));
+				End* end = CreateEntity<End>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 255), 1);
 				end->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 		}
@@ -300,7 +299,7 @@ void TestScene::UpdateCamera()
 	sf::Vector2f pPos = GetPlayer()->GetPosition();
 	sf::Vector2f posLimite = sf::Vector2f(100000, 875);
 
-	float minX = 450 + camSize.x / 2;
+	float minX = 50 + camSize.x / 2;
 	float maxX = posLimite.x - camSize.x / 2;
 	float minY = camSize.y / 2;
 	float maxY = posLimite.y - camSize.y / 2;

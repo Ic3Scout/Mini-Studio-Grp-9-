@@ -13,7 +13,7 @@ void Fongus::OnInitialize()
 	SetRigidBody(true);
 	mIsDead = false;
 
-	mCloud = CreateEntity<FongusCloud>({ GetSize().x * 5, GetSize().y * 5 }, sf::Color::Red);
+	mCloud = CreateEntity<FongusCloud>({ GetSize().x * 5, GetSize().y * 5 }, sf::Color::Red, 3);
 
 	LoadAnimation();
 }
