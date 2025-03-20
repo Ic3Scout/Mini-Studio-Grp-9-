@@ -10,7 +10,7 @@
 #include "Animation.h"
 #include "AssetManager.h"
 
-void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
+void Entity::Initialize(sf::Vector2f size, const sf::Color& color, int mDrawPriority)
 {
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 
@@ -18,7 +18,7 @@ void Entity::Initialize(sf::Vector2f size, const sf::Color& color)
 	mShape.setSize(size);
 	mShape.setFillColor(color);
 	SetHitbox(size.x, size.y);
-	
+	drawPriority = mDrawPriority;
 	mTarget.isSet = false;
 
 	mAnimations = new Animation();
