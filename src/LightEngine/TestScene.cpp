@@ -368,12 +368,7 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
-	if (mCam.GetFocus() == true)
-	{
-		mCam.FollowPlayer();
-	}
-
-	UpdateCamera();
+	
 	
 	if (pEntitySelected != nullptr)
 	{

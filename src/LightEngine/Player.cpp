@@ -364,6 +364,12 @@ void Player::FixedUpdate(float dt)
 
 	Camera* pCam = &pScene->GetCam();
 
+	if (pCam->GetFocus() == true)
+	{
+		pCam->FollowPlayer();
+	}
+
+	GetScene<TestScene>()->UpdateCamera();
 
 	int fpsCounter = (int)(1.f / GetDeltaTime());
 
