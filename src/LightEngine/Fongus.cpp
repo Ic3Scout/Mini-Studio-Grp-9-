@@ -39,6 +39,8 @@ void Fongus::OnCollision(Entity* collidedWith)
 
 void Fongus::OnUpdate()
 {
+	Enemy::OnUpdate();
+
 	HandleDurationTimer();
 	HandleDurationTimer1();
 	HandleActions();

@@ -35,3 +35,8 @@ void Bulb::LoadAnimation()
 	SetTexture("Bulb");
 	mAnimations->LoadAnimationSingle("Idle");
 }
+
+void Bulb::OnUpdate()
+{
+	Ally::OnUpdate();
+}

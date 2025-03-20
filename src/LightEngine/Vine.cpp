@@ -18,6 +18,7 @@ void Vine::OnInitialize()
 
 void Vine::OnUpdate()
 {
+	Ally::OnUpdate();
 }
 
 void Vine::FixedUpdate(float dt)

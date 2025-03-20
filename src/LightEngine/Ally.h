@@ -17,6 +17,7 @@ public:
 	int mTagAlly = -1;
 
 	virtual void OnInitialize();
+	virtual void OnUpdate();
 
 	void SetTagAlly(int tagAlly) { mTagAlly = tagAlly; }
 

@@ -9,10 +9,21 @@ void PhysicalEntity::FixedUpdate(float dt)
 
 void PhysicalEntity::OnUpdate()
 {
+	if (mIsReady == false)
+	{
+		mIsReady = true;
+		SetIsHitboxActive(true);
+	}
+
 	if (mProgress < mDelay)
 	{
 		mProgress += GetDeltaTime();
 	}
+}
+
+void PhysicalEntity::OnInitialize()
+{
+	SetIsHitboxActive(false);
 }
 
 void PhysicalEntity::OnCollision(Entity* collidedWith)

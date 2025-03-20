@@ -8,7 +8,7 @@ void PlayerAction_Idle::Start(Player* pPlayer)
 
 void PlayerAction_Idle::Update(Player* pPlayer, float deltatime)
 {
-	/*std::cout << "Idle" << std::endl;*/
+	//std::cout << "Idle" << std::endl;
 
 	if (pPlayer->mOnGround == false && pPlayer->mProgress >= pPlayer->mDelay)
 	{
@@ -71,10 +71,10 @@ void PlayerAction_Jumping::Start(Player* pPlayer)
 
 void PlayerAction_Jumping::Update(Player* pPlayer, float deltatime)
 {
-	/*std::cout << "Jumping" << std::endl;*/
+	//std::cout << "Jumping" << std::endl;
 
 	if(pPlayer->mGravitySpeed == 0)
-		pPlayer->mGravitySpeed = -std::sqrt(7 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
+		pPlayer->mGravitySpeed = -std::sqrt(5 * GRAVITY_ACCELERATION * pPlayer->GetSize().y); 
 
 	if (pPlayer->mIsMoving)
 	{
@@ -101,7 +101,7 @@ void PlayerAction_Falling::Start(Player* pPlayer)
 
 void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 {
-	/*std::cout << "Falling" << std::endl;*/
+	//std::cout << "Falling" << std::endl;
 
 	bool isMoving = false;
 
@@ -134,7 +134,7 @@ void PlayerAction_Falling::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_TakingDamage::Start(Player* pPlayer)
 {
-	/*std::cout << "TakingDamage" << std::endl;*/
+	//std::cout << "TakingDamage" << std::endl;
 	pPlayer->mOnGround = false;
 	pPlayer->AddRemoveHP(-1);
 	pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
@@ -154,36 +154,31 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dying::Start(Player* pPlayer)
 {
-
+	pPlayer->SetRigidBody(false);
+	pPlayer->SetIsHitboxActive(false);
+	pPlayer->SetGravity(false);
+	pPlayer->SetSpeed(0);
+	pPlayer->mShape.setSize({ 0, 0 });
 }
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
-	/*std::cout << "Dying" << std::endl;*/
-	
-	static float pitch = 0.1f;
+	//std::cout << "Dying" << std::endl;
+
+	if (mIsPlayed == true)
+		return;
 
 	if (mProgress >= mTimer)
 	{
-		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->setPitch(pitch);
-		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Hurt")->play();
-
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->play();
 		mProgress = 0.f;
-
-		if (pitch <= 2)
-		{
-			pitch += 0.2f;
-		}
-		else
-		{
-			pitch = 0.1f;
-		}
+		mIsPlayed = true;	
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->stop();
 	}
 	else
 	{
 		mProgress += deltatime;
 	}
-
 }
 
 
@@ -192,12 +187,12 @@ void PlayerAction_Dashing::Start(Player* pPlayer)
 {
 	if (pPlayer->mSpeed > 0)
 	{
-		/*std::cout << " Super Dashing" << std::endl;*/
+		//std::cout << " Super Dashing" << std::endl;
 		mDuration = 0.2f;
 	}
 	else
 	{
-		/*std::cout << "Dashing" << std::endl;*/
+		//std::cout << "Dashing" << std::endl;
 		mDuration = 0.1f;
 	}
 

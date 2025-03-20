@@ -48,7 +48,7 @@ void PlayerAmmoBar::UpdateUI()
 		if (w->IsTag(TestScene::TWeedKiller) && w->GetIsEquiped() == true) 
 		{
 			Debug::DrawFilledRectangle(playerPos.x - playerSize.x * 0.5f, playerPos.y - playerSize.y * 0.5f - 20, { 50, 12 }, sf::Color(150, 0, 0, 255)); 
-			Debug::DrawFilledRectangle(playerPos.x - playerSize.x * 0.5f, playerPos.y - playerSize.y * 0.5f - 20, { 50 * ratio, 12 }, sf::Color::Green); 
+			Debug::DrawFilledRectangle(playerPos.x - playerSize.x * 0.5f, playerPos.y - playerSize.y * 0.5f - 20, { 50 * ratio, 12 }, sf::Color::Yellow); 
 
 			continue;
 		}

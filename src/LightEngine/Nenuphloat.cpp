@@ -20,6 +20,8 @@ void Nenuphloat::OnInitialize()
 
 void Nenuphloat::OnUpdate()
 {
+	Ally::OnUpdate();
+
 	if(grown && mProgress <= mDuration)
 		mProgress += GetDeltaTime();
 

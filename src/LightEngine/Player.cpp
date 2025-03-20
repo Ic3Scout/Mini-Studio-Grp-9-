@@ -47,7 +47,6 @@ void Player::BasicControls()
 		{
 			mIsMoving = true;
 			mSide = 1;
-			
 		}
 		mDirection.x = mSide;
 	}
@@ -57,7 +56,7 @@ void Player::BasicControls()
 		{
 			mIsMoving = false;
 			mSide = 1;
-			
+
 		}
 		else
 		{
@@ -67,7 +66,7 @@ void Player::BasicControls()
 		mDirection.x = mSide;
 	}
 
-	
+
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -151,6 +150,7 @@ bool Player::TransitionTo(State newState)
 
 void Player::OnInitialize()
 {
+	PhysicalEntity::OnInitialize();
 	InitStates();
 
 	SetTag((int)TestScene::TPlayer);
@@ -189,7 +189,6 @@ void Player::OnUpdate()
 	PhysicalEntity::OnUpdate();
 
 	BasicControls();
-
 
 	if (mProgressDashReload <= 0)
 	{
@@ -252,6 +251,13 @@ void Player::OnCollision(Entity* other)
 			mParameters.respawnX = other->GetPosition().x;
 			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
 
+			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
+
+			if (cpSfx->getStatus() == sf::Sound::Status::Stopped)
+			{
+				cpSfx->play();
+			}
+
 			for (Weapon* weapon : mWeapons)
 			{
 				if (weapon->IsTag(TestScene::TWeedKiller))
@@ -282,7 +288,7 @@ void Player::OnCollision(Entity* other)
 
 	if (enemy)
 	{
-		if (!enemy->IsTagEnemy(Enemy::TThorn) && !enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
+		if (!enemy->IsTagEnemy(Enemy::TFongusR) && !enemy->IsTagEnemy(Enemy::TBramble))
 			return;
 	}
 

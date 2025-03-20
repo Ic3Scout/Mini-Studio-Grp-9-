@@ -19,3 +19,8 @@ void Station::LoadAnimation()
 	SetTexture("Station");
 	mAnimations->LoadAnimationSingle("Idle");
 }
+
+void Station::OnUpdate()
+{
+	Ally::OnUpdate();
+}

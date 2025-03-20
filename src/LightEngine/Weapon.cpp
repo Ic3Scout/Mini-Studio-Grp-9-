@@ -22,7 +22,7 @@ void Weapon::OnDestroy()
 
 void Weapon::ReloadManager()
 {
-	if (mProgressDelay >= mDelayBeforeReloading)
+	if (mProgressDelay >= mDelayBeforeReloading) 
 	{
 		mProgressReload += GetDeltaTime();
 

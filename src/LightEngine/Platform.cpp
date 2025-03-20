@@ -5,6 +5,7 @@
 
 void Platform::OnInitialize()
 {
+	PhysicalEntity::OnInitialize();
 	mKineticBody = false;
 	SetTag((int)TestScene::TPlatform);
 
@@ -16,6 +17,7 @@ void Platform::OnInitialize()
 
 void Platform::OnUpdate()
 {
+	PhysicalEntity::OnUpdate();
 }
 
 void Platform::OnCollision(Entity* other)
