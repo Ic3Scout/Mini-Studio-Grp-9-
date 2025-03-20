@@ -1,5 +1,6 @@
 #include "Ivy.h"
 #include "TestScene.h"
+#include "Animation.h"
 
 Ivy::Ivy() : Enemy(IVY_HP) {}
 
@@ -8,6 +9,9 @@ void Ivy::OnInitialize()
 	Enemy::OnInitialize(); 
 	SetTagEnemy(TagEnemy::TIvy);
 	mIsDead = false;
+
+	mAnimations = new Animation();
+	LoadAnimation();
 }
 
 void Ivy::OnCollision(Entity* collidedWith)
@@ -19,6 +23,10 @@ void Ivy::OnCollision(Entity* collidedWith)
 			mPlayerInContact = true;
 		}
 	}
+}
+
+void Ivy::FixedUpadat(float dt)
+{
 }
 
 void Ivy::OnUpdate()
@@ -36,8 +44,10 @@ void Ivy::OnUpdate()
 		{
 			mCounter = 0.f;
 			mPlayerInContact = false;
+			ChangeAnimation("Emerge", "single");
 		}
 	}
+
 	float currentPosition = GetPosition().x;
 	float size = GetSize().x;
 	float range = 4 * size;
@@ -57,6 +67,13 @@ void Ivy::OnUpdate()
 	{
 		Destroy();
 	}
+}
+
+void Ivy::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Ivy.json");
+	SetTexture("Ivy");
+	mAnimations->LoadAnimationSingle("Idle");
 }
 
 void Ivy::HandleAction()
