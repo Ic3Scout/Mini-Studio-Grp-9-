@@ -3,7 +3,7 @@
 
 void PhysicalEntity::FixedUpdate(float dt)
 {
-	if(mOnGround == false)
+	if(mOnGround == false && mHitbox.hasHitbox)
 		Fall(dt);
 }
 
@@ -14,7 +14,7 @@ void PhysicalEntity::OnUpdate()
 		mProgress += GetDeltaTime();
 		return;
 	}
-	if (mIsReady == false && mHitbox.hasHitbox)
+	if (mIsReady == false)
 	{
 		mIsReady = true;
 		SetIsHitboxActive(true);

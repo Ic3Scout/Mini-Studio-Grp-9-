@@ -154,6 +154,9 @@ void PlayerAction_TakingDamage::Update(Player* pPlayer, float deltatime)
 
 void PlayerAction_Dying::Start(Player* pPlayer)
 {
+	mTimer = 1.f;
+	mProgress = 0.f;
+	mIsPlayed = false;
 	pPlayer->SetRigidBody(false);
 	pPlayer->SetIsHitboxActive(false);
 	pPlayer->SetGravity(false);
@@ -165,10 +168,24 @@ void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 {
 	//std::cout << "Dying" << std::endl;
 
-	if (mIsPlayed == true)
-		return;
+	if (pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->getStatus() == sf::Sound::Status::Stopped() && mIsPlayed == true)
+	{
+		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->play();
+		pPlayer->SetRigidBody(true);
+		pPlayer->SetIsHitboxActive(true);
+		pPlayer->SetGravity(true);
+		pPlayer->AddRemoveHP(pPlayer->mMaxHP);
+		pPlayer->mShape.setSize({ 50, 50 });
 
-	if (mProgress >= mTimer)
+		PlayerParameter* pParam = &pPlayer->mParameters;
+
+		pParam->mRespawnX = pPlayer->mParameters.mDefaultRespawnX; 
+		pParam->mRespawnY = pPlayer->mParameters.mDefaultRespawnY;
+		pPlayer->SetPosition(pParam->mRespawnX, pParam->mRespawnY);
+		pPlayer->TransitionTo(Player::Falling);
+	}
+
+	if (mProgress >= mTimer && mIsPlayed == false)
 	{
 		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->play();
 		mProgress = 0.f;
