@@ -102,6 +102,7 @@ void Player::InitStates()
 	SetTransition(Idle, Falling, true);
 	SetTransition(Idle, TakingDamage, true);
 	SetTransition(Idle, Dying, true);
+	SetTransition(Idle, AFK, true);
 
 	SetTransition(Moving, Idle, true);
 	SetTransition(Moving, Jumping, true);
@@ -109,24 +110,32 @@ void Player::InitStates()
 	SetTransition(Moving, Falling, true);
 	SetTransition(Moving, TakingDamage, true);
 	SetTransition(Moving, Dying, true);
+	SetTransition(Moving, AFK, true);
 
 	SetTransition(Jumping, Dashing, true);
 	SetTransition(Jumping, Falling, true);
 	SetTransition(Jumping, TakingDamage, true);
 	SetTransition(Jumping, Dying, true);
+	SetTransition(Jumping, AFK, true);
 
 	SetTransition(Dashing, Falling, true);
+	SetTransition(Dashing, AFK, true);
 
 	SetTransition(Falling, Idle, true);
 	SetTransition(Falling, Moving, true);
 	SetTransition(Falling, Dashing, true);
 	SetTransition(Falling, TakingDamage, true);
 	SetTransition(Falling, Dying, true);
+	SetTransition(Falling, AFK, true);
 
 	SetTransition(TakingDamage, Falling, true);
 	SetTransition(TakingDamage, Dying, true);
+	SetTransition(TakingDamage, AFK, true); 
 
 	SetTransition(Dying, Falling, true);
+
+	SetTransition(AFK, Falling, true);
+
 
 	mAction[Idle] = new PlayerAction_Idle();
 	mAction[Moving] = new PlayerAction_Moving();
@@ -135,7 +144,7 @@ void Player::InitStates()
 	mAction[TakingDamage] = new PlayerAction_TakingDamage();
 	mAction[Dying] = new PlayerAction_Dying();
 	mAction[Dashing] = new PlayerAction_Dashing();
-
+	mAction[AFK] = new PlayerAction_AFK(); 
 }
 
 bool Player::TransitionTo(State newState)
@@ -191,7 +200,8 @@ void Player::OnUpdate()
 
 	PhysicalEntity::OnUpdate();
 
-	BasicControls();
+	if(mState != AFK) 
+		BasicControls();
 
 	for (PlayerUI* ui : mUI)
 	{
@@ -246,7 +256,7 @@ void Player::Respawn(int x, int y)
 		TransitionTo(Player::TakingDamage);
 		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 
-		if(GetRatioHP() > 0)
+		if(GetRatioHP() > 0 || mState != AFK) 
 			SetPosition(x, y);
 	
 

@@ -261,7 +261,7 @@ void Entity::UpdateFrame(float dt)
 	
 	if (frame == nullptr)
 	{
-		std::cout << "pas de frame trouve" << std::endl;
+		//std::cout << "pas de frame trouve" << std::endl;
 		return;
 	}
 

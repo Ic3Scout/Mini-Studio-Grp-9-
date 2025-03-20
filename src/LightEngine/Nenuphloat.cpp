@@ -15,14 +15,11 @@ void Nenuphloat::OnInitialize()
 	SetHitbox(mDefaultSize.x, mDefaultSize.y);
 
 	LoadAnimation();
-	Grow();
 }
 
 void Nenuphloat::OnUpdate()
 {
 	Ally::OnUpdate();
-
-	return;
 
 	if(grown && mProgress <= mDuration)
 		mProgress += GetDeltaTime();
@@ -86,6 +83,7 @@ void Nenuphloat::Grow()
 		SetHitbox(mGrownSize.x, mGrownSize.y / 3.f);
 		SetPosition(mPosition.x, mPosition.y);
 		ChangeAnimation("Opening", "single");
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();
 	}
 }
 
@@ -99,4 +97,5 @@ void Nenuphloat::Retract()
 	grown = false;
 	mProgress = 0.f;
 	ChangeAnimation("Closing", "single");
+	GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();
 }

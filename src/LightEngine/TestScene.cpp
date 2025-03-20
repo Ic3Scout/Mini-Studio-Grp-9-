@@ -15,6 +15,8 @@
 #include "Root.h"
 #include "Fog.h"
 #include "End.h"
+#include "Logo.h"
+#include "BG.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -44,6 +46,9 @@ void TestScene::OnInitialize()
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
 	pEntity1->SetKineticBody(true);
+
+	pLogo = CreateEntity<Logo>({ 1280, 720 }, sf::Color::White, 6);
+	pBG = CreateEntity<BG>({ 1280, 720 }, sf::Color::White, 1); 
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -266,8 +271,8 @@ void TestScene::OnInitialize()
 			}
 
 			else if (map[y][x] == 'H') {
-				End* end = CreateEntity<End>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 255), 1);
-				end->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				End* end = CreateEntity<End>({ BLOCK_SIZE.x * 2, BLOCK_SIZE.y * 8}, sf::Color::White, 1);
+				end->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - 50.f * 3); 
 			}
 		}
 	}
@@ -335,10 +340,13 @@ void TestScene::InitSounds()
 	assetManager->LoadSound("Landing", "../../../res/Assets/sfx/landing.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(50 * mVolume);
-	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(50 * mVolume);
+	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(75 * mVolume);
 	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Button", "../../../res/Assets/sfx/button.wav")->setVolume(30 * mVolume);
 	assetManager->LoadSound("DeadMonster", "../../../res/Assets/sfx/deadmonster.wav")->setVolume(75 * mVolume);
+	assetManager->LoadSound("Revelation", "../../../res/Assets/sfx/revelation.wav")->setVolume(25 * mVolume);
+	assetManager->LoadSound("Transition", "../../../res/Assets/sfx/transition.wav")->setVolume(25 * mVolume);
+	assetManager->LoadSound("Suspense", "../../../res/Assets/sfx/suspense.wav")->setVolume(100 * mVolume);
 }
 
 void TestScene::SoundManager()
@@ -403,10 +411,13 @@ void TestScene::UpdateVolume()
 	assetManager->GetSound("Landing")->setVolume(25 * mVolume);
 	assetManager->GetSound("Bonk")->setVolume(25 * mVolume);
 	assetManager->GetSound("Falling")->setVolume(50 * mVolume);
-	assetManager->GetSound("Hurt")->setVolume(50 * mVolume);
+	assetManager->GetSound("Hurt")->setVolume(75 * mVolume);
 	assetManager->GetSound("Dead")->setVolume(25 * mVolume);
 	assetManager->GetSound("Button")->setVolume(30 * mVolume);
 	assetManager->GetSound("DeadMonster")->setVolume(75 * mVolume);
+	assetManager->GetSound("Revelation")->setVolume(25 * mVolume);
+	assetManager->GetSound("Transition")->setVolume(25 * mVolume);
+	assetManager->GetSound("Suspense")->setVolume(100 * mVolume);
 }
 
 void TestScene::StopSound()
@@ -427,6 +438,9 @@ void TestScene::StopSound()
 	assetManager->GetSound("Dead")->setVolume(0);
 	assetManager->GetSound("Button")->setVolume(0);
 	assetManager->GetSound("DeadMonster")->setVolume(0);
+	assetManager->GetSound("Revelation")->setVolume(0);
+	assetManager->GetSound("Transition")->setVolume(0);
+	assetManager->GetSound("Suspense")->setVolume(0);
 }
 
 void TestScene::InitTextures()
@@ -443,6 +457,8 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("FongusCloud", "../../../res/Assets/Textures/SpriteSheet_FongusCloud.png");
 	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
 	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
+	assetManager->LoadTexture("Logo", "../../../res/Assets/Textures/Logo.png");  
+	assetManager->LoadTexture("BG", "../../../res/Assets/Textures/bg.png");
 }
 
 void TestScene::InitAssets()

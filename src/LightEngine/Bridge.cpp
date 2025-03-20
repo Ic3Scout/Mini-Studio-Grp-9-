@@ -48,4 +48,5 @@ void Bridge::Grow()
 
 	SetHitbox(GetSize().x, GetSize().y);
 	mGrowProgress++;
+	GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();
 }

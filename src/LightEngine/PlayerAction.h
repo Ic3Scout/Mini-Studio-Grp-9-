@@ -70,3 +70,12 @@ public:
 	void Update(Player* pPlayer, float deltatime) override;
 	~PlayerAction_Dashing() = default;
 };
+
+class PlayerAction_AFK : public PlayerAction
+{
+	bool isStopping;
+public:
+	void Start(Player* pPlayer) override;
+	void Update(Player* pPlayer, float deltatime) override;
+	~PlayerAction_AFK() = default;
+};
