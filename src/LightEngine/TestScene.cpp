@@ -38,13 +38,12 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White, 2);
+	pEntity1 = CreateEntity<Player>({ 75.f, 75.f }, sf::Color::White, 2);
 	pEntity1->SetPosition(width / 2.f, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
 	pEntity1->SetGravity(true);
 	pEntity1->SetKineticBody(true);
-	/*pEntity1->GetShape()->setSize({ pEntity1->GetSize() * 1.3f });*/
 
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
@@ -441,6 +440,10 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
 	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
 	assetManager->LoadTexture("Water", "../../../res/Assets/Textures/SpriteSheet_Water.png");
+	assetManager->LoadTexture("ThornWall", "../../../res/Assets/Textures/SpriteSheet_ThornWall.png");
+	assetManager->LoadTexture("Bridge", "../../../res/Assets/Textures/SpriteSheet_Bridge.png");
+	assetManager->LoadTexture("Root", "../../../res/Assets/Textures/SpriteSheet_Root.png");
+
 }
 
 void TestScene::InitAssets()

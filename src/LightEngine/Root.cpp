@@ -1,5 +1,6 @@
 #include "Root.h"
 #include "TestScene.h"
+#include "Animation.h"
 
 void Root::OnInitialize()
 {
@@ -8,6 +9,8 @@ void Root::OnInitialize()
 	SetTagObstacle(TagObstacle::TRootR);
 	SetHitbox(GetSize().x, GetSize().y);
 	SetRigidBody(false);
+
+	LoadAnimation();
 }
 
 void Root::OnCollision(Entity* collidedWith)
@@ -73,4 +76,11 @@ void Root::OnUpdate()
 			}
 		}
 	}
+}
+
+void Root::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Root.json");
+	SetTexture("Root");
+	mAnimations->LoadAnimationSingle("Idle");
 }

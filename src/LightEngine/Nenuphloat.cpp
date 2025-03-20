@@ -15,14 +15,11 @@ void Nenuphloat::OnInitialize()
 	SetHitbox(mDefaultSize.x, mDefaultSize.y);
 
 	LoadAnimation();
-	Grow();
 }
 
 void Nenuphloat::OnUpdate()
 {
 	Ally::OnUpdate();
-
-	return;
 
 	if(grown && mProgress <= mDuration)
 		mProgress += GetDeltaTime();
@@ -83,7 +80,7 @@ void Nenuphloat::Grow()
 	{
 		grown = true;
 		mShape.setSize(mGrownSize);
-		SetHitbox(mGrownSize.x, mGrownSize.y / 3.f);
+		SetHitbox(mGrownSize.x, mGrownSize.y / 4.f);
 		SetPosition(mPosition.x, mPosition.y);
 		ChangeAnimation("Opening", "single");
 	}
