@@ -309,7 +309,7 @@ void Player::OnCollision(Entity* other)
 		{
 			mGravitySpeed = 1.f;
 			mOnGround = false;
-
+			TransitionTo(Falling);
 			GetScene<TestScene>()->GetAssetManager()->GetSound("Bonk")->play();
 		}
 		break;
