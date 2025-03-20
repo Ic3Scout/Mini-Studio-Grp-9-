@@ -34,6 +34,7 @@ void Wall::OnUpdate()
 
 	if (mHP <= 0)
 	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
 		Destroy();
 	}
 }

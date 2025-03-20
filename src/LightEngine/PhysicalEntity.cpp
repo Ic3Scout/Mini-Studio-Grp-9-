@@ -9,15 +9,15 @@ void PhysicalEntity::FixedUpdate(float dt)
 
 void PhysicalEntity::OnUpdate()
 {
-	if (mIsReady == false)
-	{
-		mIsReady = true;
-		SetIsHitboxActive(true);
-	}
-
 	if (mProgress < mDelay)
 	{
 		mProgress += GetDeltaTime();
+		return;
+	}
+	if (mIsReady == false && mHitbox.hasHitbox)
+	{
+		mIsReady = true;
+		SetIsHitboxActive(true);
 	}
 }
 

@@ -32,8 +32,6 @@ private:
 
 	Player* pEntity1;
 
-	PhysicalEntity* pEntitySelected;
-
 	int mInteractions[TAG_COUNT][TAG_COUNT]; 
 
 	//Volume
@@ -42,7 +40,6 @@ private:
 	float mVolume = 0.5f;
 	bool isStopSound = false;
 private:
-	void TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y);
 	void InitTransitions();
 	void SetInteractionWith(Tag tag1, Tag tag2, bool value) { mInteractions[(int)tag1][(int)tag2] = value; mInteractions[(int)tag2][(int)tag1] = value; }
 	void AddRemoveVolume(float value);

@@ -135,16 +135,16 @@ void TestScene::OnInitialize()
 				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
 				block->GetAnimations()->LoadAnimationGrid("Dirt3");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false; 
 				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'd') {
 				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
 				block->GetAnimations()->LoadAnimationGrid("DeepDirt2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false;
 				platforms.push_back(block);
 			}
 			else if (map[y][x] == 'L') {
@@ -231,70 +231,69 @@ void TestScene::OnInitialize()
 				Platform* block = CreateEntity<Platform>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color::White);
 				block->GetAnimations()->LoadAnimationGrid("DeepWater2");
 				block->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-				block->SetRigidBody(true);
-				block->SetHitbox(BLOCK_SIZE.x, BLOCK_SIZE.y);
+				block->SetRigidBody(false);
+				block->GetHitbox()->hasHitbox = false; 
 				platforms.push_back(block);
 			}
 
 
 
-
-			if (map[y][x] == 'V') {
+			else if (map[y][x] == 'V') {
 				Vine* vine = CreateEntity<Vine>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(172, 210, 128));
 				vine->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				vines.push_back(vine);
 			}
-			if (map[y][x] == 'N') {
+			else if (map[y][x] == 'N') {
 				Nenuphloat* nenuphloat = CreateEntity<Nenuphloat>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(65, 106, 36));
 				nenuphloat->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				nenuphloats.push_back(nenuphloat);
 			}
-			if (map[y][x] == 'v') {
+			else if (map[y][x] == 'v') {
 				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
 				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - 50.f );
 				stations.push_back(station);
 			}
-			if (map[y][x] == 'U') {
+			else if (map[y][x] == 'U') {
 				Bulb* bulb = CreateEntity<Bulb>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(213, 170, 63));
 				bulb->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bulbs.push_back(bulb);
 			}
-			if (map[y][x] == 'T') {
+			else if (map[y][x] == 'T') {
 				Thorn* thorn = CreateEntity<Thorn>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(133, 46, 46));
 				thorn->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				thorns.push_back(thorn);
 			}
-			if (map[y][x] == 'F') {
+			else if (map[y][x] == 'F') {
 				Fongus* fongus = CreateEntity<Fongus>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(0, 255, 0));
 				fongus->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				fonguss.push_back(fongus);
 			}
-			if (map[y][x] == 'I') {
+			else if (map[y][x] == 'I') {
 				Ivy* ivy = CreateEntity<Ivy>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(254, 237, 92));
 				ivy->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				ivys.push_back(ivy);
 			}
-			if (map[y][x] == 'R') {
+			else if (map[y][x] == 'R') {
 				Bramble* bramble = CreateEntity<Bramble>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(66, 44, 40));
 				bramble->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				brambles.push_back(bramble);
 			}
-			if (map[y][x] == 'P') {
+			else if (map[y][x] == 'P') {
 				Bridge* bridge = CreateEntity<Bridge>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(122, 112, 112));
 				bridge->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				bridges.push_back(bridge);
 			}
-			if (map[y][x] == 'w') {
+			else if (map[y][x] == 'w') {
 				Wall* wall = CreateEntity<Wall>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 3 }, sf::Color(141, 49, 20));
 				wall->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - BLOCK_SIZE.y);
 				walls.push_back(wall);
 			}
-			if (map[y][x] == 'O') {
+			else if (map[y][x] == 'O') {
 				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x, BLOCK_SIZE.y}, sf::Color(120, 120, 10));
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				roots.push_back(root);
 			}
-			if (map[y][x] == 'G') {
+			else if (map[y][x] == 'G') {
 				Fog* fog = CreateEntity<Fog>({ BLOCK_SIZE.x * 7, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
 				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 				fogs.push_back(fog);
@@ -302,31 +301,13 @@ void TestScene::OnInitialize()
 		}
 	}
 
-	pEntitySelected = nullptr;
-
 	assetManager->GetMusic("MainMusic")->play();
 }
 
 void TestScene::OnEvent(const sf::Event& event)
 {
-	if (event.type != sf::Event::EventType::MouseButtonPressed && event.type != sf::Event::EventType::KeyPressed)
+	if (event.type != sf::Event::EventType::KeyPressed)
 		return;
-
-	sf::RenderWindow* win = GameManager::Get()->GetWindow();
-	sf::Vector2f mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
-
-	if (event.mouseButton.button == sf::Mouse::Button::Right)
-	{
-		TrySetSelectedEntity(pEntity1, mousePos.x, mousePos.y);
-	}
-
-	if (event.mouseButton.button == sf::Mouse::Button::Left)
-	{
-		if (pEntitySelected != nullptr)
-		{
-			pEntitySelected->GoToPosition(mousePos.x, mousePos.y, 200.f);
-		}
-	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F))
 	{
@@ -343,39 +324,10 @@ void TestScene::OnEvent(const sf::Event& event)
 			}
 		}
 	}
-
-	if (pEntitySelected != nullptr)
-	{
-		if (event.key.code == sf::Keyboard::H)
-		{
-			if (pEntitySelected->GetHitbox()->isActive)
-				pEntitySelected->SetIsHitboxActive(false);
-			else
-				pEntitySelected->SetIsHitboxActive();
-		}
-	}
-}
-
-void TestScene::TrySetSelectedEntity(PhysicalEntity* pEntity, int x, int y)
-{
-	if (pEntity->IsInside(x, y) == false)
-		return;
-
-	pEntitySelected = pEntity;
 }
 
 void TestScene::OnUpdate()
 {
-	float dt = GetDeltaTime();
-
-	
-	
-	if (pEntitySelected != nullptr)
-	{
-		sf::Vector2f position = pEntitySelected->GetPosition();
-		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
-	}
-
 	SoundManager();
 }
 
@@ -385,7 +337,7 @@ void TestScene::UpdateCamera()
 	sf::Vector2f pPos = GetPlayer()->GetPosition();
 	sf::Vector2f posLimite = sf::Vector2f(100000, 875);
 
-	float minX = camSize.x / 2;
+	float minX = 450 + camSize.x / 2;
 	float maxX = posLimite.x - camSize.x / 2;
 	float minY = camSize.y / 2;
 	float maxY = posLimite.y - camSize.y / 2;
@@ -419,10 +371,9 @@ void TestScene::InitSounds()
 	assetManager->LoadSound("Bonk", "../../../res/Assets/sfx/bonk.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Falling", "../../../res/Assets/sfx/falling.wav")->setVolume(50 * mVolume);
 	assetManager->LoadSound("Hurt", "../../../res/Assets/sfx/hurt.wav")->setVolume(50 * mVolume);
-
-	//A bouger au merge
 	assetManager->LoadSound("Dead", "../../../res/Assets/sfx/dead.wav")->setVolume(25 * mVolume);
 	assetManager->LoadSound("Button", "../../../res/Assets/sfx/button.wav")->setVolume(30 * mVolume);
+	assetManager->LoadSound("DeadMonster", "../../../res/Assets/sfx/deadmonster.wav")->setVolume(75 * mVolume);
 }
 
 void TestScene::SoundManager()
@@ -488,10 +439,9 @@ void TestScene::UpdateVolume()
 	assetManager->GetSound("Bonk")->setVolume(25 * mVolume);
 	assetManager->GetSound("Falling")->setVolume(50 * mVolume);
 	assetManager->GetSound("Hurt")->setVolume(50 * mVolume);
-
-	//A bouger au merge
 	assetManager->GetSound("Dead")->setVolume(25 * mVolume);
 	assetManager->GetSound("Button")->setVolume(30 * mVolume);
+	assetManager->GetSound("DeadEnemy")->setVolume(75 * mVolume);
 }
 
 void TestScene::StopSound()
@@ -509,10 +459,9 @@ void TestScene::StopSound()
 	assetManager->GetSound("Bonk")->setVolume(0);
 	assetManager->GetSound("Falling")->setVolume(0);
 	assetManager->GetSound("Hurt")->setVolume(0);
-
-	//A bouger au merge
 	assetManager->GetSound("Dead")->setVolume(0);
 	assetManager->GetSound("Button")->setVolume(0);
+	assetManager->GetSound("DeadEnemy")->setVolume(0);
 }
 
 void TestScene::InitTextures()

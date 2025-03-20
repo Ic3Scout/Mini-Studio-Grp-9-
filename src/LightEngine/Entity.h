@@ -17,8 +17,8 @@ class Entity
 {
 	struct AABBCollider
 	{
-		bool isDisplayed = false;
-
+		bool isDisplayed = true;
+		bool hasHitbox = true;
 		int face = 0;
 
 		bool isActive = true;
