@@ -48,6 +48,7 @@ void Bramble::OnUpdate()
 
 	if (mIsDead)
 	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
 		Destroy();
 	}
 }

@@ -126,6 +126,8 @@ void Player::InitStates()
 	SetTransition(TakingDamage, Falling, true);
 	SetTransition(TakingDamage, Dying, true);
 
+	SetTransition(Dying, Falling, true);
+
 	mAction[Idle] = new PlayerAction_Idle();
 	mAction[Moving] = new PlayerAction_Moving();
 	mAction[Jumping] = new PlayerAction_Jumping();
@@ -155,9 +157,6 @@ void Player::OnInitialize()
 	InitStates();
 
 	SetTag((int)TestScene::TPlayer);
-
-	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
-	/*GetShape()->setTexture(texture);*/
 
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
@@ -191,6 +190,17 @@ void Player::OnUpdate()
 
 	BasicControls();
 
+	for (PlayerUI* ui : mUI)
+	{
+		ui->UpdateUI();
+	}
+
+	int fpsCounter = (int)(1.f / GetDeltaTime());
+
+	sf::Vector2f camPos = GetScene<TestScene>()->GetCam().GetView()->getCenter(); 
+
+	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
+
 	if (mProgressDashReload <= 0)
 	{
 		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
@@ -223,20 +233,18 @@ void Player::OnUpdate()
 		}
 	}
 
-	for (PlayerUI* ui : mUI)
-	{
-		ui->UpdateUI();
-	}
-	Respawn(mParameters.respawnX, mParameters.respawnY);
+	Respawn(mParameters.mRespawnX, mParameters.mRespawnY);
 }
 
 void Player::Respawn(int x, int y)
 {
-	if (GetPosition().y > 800)
+	if (GetPosition().y > 900)
 	{
-		SetPosition(x, y);
-		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 		TransitionTo(Player::TakingDamage);
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
+
+		if(GetRatioHP() > 0)
+			SetPosition(x, y);
 	}
 }
 
@@ -246,13 +254,12 @@ void Player::OnCollision(Entity* other)
 	Enemy* enemy = dynamic_cast<Enemy*>(other);
 	Obstacle* obstacle = dynamic_cast<Obstacle*>(other);
 
-
 	if (ally)
 	{
 		if (ally->IsTagAlly(Ally::TStation))
 		{
-			mParameters.respawnX = other->GetPosition().x;
-			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
+			mParameters.mRespawnX = other->GetPosition().x;
+			mParameters.mRespawnY = other->GetPosition().y - other->GetSize().y / 2;
 
 			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
 
@@ -359,17 +366,6 @@ void Player::FixedUpdate(float dt)
 {
 	Entity::FixedUpdate(dt);
 	PhysicalEntity::FixedUpdate(dt);
-
-	TestScene* pScene = GetScene<TestScene>();
-
-	Camera* pCam = &pScene->GetCam();
-
-
-	int fpsCounter = (int)(1.f / GetDeltaTime());
-
-	sf::Vector2f camPos = pCam->GetView()->getCenter();
-
-	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 }
 
 void Player::SwapManager()

@@ -90,6 +90,9 @@ bool Entity::IsColliding(Entity* other)
 	AABBCollider& hb = mHitbox;
 	AABBCollider& otherHb = *(other->GetHitbox()); 
 
+	if (!hb.isActive && !otherHb.isActive)
+		return false;
+
 	sf::Vector2f pos = GetPosition();
 	sf::Vector2f otherPos = other->GetPosition();
 

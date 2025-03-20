@@ -13,7 +13,7 @@ void Water::OnUpdate()
 
 void Water::OnCollision(Entity* collidedWith)
 {
-	if (collidedWith->IsTag(TestScene::TPlayer)) 
+	if (collidedWith->IsTag(TestScene::TPlayer) || collidedWith->IsTag(TestScene::TEnemy))  
 		return;
 
 	Destroy();

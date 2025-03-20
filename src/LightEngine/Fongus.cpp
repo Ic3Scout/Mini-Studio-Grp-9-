@@ -109,6 +109,7 @@ void Fongus::OnUpdate()
 
 	if (mIsDead)
 	{
+		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
 		Destroy();
 	}
 }
