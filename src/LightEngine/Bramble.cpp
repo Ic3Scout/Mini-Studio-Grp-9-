@@ -27,6 +27,12 @@ void Bramble::OnCollision(Entity* collidedWith)
 
 void Bramble::OnUpdate()
 {
+	if (mIsDead)
+	{
+		Destroy();
+		return;
+	}
+
 	Enemy::OnUpdate();
 
 	isPlayerInProximity = IsPlayerInProximity();
@@ -44,11 +50,6 @@ void Bramble::OnUpdate()
 	{
 		ChangeAnimation("Death", "single");
 		Explose();
-	}
-
-	if (mIsDead)
-	{
-		Destroy();
 	}
 }
 

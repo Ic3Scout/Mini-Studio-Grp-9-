@@ -32,6 +32,12 @@ void Ivy::FixedUpadat(float dt)
 
 void Ivy::OnUpdate()
 {
+	if (mIsDead)
+	{
+		Destroy();
+		return;
+	}
+
 	Enemy::OnUpdate();
 
 	if (posInitial)
@@ -66,11 +72,6 @@ void Ivy::OnUpdate()
 	}
 
 	SetPosition(currentPosition + mDirection * mSpeed * GetDeltaTime(), GetPosition().y);
-
-	if (mIsDead)
-	{
-		Destroy();
-	}
 }
 
 void Ivy::LoadAnimation()

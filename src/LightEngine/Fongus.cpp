@@ -27,6 +27,11 @@ void Fongus::OnCollision(Entity* collidedWith)
 
 void Fongus::OnUpdate()
 {
+	if (mIsDead)
+	{
+		Destroy();
+		return;
+	}
 
 	Enemy::OnUpdate();
 	
@@ -105,10 +110,5 @@ void Fongus::OnUpdate()
 				break;
 			}
 		}
-	}
-
-	if (mIsDead)
-	{
-		Destroy();
 	}
 }

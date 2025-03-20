@@ -36,6 +36,12 @@ void Thorn::FixedUpdate(float dt)
 
 void Thorn::OnUpdate()
 {
+    if (mIsDead)
+    {
+        Destroy();
+		return;
+    }
+
     Enemy::OnUpdate();
 
 	if (isActive1)
@@ -112,11 +118,6 @@ void Thorn::OnUpdate()
             mActionTriggered = false;
             mCooldownTimer = 3.0f;
         }
-    }
-
-    if (mIsDead)
-    {
-        Destroy();
     }
 }
 

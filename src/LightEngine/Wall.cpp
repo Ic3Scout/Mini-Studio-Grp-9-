@@ -20,6 +20,12 @@ void Wall::OnCollision(Entity* collidedWith)
 
 void Wall::OnUpdate()
 {
+	if (mHP <= 0)
+	{
+		Destroy();
+		return;
+	}
+
 	if(mIsActive)
 	{
 		mProgress += GetDeltaTime();
@@ -30,10 +36,5 @@ void Wall::OnUpdate()
 		mIsActive = false;
 		mProgress = 0.f;
 		mHP--;
-	}
-
-	if (mHP <= 0)
-	{
-		Destroy();
 	}
 }
