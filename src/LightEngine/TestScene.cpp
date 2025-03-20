@@ -14,6 +14,7 @@
 #include "Wall.h"
 #include "Root.h"
 #include "Fog.h"
+#include "End.h"
 
 #include "DummyEntity.h"
 #include "Animation.h"
@@ -73,6 +74,9 @@ void TestScene::OnInitialize()
 
 	/*
 	Map Légende :
+
+	Special :
+	H : End Level
 
 	Platefrom :
 	X : Land2
@@ -257,6 +261,11 @@ void TestScene::OnInitialize()
 			else if (map[y][x] == 'G') {
 				Fog* fog = CreateEntity<Fog>({ BLOCK_SIZE.x * 7, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 100));
 				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+			}
+
+			else if (map[y][x] == 'H') {
+				End* end = CreateEntity<End>({ BLOCK_SIZE.x, BLOCK_SIZE.y * 5 }, sf::Color(0, 0, 0, 255));
+				end->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
 			}
 		}
 	}
@@ -449,6 +458,8 @@ void TestScene::InitTransitions()
 	SetInteractionWith(TWater, TObstacle, true);
 	SetInteractionWith(TPlatform, TObstacle, true);
 	SetInteractionWith(TAcid, TObstacle, true);
+
+	SetInteractionWith(TPlayer, TEnd, true);
 }
 
 void TestScene::AddRemoveVolume(float value)

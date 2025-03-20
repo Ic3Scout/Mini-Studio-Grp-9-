@@ -21,6 +21,7 @@ public:
 		TAlly,
 		TEnemy,
 		TObstacle,
+		TEnd,
 
 		Count
 	};

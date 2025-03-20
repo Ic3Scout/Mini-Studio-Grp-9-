@@ -94,6 +94,7 @@ public:
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
 
 	int GetSide() { return mSide; }
+	void SetSide(int value) { mSide = value; }
 	int GetState() { return mState; }
 	PlayerParameter* GetParameters() { return &mParameters; }
 

@@ -42,16 +42,6 @@ void Bramble::OnUpdate()
 
 	if (mExplosionTimer >= mExplosionDelay)
 	{
-		SetHitbox(GetSize().x * 5, GetSize().y * 5);
-		if (isPlayerInProximity)
-		{
-			player->AddRemoveHP(-1);
-			player->TransitionTo(Player::TakingDamage);
-		}
-		
-		AddRemoveHP(-1);
-		mExplosionTimer = 0.f;
-
 		ChangeAnimation("Death", "single");
 		Explose();
 	}

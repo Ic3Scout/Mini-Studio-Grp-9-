@@ -1,6 +1,7 @@
 #include "PlayerAction.h"
 #include "TestScene.h"
 #include "Player.h"
+#include "Weapon.h"
 
 void PlayerAction_Idle::Start(Player* pPlayer)
 {
@@ -171,18 +172,25 @@ void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 	if (pPlayer->GetScene<TestScene>()->GetAssetManager()->GetSound("Dead")->getStatus() == sf::Sound::Status::Stopped() && mIsPlayed == true)
 	{
 		pPlayer->GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->play();
-		pPlayer->SetRigidBody(true);
-		pPlayer->SetIsHitboxActive(true);
-		pPlayer->SetGravity(true);
-		pPlayer->AddRemoveHP(pPlayer->mMaxHP);
-		pPlayer->mShape.setSize({ 50, 50 });
-
 		PlayerParameter* pParam = &pPlayer->mParameters;
 
 		pParam->mRespawnX = pPlayer->mParameters.mDefaultRespawnX; 
 		pParam->mRespawnY = pPlayer->mParameters.mDefaultRespawnY;
 		pPlayer->SetPosition(pParam->mRespawnX, pParam->mRespawnY);
+
+		for (Weapon* w : pPlayer->GetAllWeapons())
+		{
+			w->SetCurrentAmmos(w->GetMaxAmmos());
+		}
+
 		pPlayer->TransitionTo(Player::Falling);
+
+		pPlayer->SetRigidBody(true);
+		pPlayer->SetIsHitboxActive(true);
+		pPlayer->SetGravity(true);
+		pPlayer->mIsDead = false;
+		pPlayer->mShape.setSize({ 50, 50 });
+		pPlayer->mCurrentHP = pPlayer->mMaxHP;
 	}
 
 	if (mProgress >= mTimer && mIsPlayed == false)

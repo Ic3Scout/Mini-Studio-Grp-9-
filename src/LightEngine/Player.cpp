@@ -158,9 +158,6 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
-	/*GetShape()->setTexture(texture);*/
-
 	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White);
 	gun->SetOwner(this);
 
@@ -243,9 +240,11 @@ void Player::Respawn(int x, int y)
 {
 	if (GetPosition().y > 900)
 	{
-		SetPosition(x, y);
-		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 		TransitionTo(Player::TakingDamage);
+		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
+
+		if(GetRatioHP() > 0)
+			SetPosition(x, y);
 	}
 }
 
@@ -367,8 +366,6 @@ void Player::FixedUpdate(float dt)
 {
 	Entity::FixedUpdate(dt);
 	PhysicalEntity::FixedUpdate(dt);
-
-	GetScene<TestScene>()->UpdateCamera();
 }
 
 void Player::SwapManager()
