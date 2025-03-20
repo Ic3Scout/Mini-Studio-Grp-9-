@@ -238,7 +238,7 @@ void TestScene::OnInitialize()
 			}
 			if (map[y][x] == 'v') {
 				Station* station = CreateEntity<Station>({ BLOCK_SIZE.x, BLOCK_SIZE.y }, sf::Color(158, 144, 193));
-				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
+				station->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y - 50.f );
 				stations.push_back(station);
 			}
 			if (map[y][x] == 'U') {
@@ -335,6 +335,13 @@ void TestScene::OnUpdate()
 {
 	float dt = GetDeltaTime();
 
+	if (mCam.GetFocus() == true)
+	{
+		mCam.FollowPlayer();
+	}
+
+	UpdateCamera();
+	
 	if (pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
@@ -346,6 +353,20 @@ void TestScene::OnUpdate()
 
 void TestScene::UpdateCamera()
 {
+	sf::Vector2f camSize = mCam.GetSize();
+	sf::Vector2f pPos = GetPlayer()->GetPosition();
+	sf::Vector2f posLimite = sf::Vector2f(2000, 825);
+
+	float minX = camSize.x / 2;
+	float maxX = posLimite.x - camSize.x / 2;
+	float minY = camSize.y / 2;
+	float maxY = posLimite.y - camSize.y / 2;
+
+	float newCamX = std::clamp(pPos.x, minX, maxX);
+	float newCamY = std::clamp(pPos.y, minY, maxY);
+
+	mCam.SetPosition({ newCamX, newCamY });
+
 	GameManager::Get()->SetCamera(mCam);
 }
 
@@ -354,10 +375,8 @@ bool TestScene::IsAllowedToCollide(int tag1, int tag2)
 	return mInteractions[tag1][tag2];
 }
 
-void TestScene::InitAssets()
+void TestScene::InitSounds()
 {
-	assetManager->LoadTexture("Player", "../../../res/Assets/248259.png");
-	assetManager->LoadTexture("Terrain", "../../../res/Assets/SpriteSheet_Terrain.png");
 	assetManager->LoadMusic("MainMusic", "../../../res/Assets/music/mainmusic.wav")->setLoop(true);
 	assetManager->GetMusic("MainMusic")->setVolume(100 * mVolume);
 	assetManager->LoadSound("Waterdrop", "../../../res/Assets/sfx/waterdrop.wav")->setVolume(100 * mVolume);
@@ -466,6 +485,23 @@ void TestScene::StopSound()
 	//A bouger au merge
 	assetManager->GetSound("Dead")->setVolume(0);
 	assetManager->GetSound("Button")->setVolume(0);
+}
+
+void TestScene::InitTextures()
+{
+	assetManager->LoadTexture("Terrain", "../../../res/Assets/Textures/SpriteSheet_Terrain.png");
+	assetManager->LoadTexture("Nenuphloat", "../../../res/Assets/Textures/SpriteSheet_Nenuphloat.png");
+	assetManager->LoadTexture("Vine", "../../../res/Assets/Textures/SpriteSheet_Liane.png");
+	assetManager->LoadTexture("Station", "../../../res/Assets/Textures/SpriteSheet_Station.png");
+	assetManager->LoadTexture("Bulb", "../../../res/Assets/Textures/SpriteSheet_BulbeLumina.png");
+	assetManager->LoadTexture("Bramble", "../../../res/Assets/Textures/SpriteSheet_Bramble.png");
+	assetManager->LoadTexture("Ivy", "../../../res/Assets/Textures/SpriteSheet_Ivy.png");
+}
+
+void TestScene::InitAssets()
+{
+	InitSounds();
+	InitTextures();
 }
 
 void TestScene::InitTransitions()

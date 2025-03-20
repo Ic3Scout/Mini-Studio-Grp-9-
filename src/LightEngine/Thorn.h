@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
+
 #define THORN_HP 1
 
 class Thorn : public Enemy
@@ -15,7 +16,11 @@ public:
 
     void OnInitialize() override;
     void OnCollision(Entity* collidedWith) override;
+
+    void FixedUpdate(float dt) override;
     void OnUpdate() override;
+
+    void LoadAnimation() override;
 
     bool IsPlayerInProximity();
 };

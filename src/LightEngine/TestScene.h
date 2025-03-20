@@ -56,6 +56,8 @@ public:
 	AssetManager* GetAssetManager() { return assetManager; }
 	bool IsAllowedToCollide(int tag1, int tag2);
 
+	void InitSounds();
+	void InitTextures();
 	void InitAssets();
 	void SoundManager();
 	void UpdateVolume();

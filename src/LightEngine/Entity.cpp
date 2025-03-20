@@ -220,7 +220,7 @@ void Entity::UpdateHitBox()
 		Debug::DrawRectangle(mHitbox.xMin, mHitbox.yMin, width, height, sf::Color::Blue);
 }
 
-void Entity::SetHitbox(float width, float height)
+void Entity::SetHitbox(float width, float height, float ratioX, float ratioY)
 {
 	if (width < 0 || height < 0)
 	{
@@ -230,10 +230,10 @@ void Entity::SetHitbox(float width, float height)
 
 	mHitbox.size = { width, height };
 
-	mHitbox.xMin = -width * 0.5f;
-	mHitbox.yMin = -height * 0.5f;
-	mHitbox.xMax = width * 0.5f;
-	mHitbox.yMax = height * 0.5f;
+	mHitbox.xMin = -width * ratioX;
+	mHitbox.yMin = -height * ratioX;
+	mHitbox.xMax = width * ratioY;
+	mHitbox.yMax = height * ratioY;
 }
 
 void Entity::SetHitboxOffset(float offsetX, float offsetY)
@@ -242,10 +242,10 @@ void Entity::SetHitboxOffset(float offsetX, float offsetY)
 	mHitbox.offsetY = offsetY;
 }
 
-void Entity::SetTexture(const char* path)
+void Entity::SetTexture(const char* name)
 {
 	AssetManager* assetManager = AssetManager::Get();
-	mTexture = assetManager->GetTexture(path);
+	mTexture = assetManager->GetTexture(name);
 }
 
 void Entity::UpdateFrame(float dt)
@@ -313,6 +313,17 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	return position;
 }
 
+sf::Vector2f Entity::GetHitboxPosition(float ratioX, float ratioY) const
+{
+	sf::Vector2f size = mHitbox.size;
+	sf::Vector2f position = {mHitbox.xMin, mHitbox.xMin};
+
+	position.x += size.x * ratioX;
+	position.y += size.y * ratioY;
+
+	return position;
+}
+
 bool Entity::GoToDirection(int x, int y, float speed)
 {
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
@@ -358,6 +369,18 @@ sf::Vector2f Entity::GetSize() const
 void Entity::LoadAnimation()
 {
 	//Faire un LoadJsonData et un LoadAnimation en fonction de la struct
+}
+
+void Entity::ChangeAnimation(const char* name, const char* type)
+{
+	if (type == "single")
+	{
+		mAnimations->LoadAnimationSingle(name);
+	}
+	else if (type == "byRow")
+	{
+		mAnimations->LoadAnimationByRow(name);
+	}
 }
 
 void Entity::FixedUpdate(float dt)

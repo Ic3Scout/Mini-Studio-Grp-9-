@@ -1,14 +1,21 @@
 #include "Nenuphloat.h"
 #include "TestScene.h"
 #include "Player.h"
+#include "Animation.h"
 
 void Nenuphloat::OnInitialize()
 {
+	mDefaultSize = GetSize();
+	mGrownSize = { mDefaultSize.x * 5, mDefaultSize.y};
+
 	mKineticBody = false;
 	Ally::OnInitialize();
 	SetTagAlly(TNenuphloatR);
 	SetRigidBody(false);
-	SetHitbox(GetSize().x, GetSize().y);
+	SetHitbox(mDefaultSize.x, mDefaultSize.y);
+
+	mAnimations = new Animation();
+	LoadAnimation();
 }
 
 void Nenuphloat::OnUpdate()
@@ -26,7 +33,10 @@ void Nenuphloat::OnUpdate()
 
 void Nenuphloat::FixedUpdate(float dt)
 {
+	if (grown == true)
+		return;
 
+	CheckClosed();
 }
 
 void Nenuphloat::OnCollision(Entity* collidedWith)
@@ -37,14 +47,43 @@ void Nenuphloat::OnCollision(Entity* collidedWith)
 	}
 }
 
+void Nenuphloat::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Nenuphloat.json");
+	SetTexture("Nenuphloat");
+	mAnimations->LoadAnimationSingle("IdleBud");
+}
+
+bool Nenuphloat::CheckClosed()
+{
+	if (mAnimations->GetCurrentAnimation() == "Closing")
+	{
+		if (mAnimations->IsFinished())
+		{
+			mShape.setSize(mDefaultSize);
+			SetHitbox(mDefaultSize.x, mDefaultSize.y);
+			SetPosition(mPosition.x, mPosition.y);
+			ChangeAnimation("IdleBud", "single");
+			return true;
+		}
+		return false;
+	}
+	return false;
+}
+
 void Nenuphloat::Grow()
 {
+	mPosition = GetPosition();
+
 	SetRigidBody(true);
 	SetTagAlly(TNenuphloatG);
 	if (!grown)
 	{
 		grown = true;
-		SetHitbox(GetSize().x * 5, GetSize().y);
+		mShape.setSize(mGrownSize);
+		SetHitbox(mGrownSize.x, mGrownSize.y);
+		SetPosition(mPosition.x, mPosition.y);
+		ChangeAnimation("Opening", "single");
 	}
 }
 
@@ -54,8 +93,8 @@ void Nenuphloat::Retract()
 	SetTagAlly(TNenuphloatR);
 	if (!grown)
 		return;
-	grown = false;
-	SetHitbox(GetSize().x, GetSize().y);
 
+	grown = false;
 	mProgress = 0.f;
+	ChangeAnimation("Closing", "single");
 }

@@ -9,8 +9,7 @@ void Platform::OnInitialize()
 	mKineticBody = false;
 	SetTag((int)TestScene::TPlatform);
 
-	sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Terrain");
-	GetShape()->setTexture(texture);
+	SetTexture("Terrain");
 	ChangeColor(sf::Color::White);
 
 	LoadAnimation();
@@ -29,6 +28,5 @@ void Platform::OnCollision(Entity* other)
 
 void Platform::LoadAnimation()
 {
-	SetTexture("Terrain");
-	mAnimations->LoadJsonData("../../../res/Assets/Terrain.json");
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Terrain.json");
 }

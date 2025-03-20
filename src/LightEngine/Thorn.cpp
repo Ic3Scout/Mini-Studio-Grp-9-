@@ -1,5 +1,6 @@
 #include "Thorn.h"
 #include "TestScene.h"
+#include "Animation.h"
 
 Thorn::Thorn() : Enemy(THORN_HP) {}
 
@@ -13,6 +14,9 @@ void Thorn::OnInitialize()
     mProximityRadius = GetSize().x * 1.5f + GetSize().x / 2 + player->GetSize().x / 2;
 	mDelay = 2.f;
 	mDelay1 = 2.f;
+
+    mAnimations = new Animation();
+    LoadAnimation();
 }
 
 void Thorn::OnCollision(Entity* collidedWith)
@@ -36,6 +40,10 @@ void Thorn::OnCollision(Entity* collidedWith)
             mProgress = mDelay;
         }
     }
+}
+
+void Thorn::FixedUpdate(float dt)
+{
 }
 
 void Thorn::OnUpdate()
@@ -77,6 +85,13 @@ void Thorn::OnUpdate()
     {
         Destroy();
     }
+}
+
+void Thorn::LoadAnimation()
+{
+    //mAnimations->LoadJsonData("../../../res/Assets/Json/Ronce.json");
+    //SetTexture("Thorn");
+    //mAnimations->LoadAnimationSingle("Idle");
 }
 
 bool Thorn::IsPlayerInProximity()

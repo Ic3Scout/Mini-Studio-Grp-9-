@@ -18,7 +18,9 @@ class Animation
 	float mDuration = 0.5f;
 	float mElapsedTime = 0.f;
 	bool mLoop;
+	bool mFinished = false;
 	bool mStatic = false;
+	const char* mCurrentAnimation;
 
 public:
 	void LoadJsonData(const char* path);
@@ -29,10 +31,11 @@ public:
 
 	void SetLoop(bool value) { mLoop = value; }
 
-	sf::IntRect* GetCurrentFrame();
+	const char* GetCurrentAnimation();
+	int GetMaxFrame();
+	int GetCurrentFrameIndex();
+	bool IsFinished();
 
-private:
-	int FindIndexA(const char* name);
-	int FindIndexE(const char* eltName);
+	sf::IntRect* GetCurrentFrame();
 };
 
