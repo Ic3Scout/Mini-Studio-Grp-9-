@@ -236,6 +236,11 @@ void Player::Respawn(int x, int y)
 		SetPosition(x, y);
 		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 		TransitionTo(Player::TakingDamage);
+
+		if (mRespawnStation == nullptr)
+			return;
+
+		mRespawnStation->ChangeAnimation("Used", "single");
 	}
 }
 
@@ -250,6 +255,7 @@ void Player::OnCollision(Entity* other)
 		{
 			mParameters.respawnX = other->GetPosition().x;
 			mParameters.respawnY = other->GetPosition().y - other->GetSize().y / 2;
+			mRespawnStation = dynamic_cast<Station*>(ally);
 
 			sf::Sound* cpSfx = GetScene<TestScene>()->GetAssetManager()->GetSound("Checkpoint");
 

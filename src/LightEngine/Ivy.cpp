@@ -11,7 +11,6 @@ void Ivy::OnInitialize()
 	SetTagEnemy(TagEnemy::TIvy); 
 	mIsDead = false;
 
-	mAnimations = new Animation();
 	LoadAnimation();
 }
 
@@ -47,7 +46,6 @@ void Ivy::OnUpdate()
 		{
 			mCounter = 0.f;
 			mPlayerInContact = false;
-			ChangeAnimation("Emerge", "single");
 		}
 	}
 

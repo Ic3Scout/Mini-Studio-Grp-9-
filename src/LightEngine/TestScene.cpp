@@ -341,12 +341,6 @@ void TestScene::OnUpdate()
 	}
 
 	UpdateCamera();
-	
-	if (pEntitySelected != nullptr)
-	{
-		sf::Vector2f position = pEntitySelected->GetPosition();
-		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
-	}
 
 	SoundManager();
 }
@@ -496,6 +490,10 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("Bulb", "../../../res/Assets/Textures/SpriteSheet_BulbeLumina.png");
 	assetManager->LoadTexture("Bramble", "../../../res/Assets/Textures/SpriteSheet_Bramble.png");
 	assetManager->LoadTexture("Ivy", "../../../res/Assets/Textures/SpriteSheet_Ivy.png");
+	assetManager->LoadTexture("Thorn", "../../../res/Assets/Textures/SpriteSheet_Thorn.png");
+	assetManager->LoadTexture("Fongus", "../../../res/Assets/Textures/SpriteSheet_Fongus.png");
+	assetManager->LoadTexture("FongusCloud", "../../../res/Assets/Textures/SpriteSheet_FongusCloud.png");
+	assetManager->LoadTexture("BrambleExplosion", "../../../res/Assets/Textures/SpriteSheet_BrambleExplosion.png");
 }
 
 void TestScene::InitAssets()

@@ -14,7 +14,6 @@ void Nenuphloat::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(mDefaultSize.x, mDefaultSize.y);
 
-	mAnimations = new Animation();
 	LoadAnimation();
 	Grow();
 }

@@ -9,7 +9,6 @@ void Bulb::OnInitialize()
 	SetRigidBody(false);
 	SetHitbox(GetSize().x, GetSize().y);
 
-	mAnimations = new Animation();
 	LoadAnimation();
 }
 

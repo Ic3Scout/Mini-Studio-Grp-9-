@@ -15,7 +15,6 @@ void Thorn::OnInitialize()
 	mDelay = 2.f;
 	mDelay1 = 2.f;
 
-    mAnimations = new Animation();
     LoadAnimation();
 }
 
@@ -62,6 +61,7 @@ void Thorn::OnUpdate()
     {
         if (!mActionTriggered)
         {
+            ChangeAnimation("Attack_left", "single");
             SetHitbox(GetSize().x * 3, GetSize().y);
 
             mActionTimer = 1.0f;
@@ -74,6 +74,7 @@ void Thorn::OnUpdate()
         mActionTimer -= GetDeltaTime();
         if (mActionTimer <= 0.0f)
         {
+            ChangeAnimation("Idle_left", "single");
             SetHitbox(GetSize().x, GetSize().y);
 
             mActionTriggered = false;
@@ -89,9 +90,9 @@ void Thorn::OnUpdate()
 
 void Thorn::LoadAnimation()
 {
-    //mAnimations->LoadJsonData("../../../res/Assets/Json/Ronce.json");
-    //SetTexture("Thorn");
-    //mAnimations->LoadAnimationSingle("Idle");
+    mAnimations->LoadJsonData("../../../res/Assets/Json/Thorn.json");
+    SetTexture("Thorn");
+    mAnimations->LoadAnimationSingle("Idle_left");
 }
 
 bool Thorn::IsPlayerInProximity()

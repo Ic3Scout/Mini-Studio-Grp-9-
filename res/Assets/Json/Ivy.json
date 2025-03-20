@@ -1,21 +1,16 @@
 {
-    "frame_size": {
-        "width": 17,
-        "height": 14,
-        "space": 0
-    },
+  "frame_size": {
+    "width": 81,
+    "height": 19,
+    "space": 1
+  },
     "structure": "single",
-    "animations": {
-        "Idle": {
-            "frames": 5,
-            "loop": true,
-            "index": 0
-        },
-        "Emerge": {
-            "frames": 5,
-            "loop": false,
-            "index": 1
-        }
+  "animations": {
+    "Idle": {
+      "frames": 5,
+      "loop": true,
+      "index": 0
     }
+  }
   }
   

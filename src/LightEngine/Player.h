@@ -68,6 +68,8 @@ private:
 
 	int mTransitions[STATE_COUNT][STATE_COUNT];
 	PlayerAction* mAction[STATE_COUNT];
+	
+	Station* mRespawnStation = nullptr;
 
 	void SetTransition(State from, State to, bool value) { mTransitions[(int)from][(int)to] = value; }
 public:

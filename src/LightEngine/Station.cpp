@@ -9,7 +9,6 @@ void Station::OnInitialize()
 	mShape.setSize({ 75.f, 150.f});
 	SetHitbox(GetSize().x, GetSize().y);
 
-	mAnimations = new Animation();
 	LoadAnimation();
 }
 
@@ -23,4 +22,9 @@ void Station::LoadAnimation()
 void Station::OnUpdate()
 {
 	Ally::OnUpdate();
+
+	if (mAnimations->IsFinished())
+	{
+		ChangeAnimation("Idle", "single");
+	}
 }
