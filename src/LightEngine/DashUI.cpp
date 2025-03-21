@@ -36,16 +36,15 @@ void DashUI::OnUpdate()
 
 	if (pOwner->GetProgressDashReload() <= 0)
 	{
-		if (mAnimations->GetCurrentAnimation() != "Recharge")
+		if (mAnimations->GetCurrentAnimation() != "Full")
 			ChangeAnimation("Full", "byRow");
-
-		SetPosition(centerCam.x - 400, centerCam.y - 300);
 	}
 	else
 	{
-		ChangeAnimation("Recharge", "byRow");
-		SetPosition(centerCam.x - 400, centerCam.y - 300);
+		if (mAnimations->GetCurrentAnimation() != "Recharge" || mAnimations->IsFinished())
+			ChangeAnimation("Recharge", "byRow");
 	}
+	SetPosition(centerCam.x - 400, centerCam.y - 300);
 }
 
 void DashUI::LoadAnimation()
