@@ -172,7 +172,7 @@ void GameManager::Draw()
 {
 	mpWindow->clear(mClearColor);
 
-	for (int i = 1; i <= 6; i++)
+	for (int i = 1; i <= 7; i++)
 	{
 		for (Entity* entity : mEntities)
 		{

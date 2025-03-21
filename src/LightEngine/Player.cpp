@@ -20,7 +20,7 @@ Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
-	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 2);
+	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 7);
 
 	mUI.push_back(pPlayerHB);
 	mUI.push_back(pPlayerAB);
