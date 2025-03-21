@@ -97,6 +97,7 @@ public:
 
 	Weapon* GetCurrentEquipedWeapon();
 	std::vector<Weapon*> GetAllWeapons() { return mWeapons; }
+	std::vector<PlayerUI*>& GetAllPlayerUI() { return mUI; }
 
 	int GetSide() { return mSide; }
 	void SetSide(int value) { mSide = value; }

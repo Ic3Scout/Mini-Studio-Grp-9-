@@ -18,17 +18,18 @@ void DashUI::FixedUpdate(float dt)
 
 }
 
-void DashUI::LoadAnimation()
+void DashUI::OnUpdate()
 {
-	mAnimations->LoadJsonData("../../../res/Assets/Json/Dash.json");
-	SetTexture("Dash");
-	mAnimations->LoadAnimationByRow("Full");
-}
-
-void DashUI::UpdateUI()
-{
-	if (!pOwner || mDisplay == false)
+	if (!pOwner)
 		return;
+
+	if (mDisplay == false)
+	{
+
+		ChangeColor(sf::Color::Transparent);
+	}
+	else
+		ChangeColor(sf::Color::White);
 
 	Camera cam = pOwner->GetScene<TestScene>()->GetCam();
 	sf::Vector2f centerCam = cam.GetView()->getCenter();
@@ -45,4 +46,16 @@ void DashUI::UpdateUI()
 		ChangeAnimation("Recharge", "byRow");
 		SetPosition(centerCam.x - 400, centerCam.y - 300);
 	}
+}
+
+void DashUI::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Dash.json");
+	SetTexture("Dash");
+	mAnimations->LoadAnimationByRow("Full");
+}
+
+void DashUI::UpdateUI()
+{
+
 }
