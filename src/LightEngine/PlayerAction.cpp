@@ -158,7 +158,7 @@ void PlayerAction_Dying::Start(Player* pPlayer)
 	pPlayer->SetIsHitboxActive(false);
 	pPlayer->SetGravity(false);
 	pPlayer->SetSpeed(0);
-	pPlayer->mShape.setSize({ 0, 0 });
+	pPlayer->ChangeColor(sf::Color::Transparent);
 }
 
 void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
@@ -184,7 +184,7 @@ void PlayerAction_Dying::Update(Player* pPlayer, float deltatime)
 		pPlayer->SetIsHitboxActive(true);
 		pPlayer->SetGravity(true);
 		pPlayer->mIsDead = false;
-		pPlayer->mShape.setSize({ 50, 50 });
+		pPlayer->ChangeColor(sf::Color::White);
 		pPlayer->mCurrentHP = pPlayer->mMaxHP;
 	}
 
