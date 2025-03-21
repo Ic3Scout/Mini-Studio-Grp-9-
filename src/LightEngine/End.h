@@ -18,6 +18,8 @@ class End : public Entity
 
 	float mProgressToDestroyPlayer = 0.f;
 
+	bool isHydroDestroyed = false;
+
 	bool mEndTheGame = false;
 	float mEndTimer;
 public:
