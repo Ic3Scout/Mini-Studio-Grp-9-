@@ -53,7 +53,7 @@ void TestScene::OnInitialize()
 	mCam.SetOwner(pEntity1);
 	mCam.SetFocus(true);
 
-	std::string filepath = "../../../res/mapDebug.txt";
+	std::string filepath = "../../../res/map.txt";
 	std::ifstream inputFile(filepath);
 
 	if (!std::filesystem::exists(filepath)) {
