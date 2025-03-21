@@ -19,6 +19,7 @@ void Water::OnCollision(Entity* collidedWith)
 
 	if (mAnimations->GetCurrentAnimation() != "Pop")
 	{
+		mHitbox.isActive = false;
 		ChangeAnimation("Pop", "byRow");
 		SetSpeed(0);
 		GetScene<TestScene>()->GetAssetManager()->GetSound("Waterdrop")->play();
