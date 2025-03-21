@@ -12,18 +12,19 @@
 #include "Obstacle.h"
 #include "PlayerAction.h"
 #include "Animation.h"
+#include "DashUI.h"
 
 #include <iostream>
-
-#include "PlayerAction.h"
 
 Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
+	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 2);
 
 	mUI.push_back(pPlayerHB);
 	mUI.push_back(pPlayerAB);
+	mUI.push_back(pDashUI);
 
 	for (PlayerUI* ui : mUI)
 	{
@@ -180,13 +181,10 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
-	/*GetShape()->setTexture(texture);*/
-
-	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White, 2);
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::Transparent, 2);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow, 2);
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Transparent, 2);
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);

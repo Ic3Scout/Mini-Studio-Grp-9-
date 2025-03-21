@@ -100,6 +100,7 @@ public:
 	int GetSide() { return mSide; }
 	void SetSide(int value) { mSide = value; }
 	int GetState() { return mState; }
+	float GetProgressDashReload() { return mProgressDashReload; }
 	PlayerParameter* GetParameters() { return &mParameters; }
 
 	friend class PlayerAction;

@@ -443,7 +443,7 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("ThornWall", "../../../res/Assets/Textures/SpriteSheet_ThornWall.png");
 	assetManager->LoadTexture("Bridge", "../../../res/Assets/Textures/SpriteSheet_Bridge.png");
 	assetManager->LoadTexture("Root", "../../../res/Assets/Textures/SpriteSheet_Root.png");
-
+	assetManager->LoadTexture("Dash", "../../../res/Assets/Textures/SpriteSheet_Dash.png");
 }
 
 void TestScene::InitAssets()
