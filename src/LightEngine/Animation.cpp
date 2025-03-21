@@ -66,7 +66,7 @@ void Animation::LoadAnimationByRow(const char* eltName)
 	mMaxFrame = mTextureRects.size() - 1;
 	mCurrentFrame = 0;
 	mElapsedTime = 0.f;
-	mLoop = false;
+	mLoop = data["elements"][eltName]["loop"];
 }
 
 void Animation::LoadAnimationGrid(const char* name)

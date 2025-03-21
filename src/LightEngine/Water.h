@@ -12,5 +12,6 @@ public:
 	void OnCollision(Entity* collidedWith) override;
 	void OnInitialize() override;
 	void OnDestroy() override;
+	void LoadAnimation() override;
 };
 

@@ -34,12 +34,12 @@ void PlayerAmmoBar::UpdateUI()
 
 			for (int i = 0; i < currentAmmos; ++i)  
 			{
-				Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 200, 15, sf::Color(0, 150, 255)); 
+				Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 275, 15, sf::Color(0, 150, 255)); 
 			} 
 
 			for (int i = currentAmmos; i < w->GetMaxAmmos(); ++i)
 			{
-				Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 200, 15, sf::Color(0, 0, 75));
+				Debug::DrawCircle(centerCam.x - 610 + i * 45, centerCam.y - 275, 15, sf::Color(0, 0, 75));
 			}
 
 			continue;

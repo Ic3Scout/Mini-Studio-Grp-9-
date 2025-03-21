@@ -12,18 +12,19 @@
 #include "Obstacle.h"
 #include "PlayerAction.h"
 #include "Animation.h"
+#include "DashUI.h"
 
 #include <iostream>
-
-#include "PlayerAction.h"
 
 Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
+	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 2);
 
 	mUI.push_back(pPlayerHB);
 	mUI.push_back(pPlayerAB);
+	mUI.push_back(pDashUI);
 
 	for (PlayerUI* ui : mUI)
 	{
@@ -67,7 +68,29 @@ void Player::BasicControls()
 		mDirection.x = mSide;
 	}
 
-
+	const char* currentAnim = mAnimations->GetCurrentAnimation();
+	if (mIsMoving)
+	{
+		if (mSide == 1 && currentAnim != "WalkRight")
+		{
+			ChangeAnimation("WalkRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "WalkLeft")
+		{
+			ChangeAnimation("WalkLeft", "single");
+		}
+	}
+	else
+	{
+		if (mSide == 1 && currentAnim != "IdleRight")
+		{
+			ChangeAnimation("IdleRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "IdleLeft")
+		{
+			ChangeAnimation("IdleLeft", "single");
+		}
+	}
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -167,17 +190,16 @@ void Player::OnInitialize()
 
 	SetTag((int)TestScene::TPlayer);
 
-	/*sf::Texture* texture = GetScene<TestScene>()->GetAssetManager()->GetTexture("Player");*/
-	/*GetShape()->setTexture(texture);*/
-
-	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::White, 2);
+	Weapon* gun = CreateEntity<Gun>({ 20, 20 }, sf::Color::Transparent, 2);
 	gun->SetOwner(this);
 
-	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Yellow, 2);
+	Weapon* weedKiller = CreateEntity<WeedKiller>({ 20, 20 }, sf::Color::Transparent, 2);
 	weedKiller->SetOwner(this);
 
 	mWeapons.push_back(gun);
 	mWeapons.push_back(weedKiller);
+
+	LoadAnimation();
 }
 
 void Player::OnUpdate()
@@ -216,7 +238,7 @@ void Player::OnUpdate()
 
 	if (mProgressDashReload <= 0)
 	{
-		Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);
+		/*Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);*/
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::isButtonPressed(0, 5))
 		{
@@ -386,6 +408,13 @@ void Player::FixedUpdate(float dt)
 {
 	Entity::FixedUpdate(dt);
 	PhysicalEntity::FixedUpdate(dt);
+}
+
+void Player::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Hydro.json");
+	SetTexture("Hydro");
+	mAnimations->LoadAnimationSingle("IdleRight");
 }
 
 void Player::SwapManager()

@@ -1,6 +1,7 @@
 #include "Bridge.h"
 #include "TestScene.h"
 #include <iostream>
+#include "Animation.h"
 
 void Bridge::OnInitialize()
 {
@@ -10,6 +11,8 @@ void Bridge::OnInitialize()
 	SetHitbox(GetSize().x, GetSize().y);
 	mInitialSizeX = GetSize().x;
 	mSizeX = GetSize().x;
+
+	LoadAnimation();
 }
 
 void Bridge::OnCollision(Entity* collidedWith)
@@ -30,6 +33,11 @@ void Bridge::OnUpdate()
 		if (mProgress >= mDuration)
 		{
 			Grow();
+
+			if (mAnimations->GetCurrentAnimation() != "Opening")
+			{
+				ChangeAnimation("Opening", "single");
+			}
 			mProgress = 0.0f;
 		}
 	}
@@ -40,13 +48,20 @@ void Bridge::OnUpdate()
 	}
 }
 
+void Bridge::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Bridge.json");
+	SetTexture("Bridge");
+	mAnimations->LoadAnimationSingle("Closing");
+}
+
 void Bridge::Grow()
 {
 	mSizeX += mInitialSizeX;
 	mShape.setSize({ mSizeX, GetSize().y });
 	SetPosition(GetPosition().x - mInitialSizeX, GetPosition().y);
 
-	SetHitbox(GetSize().x, GetSize().y);
+	SetHitbox(GetSize().x, GetSize().y / 3.f);
 	mGrowProgress++;
 	GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();
 }

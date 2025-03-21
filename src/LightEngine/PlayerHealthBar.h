@@ -5,6 +5,5 @@ class PlayerHealthBar : public PlayerUI
 {
 public:
 	void UpdateUI() override;
-
 };
 

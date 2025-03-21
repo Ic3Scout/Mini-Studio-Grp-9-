@@ -38,14 +38,11 @@ void Gun::FixedUpdate(float dt)
 
 	if (mIsEquiped == false || pOwner->GetState() == Player::Dying)
 	{
-		ChangeColor(sf::Color(255, 255, 255, 0));
 		return;
 	}
 
 	sf::Vector2f playerPos = pOwner->GetPosition();
 	sf::Vector2f pos = this->GetPosition();
-
-	ChangeColor(sf::Color(255, 255, 255, 255));
 
 	sf::Vector2f finalDirection = { std::cos(mAngle) * pOwner->GetSide(), std::sin(mAngle) };
 

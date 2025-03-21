@@ -35,6 +35,20 @@ void Thorn::FixedUpdate(float dt)
 
 void Thorn::OnUpdate()
 {
+    if (mIsDead)
+    {
+        if (mAnimations->GetCurrentAnimation() != "Death")
+        {
+            GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
+            ChangeAnimation("Death", "single");
+        }
+
+        if (mAnimations->IsFinished())
+            Destroy();
+
+		return;
+    }
+
     Enemy::OnUpdate();
 
 	if (isActive1)
@@ -85,16 +99,21 @@ void Thorn::OnUpdate()
 		if (player->GetPosition().x < GetPosition().x)
 		{
 			mPlayerLeft = true;
-			mPlayerRight = false;
 		}
 		else if (player->GetPosition().x > GetPosition().x)
 		{
 			mPlayerLeft = false;
-			mPlayerRight = true;
 		}
         if (!mActionTriggered)
         {
-            ChangeAnimation("Attack_left", "single");
+            if (mPlayerLeft)
+            {
+                ChangeAnimation("Attack_left", "single");
+            }
+            else
+            {
+                ChangeAnimation("Attack_right", "single");
+            }
             SetHitbox(GetSize().x * 3, GetSize().y);
 
             mActionTimer = 1.0f;
@@ -107,18 +126,19 @@ void Thorn::OnUpdate()
         mActionTimer -= GetDeltaTime();
         if (mActionTimer <= 0.0f)
         {
-            ChangeAnimation("Idle_left", "single");
+            if (mPlayerLeft)
+            {
+                ChangeAnimation("Idle_left", "single");
+            }
+            else
+            {
+                ChangeAnimation("Idle_right", "single");
+            }
             SetHitbox(GetSize().x, GetSize().y);
 
             mActionTriggered = false;
             mCooldownTimer = 3.0f;
         }
-    }
-
-    if (mIsDead)
-    {
-        GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
-        Destroy();
     }
 }
 

@@ -90,6 +90,8 @@ public:
 	void OnDestroy() override;
 	void FixedUpdate(float dt) override;
 
+	void LoadAnimation() override;
+
 	void SwapManager();
 	void SwapWeapon();
 
@@ -99,6 +101,7 @@ public:
 	int GetSide() { return mSide; }
 	void SetSide(int value) { mSide = value; }
 	int GetState() { return mState; }
+	float GetProgressDashReload() { return mProgressDashReload; }
 	PlayerParameter* GetParameters() { return &mParameters; }
 
 	friend class PlayerAction;

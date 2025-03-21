@@ -49,8 +49,10 @@ void Weapon::ShootManager(sf::Keyboard::Key key, int valueJoystick1, int valueJo
 	{
 		if (mShootingDelay <= 0)
 		{
-			if(pOwner != nullptr)
+			if (pOwner != nullptr)
+			{
 				Shoot();
+			}	
 		}
 	}
 

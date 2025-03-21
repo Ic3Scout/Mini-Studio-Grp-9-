@@ -3,6 +3,7 @@
 #include "Acid.h"
 #include "TestScene.h"
 #include "AssetManager.h"
+#include "Animation.h"
 
 void WeedKiller::OnInitialize()
 {
@@ -52,14 +53,11 @@ void WeedKiller::FixedUpdate(float dt)
 	if (mIsEquiped == false || pOwner->GetState() == Player::Dying)
 	{
 		GetScene<TestScene>()->GetAssetManager()->GetSound("WeedKiller")->stop();
-		ChangeColor(sf::Color(255, 255, 0, 0));
 		return;
 		
 	}
 
 	ShootManager(sf::Keyboard::Key::Right, 0, 7);
-
-	ChangeColor(sf::Color(255, 255, 0, 255));
 
 	sf::Vector2f playerPos = pOwner->GetPosition();
 
@@ -80,7 +78,20 @@ void WeedKiller::Shoot()
 
 	if (pOwner != nullptr)
 	{
-		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Green, 2);
+		const char* currentAnim = pOwner->GetAnimations()->GetCurrentAnimation();
+		int side = pOwner->GetSide();
+
+		if (side == 1 && currentAnim != "AttackRight")
+		{
+			pOwner->ChangeAnimation("AttackRight", "single");
+		}
+		else if (side == -1 && currentAnim != "AttackLeft")
+		{
+			pOwner->ChangeAnimation("AttackLeft", "single");
+		}
+
+		Acid* a = CreateEntity<Acid>({10, 10}, sf::Color::Transparent, 2);
+
 		a->SetOwner(this);
 		a->SetPosition(GetPosition().x, GetPosition().y);
 		a->SetPlayerSide(pOwner->GetSide());

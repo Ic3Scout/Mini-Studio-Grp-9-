@@ -1,5 +1,6 @@
 #include "Wall.h"
 #include "TestScene.h"
+#include "Animation.h"
 
 void Wall::OnInitialize()
 {
@@ -8,6 +9,7 @@ void Wall::OnInitialize()
 	SetTagObstacle(TagObstacle::TWall);
 	SetHitbox(GetSize().x, GetSize().y);
 
+	LoadAnimation();
 }
 
 void Wall::OnCollision(Entity* collidedWith)
@@ -20,6 +22,19 @@ void Wall::OnCollision(Entity* collidedWith)
 
 void Wall::OnUpdate()
 {
+	if (mHP <= 0)
+	{
+		if (mAnimations->GetCurrentAnimation() != "Death")
+		{
+			ChangeAnimation("Death", "single");
+			GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
+		}
+		if (mAnimations->IsFinished())
+			Destroy();
+
+		return;
+	}
+
 	if(mIsActive)
 	{
 		mProgress += GetDeltaTime();
@@ -32,9 +47,11 @@ void Wall::OnUpdate()
 		mHP--;
 	}
 
-	if (mHP <= 0)
-	{
-		GetScene<TestScene>()->GetAssetManager()->GetSound("DeadMonster")->play();
-		Destroy();
-	}
+}
+
+void Wall::LoadAnimation()
+{
+	mAnimations->LoadJsonData("../../../res/Assets/Json/ThornWall.json");
+	SetTexture("ThornWall");
+	mAnimations->LoadAnimationSingle("Idle");
 }

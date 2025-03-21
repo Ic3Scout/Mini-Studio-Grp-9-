@@ -80,7 +80,7 @@ void Nenuphloat::Grow()
 	{
 		grown = true;
 		mShape.setSize(mGrownSize);
-		SetHitbox(mGrownSize.x, mGrownSize.y / 3.f);
+		SetHitbox(mGrownSize.x, mGrownSize.y / 4.f);
 		SetPosition(mPosition.x, mPosition.y);
 		ChangeAnimation("Opening", "single");
 		GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();

@@ -1,5 +1,5 @@
 {
-  "frame_size": { "width": 32, "height": 96, "space": 2},
+  "frame_size": { "width": 96, "height": 16, "space": 3 },
   "structure": "single",
   "animations": {
     "Opening": {

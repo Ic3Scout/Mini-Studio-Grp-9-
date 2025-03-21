@@ -40,7 +40,7 @@ void TestScene::OnInitialize()
 
 	mCam.Resize(width, height);
 
-	pEntity1 = CreateEntity<Player>({ 50.f, 50.f }, sf::Color::White, 2);
+	pEntity1 = CreateEntity<Player>({ 75.f, 75.f }, sf::Color::White, 2);
 	pEntity1->SetPosition(1000, 750);
 	pEntity1->SetRigidBody(true);
 	pEntity1->SetIsHitboxActive(true);
@@ -264,10 +264,6 @@ void TestScene::OnInitialize()
 				Root* root = CreateEntity<Root>({ BLOCK_SIZE.x * 5, MOB_SIZE.y}, sf::Color(120, 120, 10), 3);
 				root->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y + BLOCK_SIZE.y / 2);
 			}
-			else if (map[y][x] == 'G') {
-				Fog* fog = CreateEntity<Fog>({ MOB_SIZE.x * 7, MOB_SIZE.y * 5 }, sf::Color(0, 0, 0, 100), 5);
-				fog->SetPosition(startX + x * BLOCK_SIZE.x, startY + y * BLOCK_SIZE.y);
-			}
 
 			else if (map[y][x] == 'H') {
 				End* end = CreateEntity<End>({ BLOCK_SIZE.x * 2, BLOCK_SIZE.y * 8}, sf::Color::White, 1);
@@ -445,6 +441,7 @@ void TestScene::StopSound()
 void TestScene::InitTextures()
 {
 	assetManager->LoadTexture("Terrain", "../../../res/Assets/Textures/SpriteSheet_Terrain.png");
+	assetManager->LoadTexture("Hydro", "../../../res/Assets/Textures/SpriteSheet_Hydro.png");
 	assetManager->LoadTexture("Nenuphloat", "../../../res/Assets/Textures/SpriteSheet_Nenuphloat.png");
 	assetManager->LoadTexture("Vine", "../../../res/Assets/Textures/SpriteSheet_Liane.png");
 	assetManager->LoadTexture("Station", "../../../res/Assets/Textures/SpriteSheet_Station.png");
@@ -458,6 +455,11 @@ void TestScene::InitTextures()
 	assetManager->LoadTexture("Mist", "../../../res/Assets/Textures/SpriteSheet_Mist.png");
 	assetManager->LoadTexture("Logo", "../../../res/Assets/Textures/Logo.png");  
 	assetManager->LoadTexture("BG", "../../../res/Assets/Textures/bg.png");
+	assetManager->LoadTexture("Water", "../../../res/Assets/Textures/SpriteSheet_Water.png");
+	assetManager->LoadTexture("ThornWall", "../../../res/Assets/Textures/SpriteSheet_ThornWall.png");
+	assetManager->LoadTexture("Bridge", "../../../res/Assets/Textures/SpriteSheet_Bridge.png");
+	assetManager->LoadTexture("Root", "../../../res/Assets/Textures/SpriteSheet_Root.png");
+	assetManager->LoadTexture("Dash", "../../../res/Assets/Textures/SpriteSheet_Dash.png");
 }
 
 void TestScene::InitAssets()
