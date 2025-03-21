@@ -2,18 +2,35 @@
 #include "TestScene.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Animation.h"
 
 void End::OnInitialize()
 {
+	mScrollSpeed = 1.f;
 	SetTag(TestScene::TEnd);
 	SetIsHitboxActive(false);
 	isTriggered = false;
-	float mAnimationDuration = 3.f;
-	float mProgress = 0.f;
+	mAnimationDuration = 3.f;
+	mProgress = 0.f;
+	mDelayBeforeAnimation = 3.f;
+	mProgressDelay = 0.f;
+	mProgressToDestroyPlayer = 0.f;
+	pOwner = GetScene<TestScene>()->GetPlayer();
+	mEndTheGame = false;
+	mEndTimer = 6.f;
+
+	mAnimations->LoadJsonData("../../../res/Assets/Json/Station.json");
+	SetTexture("Station");
+	mAnimations->LoadAnimationSingle("Idle");
 }
 
 void End::OnUpdate()
 {
+	if (mAnimations->IsFinished())
+	{
+		ChangeAnimation("Idle", "single");
+	}
+
 	if (mHitbox.isActive == false)
 	{
 		SetIsHitboxActive(true);
@@ -23,36 +40,90 @@ void End::OnUpdate()
 	{
 		TestScene* pScene = GetScene<TestScene>();
 
-		Player* pCurrentPlayer = pScene->GetPlayer();
-
 		Camera& pCam = pScene->GetCam();
 
 		pCam.SetFocus(false);
 
-		if (pCurrentPlayer->GetPosition().x > pCam.GetView()->getCenter().x + 720)
-		{
-			std::cout << "Le player est plus la : FIN\n";
-			pCurrentPlayer->Destroy();
-
-			isAnimationTriggered = true;
-		}
 
 		if (isAnimationTriggered == true)
 		{
-
-			if (pCam.GetView()->getCenter().y < -500)
+			if (pCam.GetView()->getCenter().y < -1000)
 			{
-				std::cout << "La cam est a -500 de hauteur\n";
 				isAnimationTriggered = false;
+				GetScene<TestScene>()->GetAssetManager()->GetSound("Suspense")->stop();
+				GetScene<TestScene>()->GetAssetManager()->GetSound("Revelation")->play();
+				mEndTheGame = true;
 			}
 			else
-				pCam.Move(0, -100 * GetDeltaTime());
+			{
+				mScrollSpeed += mScrollSpeed * 1.1 * GetDeltaTime();
 
+				pCam.Move(0, -10 * mScrollSpeed * GetDeltaTime());
+			}
 		}
-		
-		pCurrentPlayer->SetSide(1);
-		pCurrentPlayer->SetSpeed(250);
 
+
+		if (pOwner != nullptr)
+		{
+			if(mProgressDelay <= mDelayBeforeAnimation)
+				mProgressDelay += GetDeltaTime();
+
+			sf::Vector2f playerPos = pOwner->GetPosition();
+			sf::Vector2f pos = GetPosition();
+
+			bool isPlayerArrived = playerPos.x >= pos.x - 1 && playerPos.x <= pos.x + 1;
+
+			if (isPlayerArrived || mProgressDelay >= mDelayBeforeAnimation)//|| mProgressDelay >= mDelayBeforeAnimation)
+			{
+				pOwner->SetDirection(0, GetDirection().y);
+				pOwner->SetSpeed(0);
+
+				if (mProgressToDestroyPlayer >= 0.69f)
+				{
+					pOwner->Destroy();
+					pOwner = nullptr;
+
+					isAnimationTriggered = true;
+					GetScene<TestScene>()->GetAssetManager()->GetSound("Suspense")->play();
+					GetScene<TestScene>()->GetAssetManager()->GetMusic("MainMusic")->stop();
+				}
+				else
+					mProgressToDestroyPlayer += GetDeltaTime();
+			
+			}
+
+			if (pOwner != nullptr && isPlayerArrived == false)
+			{
+				sf::Vector2f playerPos = pOwner->GetPosition();
+				sf::Vector2f pos = GetPosition();
+
+				int direction = 0;
+
+				if (playerPos.x < pos.x)
+					direction = 1;
+				else
+					direction = -1;
+				
+				pOwner->TransitionTo(Player::AFK);
+				pOwner->SetGravity(true);
+				pOwner->SetSide(direction);
+				pOwner->SetDirection(direction, GetDirection().y);
+				pOwner->SetSpeed(75);
+			}
+		}
+
+		
+
+		if (mEndTheGame)
+		{
+			mEndTimer -= GetDeltaTime();
+
+			if (mEndTimer < 0)
+			{
+				std::cout << "This is The End of the Demo !\n";
+				exit(666);
+			}
+		}
 	}
 }
 
@@ -63,12 +134,14 @@ void End::FixedUpdate(float dt)
 
 void End::OnCollision(Entity* pOther)
 {
-	if(isTriggered)
+	if (isTriggered)
 		return;
 
 	if (pOther->IsTag(TestScene::TPlayer))
 	{
 		std::cout << "Activated\n";
 		isTriggered = true;
+
+		ChangeAnimation("Used", "single"); 
 	}
 }

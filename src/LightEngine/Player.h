@@ -43,6 +43,7 @@ public:
 		Falling,
 		TakingDamage,
 		Dying,
+		AFK,
 
 		Count
 	};
@@ -108,4 +109,5 @@ public:
 	friend class PlayerAction_TakingDamage;
 	friend class PlayerAction_Dying;
 	friend class PlayerAction_Dashing;
+	friend class PlayerAction_AFK;
 };

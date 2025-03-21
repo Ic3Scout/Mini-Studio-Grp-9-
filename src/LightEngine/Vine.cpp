@@ -59,6 +59,7 @@ void Vine::Grow()
 	SetHitbox(mGrownSize.x, mGrownSize.y);
 	SetPosition(mDefaultPos.x, mDefaultPos.y - (mDefaultSize.y * 4));
 	ChangeAnimation("Opening", "single");
+	GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play();
 }
 
 void Vine::Retract()
@@ -69,6 +70,7 @@ void Vine::Retract()
 
 	grown = false;
 	ChangeAnimation("Closing", "single");
+	GetScene<TestScene>()->GetAssetManager()->GetSound("Transition")->play(); 
 }
 
 bool Vine::CheckClosed()

@@ -4,11 +4,15 @@
 #include "GameManager.h"
 #include "AssetManager.h"
 
+class BG;
+class Logo;
 class PhysicalEntity;
 class Player;
 
 class TestScene : public Scene
 {
+	Logo* pLogo;
+	BG* pBG;
 public:
 	enum Tag
 	{
@@ -22,6 +26,8 @@ public:
 		TEnemy,
 		TObstacle,
 		TEnd,
+		TLogo,
+		TBG,
 
 		Count
 	};

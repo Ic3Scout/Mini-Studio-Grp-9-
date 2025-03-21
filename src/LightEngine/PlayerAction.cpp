@@ -260,3 +260,14 @@ void PlayerAction_Dashing::Update(Player* pPlayer, float deltatime)
 
 	mDuration -= deltatime;
 }
+
+void PlayerAction_AFK::Start(Player* pPlayer)
+{
+	isStopping = false;
+}
+
+void PlayerAction_AFK::Update(Player* pPlayer, float deltatime)
+{
+	if (isStopping)
+		pPlayer->TransitionTo(Player::Falling);
+}
