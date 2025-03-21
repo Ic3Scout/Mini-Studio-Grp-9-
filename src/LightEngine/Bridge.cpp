@@ -66,6 +66,10 @@ void Bridge::OnUpdate()
 				mRetractProgress += GetDeltaTime();
 			if (mRetractProgress >= mRetractDuration)
 			{
+				if (mAnimations->GetCurrentAnimation() != "Closing")
+				{
+					ChangeAnimation("Closing", "single");
+				}
 				Retract();
 				mRetractProgress = 0.f;
 			}
