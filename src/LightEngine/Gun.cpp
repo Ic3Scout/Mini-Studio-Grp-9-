@@ -76,7 +76,7 @@ void Gun::Shoot()
 
 	sf::Vector2f pos = GetPosition();
 
-	Water* w = CreateEntity<Water>({24, 24}, sf::Color::Blue, 2);
+	Water* w = CreateEntity<Water>({24, 24}, sf::Color::White, 2);
 	w->SetPosition(pos.x, pos.y);
 	w->SetDirection(mDirection.x, mDirection.y); 
 	mShootingDelay = 0.5f;

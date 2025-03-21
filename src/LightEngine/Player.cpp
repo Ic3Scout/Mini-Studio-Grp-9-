@@ -68,29 +68,7 @@ void Player::BasicControls()
 		mDirection.x = mSide;
 	}
 
-	const char* currentAnim = mAnimations->GetCurrentAnimation();
-	if (mIsMoving)
-	{
-		if (mSide == 1 && currentAnim != "WalkRight")
-		{
-			ChangeAnimation("WalkRight", "single");
-		}
-		else if (mSide == -1 && currentAnim != "WalkLeft")
-		{
-			ChangeAnimation("WalkLeft", "single");
-		}
-	}
-	else
-	{
-		if (mSide == 1 && currentAnim != "IdleRight")
-		{
-			ChangeAnimation("IdleRight", "single");
-		}
-		else if (mSide == -1 && currentAnim != "IdleLeft")
-		{
-			ChangeAnimation("IdleLeft", "single");
-		}
-	}
+	UpdateAnimation();
 
 	if (mIsMoving && mState != Falling)
 		TransitionTo(Player::Moving);
@@ -238,8 +216,6 @@ void Player::OnUpdate()
 
 	if (mProgressDashReload <= 0)
 	{
-		/*Debug::DrawCircle(GetPosition().x, GetPosition().y, 15, sf::Color::Magenta);*/
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Joystick::isButtonPressed(0, 5))
 		{
 			TransitionTo(Dashing);
@@ -415,6 +391,76 @@ void Player::LoadAnimation()
 	mAnimations->LoadJsonData("../../../res/Assets/Json/Hydro.json");
 	SetTexture("Hydro");
 	mAnimations->LoadAnimationSingle("IdleRight");
+}
+
+void Player::UpdateAnimation()
+{
+	Weapon* weapon = GetCurrentEquipedWeapon();
+
+	if (weapon->GetTag() == TestScene::Tag::TGun)
+	{
+		UpdateAnimationBlue();
+	}
+	else
+	{
+		UpdateAnimationGreen();
+	}
+}
+
+void Player::UpdateAnimationBlue()
+{
+	const char* currentAnim = mAnimations->GetCurrentAnimation();
+
+	if (mIsMoving)
+	{
+		if (mSide == 1 && currentAnim != "WalkRightBlue")
+		{
+			ChangeAnimation("WalkRightBlue", "single");
+		}
+		else if (mSide == -1 && currentAnim != "WalkLeftBlue")
+		{
+			ChangeAnimation("WalkLeftBlue", "single");
+		}
+	}
+	else
+	{
+		if (mSide == 1 && currentAnim != "IdleRightBlue")
+		{
+			ChangeAnimation("IdleRightBlue", "single");
+		}
+		else if (mSide == -1 && currentAnim != "IdleLeftBlue")
+		{
+			ChangeAnimation("IdleLeftBlue", "single");
+		}
+	}
+}
+
+void Player::UpdateAnimationGreen()
+{
+	const char* currentAnim = mAnimations->GetCurrentAnimation();
+
+	if (mIsMoving)
+	{
+		if (mSide == 1 && currentAnim != "WalkRight")
+		{
+			ChangeAnimation("WalkRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "WalkLeft")
+		{
+			ChangeAnimation("WalkLeft", "single");
+		}
+	}
+	else
+	{
+		if (mSide == 1 && currentAnim != "IdleRight")
+		{
+			ChangeAnimation("IdleRight", "single");
+		}
+		else if (mSide == -1 && currentAnim != "IdleLeft")
+		{
+			ChangeAnimation("IdleLeft", "single");
+		}
+	}
 }
 
 void Player::SwapManager()
