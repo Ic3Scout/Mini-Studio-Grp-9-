@@ -20,7 +20,7 @@ Player::Player() : Character(PLAYER_HP)
 {
 	PlayerHealthBar* pPlayerHB = new PlayerHealthBar();
 	PlayerAmmoBar* pPlayerAB = new PlayerAmmoBar();
-	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 2);
+	DashUI* pDashUI = CreateEntity<DashUI>({ 25.f,50.f }, sf::Color::White, 7);
 
 	mUI.push_back(pPlayerHB);
 	mUI.push_back(pPlayerAB);
@@ -131,7 +131,7 @@ void Player::InitStates()
 
 	SetTransition(TakingDamage, Falling, true);
 	SetTransition(TakingDamage, Dying, true);
-	SetTransition(TakingDamage, AFK, true); 
+	SetTransition(TakingDamage, AFK, true);
 
 	SetTransition(Dying, Falling, true);
 
@@ -145,7 +145,7 @@ void Player::InitStates()
 	mAction[TakingDamage] = new PlayerAction_TakingDamage();
 	mAction[Dying] = new PlayerAction_Dying();
 	mAction[Dashing] = new PlayerAction_Dashing();
-	mAction[AFK] = new PlayerAction_AFK(); 
+	mAction[AFK] = new PlayerAction_AFK();
 }
 
 bool Player::TransitionTo(State newState)
@@ -200,7 +200,7 @@ void Player::OnUpdate()
 
 	PhysicalEntity::OnUpdate();
 
-	if(mState != AFK) 
+	if (mState != AFK)
 		BasicControls();
 
 	for (PlayerUI* ui : mUI)
@@ -210,7 +210,7 @@ void Player::OnUpdate()
 
 	int fpsCounter = (int)(1.f / GetDeltaTime());
 
-	sf::Vector2f camPos = GetScene<TestScene>()->GetCam().GetView()->getCenter(); 
+	sf::Vector2f camPos = GetScene<TestScene>()->GetCam().GetView()->getCenter();
 
 	Debug::DrawText(camPos.x + 500, camPos.y - 340, "FPS : " + std::to_string(fpsCounter), sf::Color::White);
 
@@ -254,9 +254,9 @@ void Player::Respawn(int x, int y)
 		TransitionTo(Player::TakingDamage);
 		GetScene<TestScene>()->GetAssetManager()->GetSound("Falling")->play();
 
-		if(GetRatioHP() > 0 || mState != AFK) 
+		if (GetRatioHP() > 0 || mState != AFK)
 			SetPosition(x, y);
-	
+
 
 		if (mRespawnStation == nullptr)
 			return;
@@ -299,7 +299,7 @@ void Player::OnCollision(Entity* other)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) || sf::Joystick::isButtonPressed(0, 1))// bouton X
 			{
-				mGravitySpeed = -std::sqrt(5 * 9.81 * 50.f * GetSize().y);
+				mGravitySpeed = -std::sqrt(9.81 * 50.f * GetSize().y);
 			}
 		}
 

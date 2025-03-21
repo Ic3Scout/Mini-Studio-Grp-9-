@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Animation.h"
+#include "Weapon.h"
+#include "PlayerUI.h"
 
 void End::OnInitialize()
 {
@@ -63,7 +65,7 @@ void End::OnUpdate()
 		}
 
 
-		if (pOwner != nullptr)
+		if (isHydroDestroyed == false)
 		{
 			if(mProgressDelay <= mDelayBeforeAnimation)
 				mProgressDelay += GetDeltaTime();
@@ -80,8 +82,22 @@ void End::OnUpdate()
 
 				if (mProgressToDestroyPlayer >= 0.69f)
 				{
-					pOwner->Destroy();
-					pOwner = nullptr;
+					for (Weapon* w : pOwner->GetAllWeapons())
+					{
+						w->Destroy();
+					}
+
+					for (PlayerUI * ui : pOwner->GetAllPlayerUI())
+					{
+						ui->SetDisplay(false);
+					}
+
+					pOwner->GetAllPlayerUI().clear();
+
+					pOwner->ChangeColor(sf::Color::Transparent);
+					pOwner->GetShape()->setSize({ 0, 0 });
+	
+					isHydroDestroyed = true;
 
 					isAnimationTriggered = true;
 					GetScene<TestScene>()->GetAssetManager()->GetSound("Suspense")->play();
@@ -92,7 +108,7 @@ void End::OnUpdate()
 			
 			}
 
-			if (pOwner != nullptr && isPlayerArrived == false)
+			if (isHydroDestroyed == false && isPlayerArrived == false)
 			{
 				sf::Vector2f playerPos = pOwner->GetPosition();
 				sf::Vector2f pos = GetPosition();
