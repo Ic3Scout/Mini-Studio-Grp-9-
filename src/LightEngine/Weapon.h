@@ -35,6 +35,7 @@ public:
 	int GetCurrentAmmos() { return mAmmos; }
 	int GetMaxAmmos() { return mMaxAmmos; }
 	float GetRatioMunition() { return (float) mAmmos / (float) mMaxAmmos; }
+	int GetTag() { return mTag; }
 	void SetMaxAmmos(int value) { mMaxAmmos = value; }
 	void SetCurrentAmmos(int value) { mAmmos = value; }
 

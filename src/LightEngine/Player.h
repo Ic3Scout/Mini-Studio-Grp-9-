@@ -91,6 +91,9 @@ public:
 	void FixedUpdate(float dt) override;
 
 	void LoadAnimation() override;
+	void UpdateAnimation();
+	void UpdateAnimationBlue();
+	void UpdateAnimationGreen();
 
 	void SwapManager();
 	void SwapWeapon();
